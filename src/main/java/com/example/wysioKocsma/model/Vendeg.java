@@ -1,27 +1,31 @@
 package com.example.wysioKocsma.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="vendeg")
-@Data
-@AllArgsConstructor
 public class Vendeg {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long vendegId;
+
     @Column(name = "becenev")
     private String becenev;
+
     @Column(name = "majerosseg")
     private String majerosseg;
+
     @Column(name = "bicepszmeret")
     private int bicepszmeret;
 
-    public Vendeg() {
-
-    }
 }
