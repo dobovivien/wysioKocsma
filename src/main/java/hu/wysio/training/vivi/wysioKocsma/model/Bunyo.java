@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -19,10 +19,10 @@ import java.util.List;
 public class Bunyo extends AbstractEntity {
 
     @Column
-    private Date mettol;
+    private LocalDateTime mettol;
 
     @Column
-    private Date meddig;
+    private LocalDateTime meddig;
 
     @CollectionTable
     @OneToMany(fetch = FetchType.LAZY)
