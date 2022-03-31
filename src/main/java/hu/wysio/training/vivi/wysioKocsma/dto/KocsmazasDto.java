@@ -1,6 +1,5 @@
 package hu.wysio.training.vivi.wysioKocsma.dto;
 
-import hu.wysio.training.vivi.wysioKocsma.model.Fogyasztas;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class KocsmazasDto implements Serializable {
 
-    private List<Fogyasztas> fogyasztasLista;
+    private List<FogyasztasDto> fogyasztasLista;
     private boolean detoxbaKerult;
 }

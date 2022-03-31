@@ -1,6 +1,5 @@
 package hu.wysio.training.vivi.wysioKocsma.dto;
 
-import hu.wysio.training.vivi.wysioKocsma.model.Vendeg;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class BunyoDto implements Serializable {
 
-    private List<Vendeg> resztvevok;
+    private List<VendegDto> resztvevok;
     private String nyertes;
 }
