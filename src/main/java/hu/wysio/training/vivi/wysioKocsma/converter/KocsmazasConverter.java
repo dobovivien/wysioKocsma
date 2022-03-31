@@ -2,15 +2,19 @@ package hu.wysio.training.vivi.wysioKocsma.converter;
 
 import hu.wysio.training.vivi.wysioKocsma.dto.KocsmazasDto;
 import hu.wysio.training.vivi.wysioKocsma.model.Kocsmazas;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import static hu.wysio.training.vivi.wysioKocsma.converter.FogyasztasConverter.listConverter;
-
+@Component
 public class KocsmazasConverter {
 
-    public static KocsmazasDto convertKocsmazasToDto(Kocsmazas kocsmazas) {
+    @Autowired
+    private FogyasztasConverter fogyasztasConverter;
+
+    public KocsmazasDto convertKocsmazasToDto(Kocsmazas kocsmazas) {
         KocsmazasDto dto = new KocsmazasDto();
         dto.setDetoxbaKerult(kocsmazas.isDetoxbaKerult());
-        dto.setFogyasztasLista(listConverter(kocsmazas.getFogyasztasLista()));
+        dto.setFogyasztasLista(fogyasztasConverter.listConverter(kocsmazas.getFogyasztasLista()));
         return dto;
     }
 }
