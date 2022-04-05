@@ -1,5 +1,6 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
+import hu.wysio.training.vivi.wysioKocsma.dto.VendegDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Vendeg;
 import hu.wysio.training.vivi.wysioKocsma.service.VendegService;
@@ -17,11 +18,6 @@ public class VendegController {
     @Autowired
     VendegService vendegService;
 
-    @GetMapping("/")
-    public String index() {
-        return "Greetings from Spring Boot!";
-    }
-
     //get all
     @GetMapping("/getAllVendeg")
     public List<Vendeg> getAllVendeg() {
@@ -30,10 +26,10 @@ public class VendegController {
 
     //create
     @PostMapping("/createVendeg")
-    public ResponseEntity<Vendeg> createVendeg(@RequestBody Vendeg vendegAdat) {
+    public ResponseEntity<Long> createVendeg(@RequestBody VendegDto vendegDto) {
         try {
-            Vendeg vendeg = vendegService.createVendeg(vendegAdat);
-            return new ResponseEntity<>(vendeg, HttpStatus.CREATED);
+            long vendegId = vendegService.createVendeg(vendegDto);
+            return new ResponseEntity<>(vendegId, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

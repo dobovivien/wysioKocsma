@@ -1,5 +1,6 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
+import hu.wysio.training.vivi.wysioKocsma.dto.BunyoDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Bunyo;
 import hu.wysio.training.vivi.wysioKocsma.service.BunyoService;
@@ -25,30 +26,18 @@ public class BunyoController {
 
     //create
     @PostMapping("/createBunyo")
-    public ResponseEntity<Bunyo> createBunyo(@RequestBody Bunyo bunyoAdat) {
+    public ResponseEntity<Long> createBunyo(@RequestBody BunyoDto bunyoDto) {
         try {
-            Bunyo bunyo = bunyoService.createBunyo(bunyoAdat);
-            return new ResponseEntity<>(bunyo, HttpStatus.CREATED);
+            long bunyoId = bunyoService.createBunyo(bunyoDto);
+            return new ResponseEntity<>(bunyoId, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    //get by id
-    @GetMapping("/getBunyoById/{id}")
-    public ResponseEntity<Bunyo> getBunyoById(@PathVariable Long id) throws ResourceNotFoundException {
-        return ResponseEntity.ok(bunyoService.findById(id));
     }
 
     //update
     @PutMapping("/updateBunyo/{id}")
     public ResponseEntity<Bunyo> updateBunyo(@PathVariable Long id, @RequestBody Bunyo bunyoAdat) throws ResourceNotFoundException {
         return ResponseEntity.ok(bunyoService.updateBunyo(id, bunyoAdat));
-    }
-
-    //delete
-    @DeleteMapping("/deleteBunyo/{id}")
-    public void deleteItal(@PathVariable Long id, @RequestBody Bunyo bunyoAdat) throws ResourceNotFoundException {
-        bunyoService.deleteBunyo(bunyoAdat);
     }
 }

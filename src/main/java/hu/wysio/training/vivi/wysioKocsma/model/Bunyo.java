@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -24,10 +23,11 @@ public class Bunyo extends AbstractEntity {
     @Column
     private LocalDateTime meddig;
 
-    @CollectionTable
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, unique = true)
-    private List<Vendeg> resztvevok = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "bunyo_vendeg", joinColumns = @JoinColumn(name = "bunyo_id"), inverseJoinColumns = @JoinColumn(name = "vendeg_id"))
+//    @JoinColumn(nullable = false, unique = true)
+    private List<Vendeg> vendegList;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nyertesId", nullable = false, unique = true)

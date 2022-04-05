@@ -1,5 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.service;
 
+import hu.wysio.training.vivi.wysioKocsma.converter.FogyasztasConverter;
+import hu.wysio.training.vivi.wysioKocsma.dto.FogyasztasDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Fogyasztas;
 import hu.wysio.training.vivi.wysioKocsma.repository.FogyasztasRepository;
@@ -14,8 +16,12 @@ public class FogyasztasService {
     @Autowired
     private FogyasztasRepository fogyasztasRepository;
 
-    public Fogyasztas createFogyasztas(Fogyasztas fogyasztasAdat) {
-        return fogyasztasRepository.save(fogyasztasAdat);
+    @Autowired
+    private FogyasztasConverter fogyasztasConverter;
+
+    public long createFogyasztas(FogyasztasDto fogyasztasDto) {
+        Fogyasztas fogyasztas = fogyasztasRepository.save(fogyasztasConverter.convertDtoToFogyasztas(fogyasztasDto));
+        return fogyasztas.getId();
     }
 
     public Fogyasztas updateFogyasztas(long id, Fogyasztas fogyasztasAdat) throws ResourceNotFoundException {

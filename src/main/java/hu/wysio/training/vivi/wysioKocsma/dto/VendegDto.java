@@ -13,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class VendegDto implements Serializable {
 
+    private long id;
     private String nev;
     private String majerosseg;
     private int bicepszmeret;

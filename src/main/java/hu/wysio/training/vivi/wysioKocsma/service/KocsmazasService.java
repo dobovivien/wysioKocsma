@@ -2,11 +2,14 @@ package hu.wysio.training.vivi.wysioKocsma.service;
 
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Kocsmazas;
+import hu.wysio.training.vivi.wysioKocsma.model.Vendeg;
 import hu.wysio.training.vivi.wysioKocsma.repository.KocsmazasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class KocsmazasService {
@@ -14,36 +17,42 @@ public class KocsmazasService {
     @Autowired
     private KocsmazasRepository kocsmazasRepository;
 
-    public Kocsmazas createKocsmazas(Kocsmazas kocsmazasAdat) {
-        return kocsmazasRepository.save(kocsmazasAdat);
+    @Autowired
+    private VendegService vendegService;
+
+    public long startKocsmazas(long vendegId) throws ResourceNotFoundException {
+        Kocsmazas kocsmazas = new Kocsmazas();
+        kocsmazas.setMettol(LocalDateTime.now());
+        kocsmazas.setVendeg(vendegService.findById(vendegId));
+        return kocsmazasRepository.save(kocsmazas).getId();
     }
 
-    public Kocsmazas updateKocsmazas(long id, Kocsmazas kocsmazasAdat) throws ResourceNotFoundException {
-        Kocsmazas kocsmazas = kocsmazasRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Nincs ilyen kocsmazas az alabbi id-val: " + id));
-
-        kocsmazas.setMettol(kocsmazasAdat.getMettol());
-        kocsmazas.setMeddig(kocsmazasAdat.getMeddig());
-        kocsmazas.setFogyasztasLista(kocsmazasAdat.getFogyasztasLista());
-        kocsmazas.setDetoxbaKerult(kocsmazasAdat.isDetoxbaKerult());
-
-        return kocsmazasRepository.save(kocsmazas);
+    public Kocsmazas getBefejezetlenKocsmazasByVendegId(long vendegId) throws ResourceNotFoundException {
+        Vendeg vendeg = vendegService.findById(vendegId);
+        List<Kocsmazas> kocsmazasList = kocsmazasRepository.findAllByVendeg(vendeg);
+        Optional<Kocsmazas> befejezetlenKocsmazas = kocsmazasList.stream().filter(kocsmazas -> kocsmazas.getMeddig() == null).findFirst();
+        return befejezetlenKocsmazas.orElse(null);
     }
 
-    public List<Kocsmazas> findAll() {
-        return kocsmazasRepository.findAll();
+    public long finishKocsmazas(long vendegId) throws ResourceNotFoundException {
+        Kocsmazas befejezetlenKocsmazas = getBefejezetlenKocsmazasByVendegId(vendegId);
+        if (befejezetlenKocsmazas != null) {
+            befejezetlenKocsmazas.setMeddig(LocalDateTime.now());
+            return kocsmazasRepository.save(befejezetlenKocsmazas).getId();
+        } else {
+            //todo exception
+            return 0;
+        }
     }
 
-    public Kocsmazas findById(long id) throws ResourceNotFoundException {
-        return kocsmazasRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Nincs ilyen kocsmazas az alabbi id-val: " + id));
-    }
-
-    public void deleteKocsmazas(Kocsmazas kocsmazasAdat) throws ResourceNotFoundException {
-        try {
-            kocsmazasRepository.delete(kocsmazasAdat);
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Nincs ilyen kocsmazas az alabbi id-val: " + kocsmazasAdat.getId());
+    public void addToDetox(long vendegId) throws ResourceNotFoundException {
+        Kocsmazas kocsmazas = getBefejezetlenKocsmazasByVendegId(vendegId);
+        if (kocsmazas != null) {
+            kocsmazas.setDetoxbaKerult(true);
+            kocsmazasRepository.save(kocsmazas);
+            finishKocsmazas(vendegId);
+        } else {
+            //todo exception
         }
     }
 }

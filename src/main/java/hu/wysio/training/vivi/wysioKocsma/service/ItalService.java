@@ -1,5 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.service;
 
+import hu.wysio.training.vivi.wysioKocsma.converter.ItalConverter;
+import hu.wysio.training.vivi.wysioKocsma.dto.ItalDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Ital;
 import hu.wysio.training.vivi.wysioKocsma.repository.ItalRepository;
@@ -15,8 +17,12 @@ public class ItalService {
     @Autowired
     private ItalRepository italRepository;
 
-    public Ital createItal(Ital italAdat) {
-        return italRepository.save(italAdat);
+    @Autowired
+    private ItalConverter italConverter;
+
+    public long createItal(ItalDto italDto) {
+        Ital ital = italRepository.save(italConverter.convertDtoToItal(italDto));
+        return ital.getId();
     }
 
     public Ital updateItal(long id, Ital italAdat) throws ResourceNotFoundException {

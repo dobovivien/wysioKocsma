@@ -1,5 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.service;
 
+import hu.wysio.training.vivi.wysioKocsma.converter.BunyoConverter;
+import hu.wysio.training.vivi.wysioKocsma.dto.BunyoDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Bunyo;
 import hu.wysio.training.vivi.wysioKocsma.repository.BunyoRepository;
@@ -15,8 +17,12 @@ public class BunyoService {
     @Autowired
     private BunyoRepository bunyoRepository;
 
-    public Bunyo createBunyo(Bunyo bunyoAdat) {
-        return bunyoRepository.save(bunyoAdat);
+    @Autowired
+    private BunyoConverter bunyoConverter;
+
+    public long createBunyo(BunyoDto bunyoDto) {
+        Bunyo bunyo = bunyoRepository.save(bunyoConverter.convertDtoToBunyo(bunyoDto));
+        return bunyo.getId();
     }
 
     public Bunyo updateBunyo(long id, Bunyo bunyoAdat) throws ResourceNotFoundException {
@@ -25,7 +31,7 @@ public class BunyoService {
 
         bunyo.setMettol(bunyoAdat.getMettol());
         bunyo.setMeddig(bunyoAdat.getMeddig());
-        bunyo.setResztvevok(bunyoAdat.getResztvevok());
+        bunyo.setVendegList(bunyoAdat.getVendegList());
         bunyo.setNyertes(bunyoAdat.getNyertes());
 
         return bunyoRepository.save(bunyo);
