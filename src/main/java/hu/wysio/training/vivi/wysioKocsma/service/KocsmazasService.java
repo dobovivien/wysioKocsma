@@ -34,6 +34,12 @@ public class KocsmazasService {
         return befejezetlenKocsmazas.orElse(null);
     }
 
+    public List<Kocsmazas> getAllBefejezetlenKocsmazas() {
+        List<Kocsmazas> kocsmazasList = kocsmazasRepository.findAll();
+        List<Kocsmazas> allBefejezetlenKocsmazas = kocsmazasList.stream().filter(kocsmazas -> kocsmazas.getMeddig() == null).toList();
+        return allBefejezetlenKocsmazas;
+    }
+
     public long finishKocsmazas(long vendegId) throws ResourceNotFoundException {
         Kocsmazas befejezetlenKocsmazas = getBefejezetlenKocsmazasByVendegId(vendegId);
         if (befejezetlenKocsmazas != null) {

@@ -3,6 +3,7 @@ package hu.wysio.training.vivi.wysioKocsma.converter;
 import hu.wysio.training.vivi.wysioKocsma.dto.FogyasztasDto;
 import hu.wysio.training.vivi.wysioKocsma.model.Fogyasztas;
 import hu.wysio.training.vivi.wysioKocsma.model.Ital;
+import hu.wysio.training.vivi.wysioKocsma.model.Kocsmazas;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,11 +20,14 @@ public class FogyasztasConverter {
     }
 
     public Fogyasztas convertDtoToFogyasztas(FogyasztasDto fogyasztasDto) {
-        Fogyasztas fogyasztas = new Fogyasztas();
         Ital ital = new Ital();
         ital.setId(fogyasztasDto.getItalId());
+        Kocsmazas kocsmazas = new Kocsmazas();
+        kocsmazas.setId(fogyasztasDto.getKocsmazasId());
+        Fogyasztas fogyasztas = new Fogyasztas();
         fogyasztas.setElfogyasztottMennyiseg(fogyasztasDto.getElfogyasztottMennyiseg());
         fogyasztas.setItal(ital);
+        fogyasztas.setKocsmazas(kocsmazas);
         return fogyasztas;
     }
 

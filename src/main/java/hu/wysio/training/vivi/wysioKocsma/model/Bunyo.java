@@ -26,11 +26,10 @@ public class Bunyo extends AbstractEntity {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "bunyo_vendeg", joinColumns = @JoinColumn(name = "bunyo_id"), inverseJoinColumns = @JoinColumn(name = "vendeg_id"))
-//    @JoinColumn(nullable = false, unique = true)
     private List<Vendeg> vendegList;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nyertesId", nullable = false, unique = true)
+    @JoinColumn(name = "nyertesId")
     private Vendeg nyertes;
 
 }

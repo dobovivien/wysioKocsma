@@ -27,7 +27,6 @@ public class Kocsmazas extends AbstractEntity {
     private LocalDateTime meddig;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fogyasztasLista", nullable = false)
     private List<Fogyasztas> fogyasztasLista;
 
     @Column

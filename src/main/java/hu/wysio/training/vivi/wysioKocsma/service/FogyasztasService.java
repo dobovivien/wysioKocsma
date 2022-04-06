@@ -8,8 +8,6 @@ import hu.wysio.training.vivi.wysioKocsma.repository.FogyasztasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class FogyasztasService {
 
@@ -32,22 +30,5 @@ public class FogyasztasService {
         fogyasztas.setElfogyasztottMennyiseg(fogyasztasAdat.getElfogyasztottMennyiseg());
 
         return fogyasztasRepository.save(fogyasztas);
-    }
-
-    public List<Fogyasztas> findAll() {
-        return fogyasztasRepository.findAll();
-    }
-
-    public Fogyasztas findById(long id) throws ResourceNotFoundException {
-        return fogyasztasRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Nincs ilyen fogyasztas az alabbi id-val: " + id));
-    }
-
-    public void deleteFogyasztas(Fogyasztas fogyasztasAdat) throws ResourceNotFoundException {
-        try {
-            fogyasztasRepository.delete(fogyasztasAdat);
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Nincs ilyen fogyasztas az alabbi id-val: " + fogyasztasAdat.getId());
-        }
     }
 }

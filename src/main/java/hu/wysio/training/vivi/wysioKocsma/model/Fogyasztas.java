@@ -23,6 +23,7 @@ public class Fogyasztas extends AbstractEntity {
     private int elfogyasztottMennyiseg;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "kocsmazas_id", nullable = false)
     private Kocsmazas kocsmazas;
 
 }

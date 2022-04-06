@@ -11,8 +11,10 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BunyoDto implements Serializable {
-    
-    private String nyertes;
-    private long nyertesId;
+public class TabellaDto implements Serializable {
+
+    private String resztvevoNeve;
+    private int gyozelmekSzama;
+    private int bunyokbanReszvetelSzama;
+
 }
