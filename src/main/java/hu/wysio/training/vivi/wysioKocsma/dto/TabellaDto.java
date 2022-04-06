@@ -11,10 +11,14 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TabellaDto implements Serializable {
+public class TabellaDto implements Serializable, Comparable<TabellaDto> {
 
     private String resztvevoNeve;
     private int gyozelmekSzama;
-    private int bunyokbanReszvetelSzama;
+    private long bunyokbanReszvetelSzama;
 
+    @Override
+    public int compareTo(TabellaDto masikDto) {
+        return Integer.compare(getGyozelmekSzama(), masikDto.getGyozelmekSzama());
+    }
 }

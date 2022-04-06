@@ -1,5 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.service;
 
+import hu.wysio.training.vivi.wysioKocsma.comparator.TabellaDtoComparator;
+import hu.wysio.training.vivi.wysioKocsma.converter.VendegConverter;
 import hu.wysio.training.vivi.wysioKocsma.dto.TabellaDto;
 import hu.wysio.training.vivi.wysioKocsma.model.Bunyo;
 import hu.wysio.training.vivi.wysioKocsma.model.Kocsmazas;
@@ -10,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -24,6 +29,9 @@ public class BunyoService {
 
     @Autowired
     private VendegRepository vendegRepository;
+
+    @Autowired
+    private VendegConverter vendegConverter;
 
     public long startBunyo() {
         List<Vendeg> vendegList = new ArrayList<>();
@@ -59,40 +67,19 @@ public class BunyoService {
 
     public List<TabellaDto> getTabellaEredmeny() {
         List<TabellaDto> tabellaDtoList = new ArrayList<>();
-        List<Bunyo> allBunyo = bunyoRepository.findAll();
-        List<Vendeg> vendegList = new ArrayList<>();
-        List<Long> vendegIdList = new ArrayList<>();
-        List<String> resztvevokNevei = new ArrayList<>();
-        for (Bunyo bunyo : allBunyo) {
-            vendegList.addAll(bunyo.getVendegList());
-        }
+        List<Vendeg> vendegList = vendegRepository.findAll();
         for (Vendeg vendeg : vendegList) {
-            vendegIdList.add(vendeg.getId());
-            resztvevokNevei.add(vendeg.getBecenev());
+            long bunyokSzama = getBunyokSzama(vendeg.getId());
+            tabellaDtoList.add(vendegConverter.convertVendegToTabellaDto(vendeg, bunyokSzama));
         }
-        Collections.sort(vendegIdList);
-        List<Long> uniqueIdList = removeDuplicates(vendegIdList);
-        for (Long id : uniqueIdList) {
-            TabellaDto tabellaDto = new TabellaDto();
-            tabellaDto.setResztvevoNeve(vendegRepository.getById(id).getBecenev());
-            tabellaDto.setBunyokbanReszvetelSzama(getBunyokSzama(id));
-//            tabellaDto.setGyozelmekSzama(getGyozelmekSzama(id));
-        }
+        TabellaDtoComparator tabellaDtoComparator = new TabellaDtoComparator();
+        tabellaDtoList.sort(tabellaDtoComparator);
         return tabellaDtoList;
     }
 
-    public int getBunyokSzama(Long vendegId) {
-        int bunyokSzama = 0;
+    public long getBunyokSzama(Long vendegId) {
         List<Bunyo> bunyoList = bunyoRepository.findAll();
-        for (Bunyo bunyo : bunyoList) {
-            List<Vendeg> vendegList = bunyo.getVendegList();
-            for (Vendeg vendeg : vendegList) {
-                if (vendeg.getId() == vendegId) {
-                    bunyokSzama++;
-                }
-            }
-        }
-        return bunyokSzama;
+        return bunyoList.stream().map(bunyo -> bunyo.getVendegList().stream().filter(vendeg -> vendeg.getId() == vendegId)).count();
     }
 
 //    public int getGyozelmekSzama(Long vendegId) {
@@ -109,4 +96,6 @@ public class BunyoService {
 //        }
 //        return gyozelmekSzama;
 //    } todo: mivel még nincsenek nyertesek, ezért NPE-vel elszáll
+
+
 }
