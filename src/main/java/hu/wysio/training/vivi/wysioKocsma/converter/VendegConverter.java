@@ -2,6 +2,7 @@ package hu.wysio.training.vivi.wysioKocsma.converter;
 
 import hu.wysio.training.vivi.wysioKocsma.dto.TabellaDto;
 import hu.wysio.training.vivi.wysioKocsma.dto.VendegDto;
+import hu.wysio.training.vivi.wysioKocsma.dto.VendegFogyasztasSzerintDto;
 import hu.wysio.training.vivi.wysioKocsma.model.Vendeg;
 import hu.wysio.training.vivi.wysioKocsma.repository.VendegRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class VendegConverter {
         dto.setNev(vendeg.getBecenev());
         dto.setMajerosseg(vendeg.getMajerosseg());
         dto.setBicepszmeret(vendeg.getBicepszmeret());
+        dto.setBunyoList(vendeg.getBunyoList());
+        dto.setKocsmazasList(vendeg.getKocsmazasList());
         return dto;
     }
 
@@ -31,6 +34,8 @@ public class VendegConverter {
         vendeg.setBecenev(vendegDto.getNev());
         vendeg.setMajerosseg(vendegDto.getMajerosseg());
         vendeg.setBicepszmeret(vendegDto.getBicepszmeret());
+        vendeg.setBunyoList(vendegDto.getBunyoList());
+        vendeg.setKocsmazasList(vendegDto.getKocsmazasList());
         return vendeg;
     }
 
@@ -55,5 +60,12 @@ public class VendegConverter {
         tabellaDto.setResztvevoNeve(vendegRepository.getById(vendeg.getId()).getBecenev());
         tabellaDto.setBunyokbanReszvetelSzama(bunyokSzama);
         return tabellaDto;
+    }
+
+    public VendegFogyasztasSzerintDto convertVendegToVFSZDto(Vendeg vendeg, long fogyasztottMennyiseg) {
+        VendegFogyasztasSzerintDto vendegFogyasztasSzerintDto = new VendegFogyasztasSzerintDto();
+        vendegFogyasztasSzerintDto.setBecenev(vendegRepository.getById(vendeg.getId()).getBecenev());
+        vendegFogyasztasSzerintDto.setElfogyasztottMennyiseg(fogyasztottMennyiseg);
+        return vendegFogyasztasSzerintDto;
     }
 }

@@ -1,6 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
 import hu.wysio.training.vivi.wysioKocsma.dto.VendegDto;
+import hu.wysio.training.vivi.wysioKocsma.dto.VendegFogyasztasSzerintDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Vendeg;
 import hu.wysio.training.vivi.wysioKocsma.service.VendegService;
@@ -47,9 +48,8 @@ public class VendegController {
         return ResponseEntity.ok(vendegService.updateVendeg(id, vendegAdatok));
     }
 
-    //delete
-    @DeleteMapping("/deleteVendeg/{id}")
-    public void deleteVendeg(@PathVariable Long id, @RequestBody Vendeg vendegAdatok) throws ResourceNotFoundException {
-        vendegService.deleteVendeg(vendegAdatok);
+    @GetMapping("/getVendegekByElfogyasztottMennyiseg")
+    public List<VendegFogyasztasSzerintDto> getVendegekByElfogyasztottMennyiseg() {
+        return vendegService.getVendegekByElfogyasztottMennyiseg();
     }
 }

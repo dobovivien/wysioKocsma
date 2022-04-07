@@ -69,17 +69,12 @@ public class BunyoService {
         List<TabellaDto> tabellaDtoList = new ArrayList<>();
         List<Vendeg> vendegList = vendegRepository.findAll();
         for (Vendeg vendeg : vendegList) {
-            long bunyokSzama = getBunyokSzama(vendeg.getId());
+            long bunyokSzama = vendeg.getBunyoList().size();
             tabellaDtoList.add(vendegConverter.convertVendegToTabellaDto(vendeg, bunyokSzama));
         }
         TabellaDtoComparator tabellaDtoComparator = new TabellaDtoComparator();
         tabellaDtoList.sort(tabellaDtoComparator);
         return tabellaDtoList;
-    }
-
-    public long getBunyokSzama(Long vendegId) {
-        List<Bunyo> bunyoList = bunyoRepository.findAll();
-        return bunyoList.stream().map(bunyo -> bunyo.getVendegList().stream().filter(vendeg -> vendeg.getId() == vendegId)).count();
     }
 
 //    public int getGyozelmekSzama(Long vendegId) {

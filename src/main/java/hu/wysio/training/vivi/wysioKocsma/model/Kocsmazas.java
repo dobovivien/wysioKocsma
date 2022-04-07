@@ -26,7 +26,7 @@ public class Kocsmazas extends AbstractEntity {
     @JsonFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     private LocalDateTime meddig;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "kocsmazas", fetch = FetchType.LAZY)
     private List<Fogyasztas> fogyasztasLista;
 
     @Column
