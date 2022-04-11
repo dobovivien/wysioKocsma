@@ -5,6 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VendegRepository extends JpaRepository<Vendeg, Long> {
 
-//    @Query("SELECT vendeg FROM Vendeg WHERE majerosseg")
-
 }

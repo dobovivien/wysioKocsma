@@ -34,14 +34,14 @@ public class BunyoService {
     private VendegConverter vendegConverter;
 
     public long startBunyo() {
-        List<Vendeg> vendegList = new ArrayList<>();
+        Set<Vendeg> vendegSet = new HashSet<>();
         Bunyo bunyo = new Bunyo();
         bunyo.setMettol(LocalDateTime.now());
-        List<Kocsmazas> befejezetlenKocsmazasokList = kocsmazasService.getAllBefejezetlenKocsmazas().stream().toList();
+        List<Kocsmazas> befejezetlenKocsmazasokList = kocsmazasService.getAllBefejezetlenKocsmazas();
         for (Kocsmazas kocsmazas : befejezetlenKocsmazasokList) {
-            vendegList.add(kocsmazas.getVendeg());
+            vendegSet.add(kocsmazas.getVendeg());
         }
-        bunyo.setVendegList(vendegList);
+        bunyo.setVendegList(vendegSet);
         return bunyoRepository.save(bunyo).getId();
     }
 
@@ -71,15 +71,9 @@ public class BunyoService {
 
     public int getGyozelmekSzama(Long vendegId) {
         int gyozelmekSzama = 0;
-        List<Vendeg> nyertesek = new ArrayList<>();
         List<Bunyo> bunyoList = bunyoRepository.findAll();
         for (Bunyo bunyo : bunyoList) {
-            if (bunyo.getNyertes() != null) {
-                nyertesek.add(bunyo.getNyertes());
-            }
-        }
-        for (Vendeg nyertes : nyertesek) {
-            if (nyertes.getId() == vendegId) {
+            if (bunyo.getNyertes() != null && bunyo.getNyertes().getId() == vendegId) {
                 gyozelmekSzama++;
             }
         }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VendegService {
@@ -52,24 +53,20 @@ public class VendegService {
         List<VendegFogyasztasSzerintDto> vendegFogyasztasSzerintDtoList = new ArrayList<>();
         List<Vendeg> vendegList = vendegRepository.findAll();
         for (Vendeg vendeg : vendegList) {
-            long fogyasztasByVendegId = getFogyasztasByVendegId(vendeg.getId());
+            long fogyasztasByVendegId = getElfogyasztottMennyisegByVendegId(vendeg.getId());
             vendegFogyasztasSzerintDtoList.add(vendegConverter.convertVendegToVFSZDto(vendeg, fogyasztasByVendegId));
         }
         return vendegFogyasztasSzerintDtoList;
     }
 
-    public long getFogyasztasByVendegId(Long vendegId) {
-        long fogyasztas = 0;
-        List<Integer> elfogyasztottMennyiseg = new ArrayList<>();
-        List<Vendeg> vendegList = vendegRepository.findAll();
-        for (Vendeg vendeg : vendegList) {
-            if (vendeg.getId() == vendegId) {
-                elfogyasztottMennyiseg = vendeg.getKocsmazasList().stream().flatMap(kocsmazas -> kocsmazas.getFogyasztasLista().stream().map(Fogyasztas::getElfogyasztottMennyiseg)).toList();
-            }
+    public long getElfogyasztottMennyisegByVendegId(Long vendegId) {
+        Optional<Vendeg> vendeg = vendegRepository.findById(vendegId);
+        if (vendeg.isPresent()) {
+            return vendeg.get().getKocsmazasList().stream()
+                    .flatMap(kocsmazas -> kocsmazas.getFogyasztasLista().stream())
+                    .mapToInt(Fogyasztas::getElfogyasztottMennyiseg).sum();
         }
-        for (int f : elfogyasztottMennyiseg) {
-            fogyasztas += f;
-        }
-        return fogyasztas;
+        return 0;
+        //todo: exception
     }
 }
