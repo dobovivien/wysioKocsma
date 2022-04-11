@@ -16,6 +16,7 @@ public class TabellaDto implements Serializable, Comparable<TabellaDto> {
     private String resztvevoNeve;
     private int gyozelmekSzama;
     private long bunyokbanReszvetelSzama;
+    private double gyozelmiArany;
 
     @Override
     public int compareTo(TabellaDto masikDto) {

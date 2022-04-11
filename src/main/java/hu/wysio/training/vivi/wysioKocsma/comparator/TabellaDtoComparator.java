@@ -5,8 +5,9 @@ import hu.wysio.training.vivi.wysioKocsma.dto.TabellaDto;
 import java.util.Comparator;
 
 public class TabellaDtoComparator implements Comparator<TabellaDto> {
-    @Override
+
+    //a bunyókban való részvételek és győzelmek számának arányát hasonlítja össze
     public int compare(TabellaDto tabellaDto1, TabellaDto tabellaDto2) {
-        return tabellaDto1.compareTo(tabellaDto2);
+        return (int) (tabellaDto1.getGyozelmiArany() - (tabellaDto2.getGyozelmiArany()));
     }
 }

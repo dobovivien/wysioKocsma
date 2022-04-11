@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -57,40 +57,32 @@ public class BunyoService {
 //        return bunyoRepository.save(bunyo);
 //    } todo: később kelleni fog
 
-    public static List<Long> removeDuplicates(List<Long> idList) {
-        Set<Long> set = new LinkedHashSet<>();
-        set.addAll(idList);
-        idList.clear();
-        idList.addAll(set);
-        return idList;
-    }
-
     public List<TabellaDto> getTabellaEredmeny() {
-        List<TabellaDto> tabellaDtoList = new ArrayList<>();
+        Set<TabellaDto> tabellaDtoSet = new HashSet<>();
         List<Vendeg> vendegList = vendegRepository.findAll();
         for (Vendeg vendeg : vendegList) {
-            long bunyokSzama = vendeg.getBunyoList().size();
-            tabellaDtoList.add(vendegConverter.convertVendegToTabellaDto(vendeg, bunyokSzama));
+            int bunyokSzama = vendeg.getBunyoList().size();
+            tabellaDtoSet.add(vendegConverter.convertVendegToTabellaDto(vendeg, bunyokSzama, getGyozelmekSzama(vendeg.getId())));
         }
         TabellaDtoComparator tabellaDtoComparator = new TabellaDtoComparator();
-        tabellaDtoList.sort(tabellaDtoComparator);
-        return tabellaDtoList;
+        List<TabellaDto> tabellaDtoList = new ArrayList<>(tabellaDtoSet);
+        return tabellaDtoList.stream().sorted(tabellaDtoComparator).toList();
     }
 
-//    public int getGyozelmekSzama(Long vendegId) {
-//        int gyozelmekSzama = 0;
-//        List<Vendeg> nyertesek = new ArrayList<>();
-//        List<Bunyo> bunyoList = bunyoRepository.findAll();
-//        for (Bunyo bunyo : bunyoList) {
-//            nyertesek.add(bunyo.getNyertes());
-//        }
-//        for (Vendeg nyertes : nyertesek) {
-//            if (nyertes.getId() == vendegId) {
-//                gyozelmekSzama++;
-//            }
-//        }
-//        return gyozelmekSzama;
-//    } todo: mivel még nincsenek nyertesek, ezért NPE-vel elszáll
-
-
+    public int getGyozelmekSzama(Long vendegId) {
+        int gyozelmekSzama = 0;
+        List<Vendeg> nyertesek = new ArrayList<>();
+        List<Bunyo> bunyoList = bunyoRepository.findAll();
+        for (Bunyo bunyo : bunyoList) {
+            if (bunyo.getNyertes() != null) {
+                nyertesek.add(bunyo.getNyertes());
+            }
+        }
+        for (Vendeg nyertes : nyertesek) {
+            if (nyertes.getId() == vendegId) {
+                gyozelmekSzama++;
+            }
+        }
+        return gyozelmekSzama;
+    }
 }

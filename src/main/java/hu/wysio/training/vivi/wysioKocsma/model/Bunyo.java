@@ -22,8 +22,7 @@ public class Bunyo extends AbstractEntity {
 
     @Column
     private LocalDateTime meddig;
-
-
+    
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "bunyo_vendeg", joinColumns = @JoinColumn(name = "bunyo_id"), inverseJoinColumns = @JoinColumn(name = "vendeg_id"))
     private List<Vendeg> vendegList;

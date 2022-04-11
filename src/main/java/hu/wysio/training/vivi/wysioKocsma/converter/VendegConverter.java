@@ -55,10 +55,12 @@ public class VendegConverter {
         return vendegList;
     }
 
-    public TabellaDto convertVendegToTabellaDto(Vendeg vendeg, long bunyokSzama) {
+    public TabellaDto convertVendegToTabellaDto(Vendeg vendeg, int bunyokSzama, int gyozelmekSzama) {
         TabellaDto tabellaDto = new TabellaDto();
         tabellaDto.setResztvevoNeve(vendegRepository.getById(vendeg.getId()).getBecenev());
         tabellaDto.setBunyokbanReszvetelSzama(bunyokSzama);
+        tabellaDto.setGyozelmekSzama(gyozelmekSzama);
+        tabellaDto.setGyozelmiArany((double) gyozelmekSzama / bunyokSzama * 100);
         return tabellaDto;
     }
 
