@@ -1,5 +1,6 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
+import hu.wysio.training.vivi.wysioKocsma.dto.ItalDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Ital;
 import hu.wysio.training.vivi.wysioKocsma.service.ItalService;
@@ -25,19 +26,13 @@ public class ItalController {
 
     //create
     @PostMapping("/createItal")
-    public ResponseEntity<Ital> createItal(@RequestBody Ital italAdat) {
+    public ResponseEntity<Long> createItal(@RequestBody ItalDto italDto) {
         try {
-            Ital ital = italService.createItal(italAdat);
-            return new ResponseEntity<>(ital, HttpStatus.CREATED);
+            long italId = italService.createItal(italDto);
+            return new ResponseEntity<>(italId, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    //get by id
-    @GetMapping("/getItalById/{id}")
-    public ResponseEntity<Ital> getItalById(@PathVariable Long id) throws ResourceNotFoundException {
-        return ResponseEntity.ok(italService.findById(id));
     }
 
     //update

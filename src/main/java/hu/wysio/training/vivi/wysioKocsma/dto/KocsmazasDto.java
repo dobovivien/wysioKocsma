@@ -14,6 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class KocsmazasDto implements Serializable {
 
-    private List<FogyasztasDto> fogyasztasLista;
+    private List<Long> fogyasztasLista;
     private boolean detoxbaKerult;
 }
