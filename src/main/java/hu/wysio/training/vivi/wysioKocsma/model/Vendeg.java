@@ -5,9 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Setter
 @Getter
@@ -25,4 +24,10 @@ public class Vendeg extends AbstractEntity {
 
     @Column
     private int bicepszmeret;
+
+    @OneToMany(mappedBy = "vendeg", fetch = FetchType.LAZY)
+    private List<Kocsmazas> kocsmazasList;
+
+    @ManyToMany(mappedBy = "vendegList")
+    private List<Bunyo> bunyoList;
 }

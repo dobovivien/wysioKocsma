@@ -14,7 +14,14 @@ public class KocsmazasConverter {
     public KocsmazasDto convertKocsmazasToDto(Kocsmazas kocsmazas) {
         KocsmazasDto dto = new KocsmazasDto();
         dto.setDetoxbaKerult(kocsmazas.isDetoxbaKerult());
-        dto.setFogyasztasLista(fogyasztasConverter.listConverter(kocsmazas.getFogyasztasLista()));
+        dto.setFogyasztasLista(fogyasztasConverter.convertFogyasztasListToFogyasztasDtoList(kocsmazas.getFogyasztasLista()));
         return dto;
+    }
+
+    public Kocsmazas convertDtoToKocsmazas(KocsmazasDto kocsmazasDto) {
+        Kocsmazas kocsmazas = new Kocsmazas();
+        kocsmazas.setDetoxbaKerult(kocsmazas.isDetoxbaKerult());
+        kocsmazas.setFogyasztasLista(kocsmazas.getFogyasztasLista());
+        return kocsmazas;
     }
 }

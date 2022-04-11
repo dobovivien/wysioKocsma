@@ -13,7 +13,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class FogyasztasDto implements Serializable {
 
-    private String italNeve;
+    private long kocsmazasId;
+    private long italId;
     private int elfogyasztottMennyiseg;
 
 }
