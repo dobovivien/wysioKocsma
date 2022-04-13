@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -66,7 +67,7 @@ public class BunyoService {
         }
         TabellaDtoComparator tabellaDtoComparator = new TabellaDtoComparator();
         List<TabellaDto> tabellaDtoList = new ArrayList<>(tabellaDtoSet);
-        return tabellaDtoList.stream().sorted(tabellaDtoComparator).toList();
+        return tabellaDtoList.stream().sorted(tabellaDtoComparator).collect(Collectors.toList());
     }
 
     public int getGyozelmekSzama(Long vendegId) {
