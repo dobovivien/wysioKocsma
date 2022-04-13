@@ -40,4 +40,20 @@ public class KocsmazasController {
 
         }
     }
+
+    //alkoholista-e
+    @GetMapping("/vendegIsDetoxos/{vendegId}")
+    public boolean vendegIsDetoxos(@PathVariable(value = "vendegId") Long vendegId) {
+        try {
+            return kocsmazasService.vendegIsDetoxos(vendegId);
+        } catch (Exception e) {
+
+        }
+        return false;
+    }
+
+    @GetMapping("isAlkoholista/{vendegId}")
+    public boolean isAlkoholista(@PathVariable(value = "vendegId") Long vendegId) {
+        return kocsmazasService.isAlkoholista(vendegId);
+    }
 }

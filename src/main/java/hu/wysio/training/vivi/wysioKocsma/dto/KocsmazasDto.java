@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -14,6 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class KocsmazasDto implements Serializable {
 
+    LocalDateTime mettol;
+    LocalDateTime meddig;
     private List<Long> fogyasztasLista;
     private boolean detoxbaKerult;
 }
