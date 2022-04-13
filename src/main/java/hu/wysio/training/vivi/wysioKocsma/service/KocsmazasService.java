@@ -3,6 +3,7 @@ package hu.wysio.training.vivi.wysioKocsma.service;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.FogyasztasAdatok;
 import hu.wysio.training.vivi.wysioKocsma.model.Kocsmazas;
+import hu.wysio.training.vivi.wysioKocsma.model.KocsmazasIdotartam;
 import hu.wysio.training.vivi.wysioKocsma.repository.FogyasztasRepository;
 import hu.wysio.training.vivi.wysioKocsma.repository.KocsmazasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class KocsmazasService {
     }
 
     public boolean vendegIsDetoxos(Long vendegId) {
-        int allKocsmazasByVendegDetoxban = kocsmazasRepository.findAllKocsmazasByVendegDetoxban(vendegId);
+        int allKocsmazasByVendegDetoxban = kocsmazasRepository.getKocsmazasCountByVendegDetoxban(vendegId);
         if (allKocsmazasByVendegDetoxban > 5) {
             return true;
         }
@@ -77,10 +78,9 @@ public class KocsmazasService {
     public double getHetiAtlagosKocsmazasSzama(Long vendegId) {
         int napokSzama = 0;
         int kocsmazasokSzama = kocsmazasRepository.findAllByVendeg_Id(vendegId).size();
-        LocalDateTime elsoKocsmazas = kocsmazasRepository.findElsoKocsmazas(vendegId);
-        LocalDateTime utolsoKocsmazas = kocsmazasRepository.findUtolsoKocsmazas(vendegId);
-        if (elsoKocsmazas != null && utolsoKocsmazas != null) {
-            napokSzama = (int) Duration.between(elsoKocsmazas, utolsoKocsmazas).toDays() + 1;
+        KocsmazasIdotartam kocsmazasIdotartam = kocsmazasRepository.findElsoEsUtolsoKocsmazasByVendegId(vendegId);
+        if (kocsmazasIdotartam.getMettol() != null && kocsmazasIdotartam.getMeddig() != null) {
+            napokSzama = (int) Duration.between(kocsmazasIdotartam.getMettol(), kocsmazasIdotartam.getMeddig()).toDays() + 1;
             int hetekSzama = (int) Math.ceil(napokSzama / 7.0);
             return (double) kocsmazasokSzama / hetekSzama;
         }
