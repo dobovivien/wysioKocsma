@@ -15,6 +15,7 @@
     <description>Wysio kocsma project</description>
     <properties>
         <java.version>11</java.version>
+        <h2database.version>2.1.210</h2database.version>
     </properties>
     <dependencies>
 
@@ -64,6 +65,13 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2database.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
