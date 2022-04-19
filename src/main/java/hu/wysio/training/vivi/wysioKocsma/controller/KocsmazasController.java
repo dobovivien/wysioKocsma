@@ -1,11 +1,14 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
+import hu.wysio.training.vivi.wysioKocsma.dto.KocsmazasDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.service.KocsmazasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController("/kocsmazas")
@@ -55,5 +58,10 @@ public class KocsmazasController {
     @GetMapping("isAlkoholista/{vendegId}")
     public boolean isAlkoholista(@PathVariable(value = "vendegId") Long vendegId) {
         return kocsmazasService.isAlkoholista(vendegId);
+    }
+
+    @GetMapping("isAlkoholistaWithCriteriaBuilder/{vendegId}")
+    public List<KocsmazasDto> isAlkoholistaWithCriteriaBuilder(@PathVariable(value = "vendegId") Long vendegId) {
+        return kocsmazasService.isAlkoholistaWithCriteriaBuilder(vendegId);
     }
 }

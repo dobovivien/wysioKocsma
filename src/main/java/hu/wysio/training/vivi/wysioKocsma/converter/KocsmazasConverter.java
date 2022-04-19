@@ -44,4 +44,12 @@ public class KocsmazasConverter {
         kocsmazas.setFogyasztasLista(fogyasztasList);
         return kocsmazas;
     }
+
+    public List<KocsmazasDto> convertKocsmazasListToKocsmazasDtoList(List<Kocsmazas> kocsmazasList) {
+        List<KocsmazasDto> kocsmazasDtoList = new ArrayList<>();
+        for (Kocsmazas kocsmazas : kocsmazasList) {
+            kocsmazasDtoList.add(convertKocsmazasToDto(kocsmazas));
+        }
+        return kocsmazasDtoList;
+    }
 }

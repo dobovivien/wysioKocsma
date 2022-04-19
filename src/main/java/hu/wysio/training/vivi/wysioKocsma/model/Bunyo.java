@@ -1,5 +1,6 @@
 package hu.wysio.training.vivi.wysioKocsma.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "bunyo", schema = "public")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Bunyo extends AbstractEntity {
 
     @Column
@@ -28,7 +30,7 @@ public class Bunyo extends AbstractEntity {
     private Set<Vendeg> vendegList;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nyertesId")
+    @JoinColumn(name = "nyertes_id")
     private Vendeg nyertes;
 
 }

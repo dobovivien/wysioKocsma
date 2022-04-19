@@ -1,6 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,25 +16,26 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "kocsmazas", schema = "public")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Kocsmazas extends AbstractEntity {
 
     @Column
-    @JsonFormat(pattern = "yyyy-mm-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd hh:mm:ss")
     private LocalDateTime mettol;
 
     @Column
-    @JsonFormat(pattern = "yyyy-mm-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd hh:mm:ss")
     private LocalDateTime meddig;
 
     @OneToMany(mappedBy = "kocsmazas", fetch = FetchType.LAZY)
     private List<Fogyasztas> fogyasztasLista;
 
-    @Column
+    @Column(name = "detoxba_kerult")
     private boolean detoxbaKerult;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vendegId", nullable = false)
+    @JoinColumn(name = "vendeg_id", nullable = false)
     private Vendeg vendeg;
 
 }

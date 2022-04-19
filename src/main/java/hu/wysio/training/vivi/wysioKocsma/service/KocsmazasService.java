@@ -1,5 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.service;
 
+import hu.wysio.training.vivi.wysioKocsma.converter.KocsmazasConverter;
+import hu.wysio.training.vivi.wysioKocsma.dto.KocsmazasDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.FogyasztasAdatok;
 import hu.wysio.training.vivi.wysioKocsma.model.Kocsmazas;
@@ -17,6 +19,10 @@ import java.util.Optional;
 @Service
 public class KocsmazasService {
 
+    private int maxDetox = 5;
+    private int maxKocsmazas = 4;
+    private int maxFogyasztas = 2000;
+
     @Autowired
     private KocsmazasRepository kocsmazasRepository;
 
@@ -25,6 +31,9 @@ public class KocsmazasService {
 
     @Autowired
     private FogyasztasRepository fogyasztasRepository;
+
+    @Autowired
+    private KocsmazasConverter kocsmazasConverter;
 
     public long startKocsmazas(long vendegId) throws ResourceNotFoundException {
         Kocsmazas kocsmazas = new Kocsmazas();
@@ -69,7 +78,7 @@ public class KocsmazasService {
 
     public boolean vendegIsDetoxos(Long vendegId) {
         int allKocsmazasByVendegDetoxban = kocsmazasRepository.getKocsmazasCountByVendegDetoxban(vendegId);
-        if (allKocsmazasByVendegDetoxban > 5) {
+        if (allKocsmazasByVendegDetoxban > maxDetox) {
             return true;
         }
         return false;
@@ -98,10 +107,11 @@ public class KocsmazasService {
     }
 
     public boolean isAlkoholista(Long vendegId) {
-        if (vendegIsDetoxos(vendegId) && getHetiAtlagosKocsmazasSzama(vendegId) > 4 && getVendegAtlagosFogyasztasAdatok(vendegId) > 2000) {
-            return true;
-        }
-        return false;
+        return vendegIsDetoxos(vendegId) && getHetiAtlagosKocsmazasSzama(vendegId) > maxKocsmazas && getVendegAtlagosFogyasztasAdatok(vendegId) > maxFogyasztas;
     }
 
+    public List<KocsmazasDto> isAlkoholistaWithCriteriaBuilder(Long vendegId) {
+        return kocsmazasConverter.convertKocsmazasListToKocsmazasDtoList(
+                kocsmazasRepository.isAlkoholistaWithCriteriaBuilder(vendegId));
+    }
 }
