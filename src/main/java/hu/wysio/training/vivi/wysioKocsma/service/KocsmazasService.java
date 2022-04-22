@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class KocsmazasService {
@@ -50,7 +51,7 @@ public class KocsmazasService {
 
     public List<Kocsmazas> getAllBefejezetlenKocsmazas() {
         List<Kocsmazas> kocsmazasList = kocsmazasRepository.findAll();
-        List<Kocsmazas> allBefejezetlenKocsmazas = kocsmazasList.stream().filter(kocsmazas -> kocsmazas.getMeddig() == null).toList();
+        List<Kocsmazas> allBefejezetlenKocsmazas = kocsmazasList.stream().filter(kocsmazas -> kocsmazas.getMeddig() == null).collect(Collectors.toList());
         return allBefejezetlenKocsmazas;
     }
 
