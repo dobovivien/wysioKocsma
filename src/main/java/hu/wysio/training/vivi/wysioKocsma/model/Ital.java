@@ -1,6 +1,5 @@
 package hu.wysio.training.vivi.wysioKocsma.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,6 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name = "ital", schema = "public")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Ital extends AbstractEntity {
 
     @Column

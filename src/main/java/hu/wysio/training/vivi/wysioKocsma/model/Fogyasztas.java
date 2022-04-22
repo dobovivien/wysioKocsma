@@ -1,6 +1,5 @@
 package hu.wysio.training.vivi.wysioKocsma.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "fogyasztas", schema = "public")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Fogyasztas extends AbstractEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
