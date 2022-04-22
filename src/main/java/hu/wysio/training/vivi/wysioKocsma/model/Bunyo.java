@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "bunyo", schema = "public")
 public class Bunyo extends AbstractEntity {
 
     @Column
@@ -28,7 +28,7 @@ public class Bunyo extends AbstractEntity {
     private Set<Vendeg> vendegList;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nyertesId")
+    @JoinColumn(name = "nyertes_id")
     private Vendeg nyertes;
 
 }

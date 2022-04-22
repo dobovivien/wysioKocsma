@@ -14,16 +14,16 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "ital", schema = "public")
 public class Ital extends AbstractEntity {
 
     @Column
     private String nev;
 
-    @Column
+    @Column(name = "alkohol_tartalom")
     private int alkoholTartalom;
 
-    @Column
+    @Column(name = "adag_mennyisege")
     private int adagMennyisege;
 
 }

@@ -1,6 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
 import hu.wysio.training.vivi.wysioKocsma.dto.FogyasztasDto;
+import hu.wysio.training.vivi.wysioKocsma.dto.ItalRangsorDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Fogyasztas;
 import hu.wysio.training.vivi.wysioKocsma.service.FogyasztasService;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController("/fogyasztas")
@@ -31,5 +34,10 @@ public class FogyasztasController {
     @PutMapping("/updateFogyasztas/{id}")
     public ResponseEntity<Fogyasztas> updateFogyasztas(@PathVariable Long id, @RequestBody Fogyasztas fogyasztasAdat) throws ResourceNotFoundException {
         return ResponseEntity.ok(fogyasztasService.updateFogyasztas(id, fogyasztasAdat));
+    }
+
+    @GetMapping("/getTopItal")
+    public List<ItalRangsorDto> getTopItal() {
+        return fogyasztasService.getTopItal();
     }
 }

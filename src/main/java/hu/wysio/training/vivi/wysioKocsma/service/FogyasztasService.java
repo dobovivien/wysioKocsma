@@ -2,11 +2,14 @@ package hu.wysio.training.vivi.wysioKocsma.service;
 
 import hu.wysio.training.vivi.wysioKocsma.converter.FogyasztasConverter;
 import hu.wysio.training.vivi.wysioKocsma.dto.FogyasztasDto;
+import hu.wysio.training.vivi.wysioKocsma.dto.ItalRangsorDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Fogyasztas;
 import hu.wysio.training.vivi.wysioKocsma.repository.FogyasztasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class FogyasztasService {
@@ -30,5 +33,9 @@ public class FogyasztasService {
         fogyasztas.setElfogyasztottMennyiseg(fogyasztasAdat.getElfogyasztottMennyiseg());
 
         return fogyasztasRepository.save(fogyasztas);
+    }
+
+    public List<ItalRangsorDto> getTopItal() {
+        return fogyasztasRepository.getTopItal();
     }
 }

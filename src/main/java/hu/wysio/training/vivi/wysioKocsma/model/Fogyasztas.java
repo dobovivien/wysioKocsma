@@ -12,14 +12,14 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "fogyasztas", schema = "public")
 public class Fogyasztas extends AbstractEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ital_id", nullable = false)
     private Ital ital;
 
-    @Column
+    @Column(name = "elfogyasztott_mennyiseg")
     private int elfogyasztottMennyiseg;
 
     @ManyToOne(fetch = FetchType.LAZY)

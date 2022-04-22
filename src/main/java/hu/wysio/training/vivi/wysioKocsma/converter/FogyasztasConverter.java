@@ -31,10 +31,10 @@ public class FogyasztasConverter {
         return fogyasztas;
     }
 
-    public List<Long> convertFogyasztasListToFogyasztasDtoList(List<Fogyasztas> fogyasztasok) {
-        List<Long> fogyasztasDtoList = new ArrayList<>();
+    public List<FogyasztasDto> convertFogyasztasListToFogyasztasDtoList(List<Fogyasztas> fogyasztasok) {
+        List<FogyasztasDto> fogyasztasDtoList = new ArrayList<>();
         for (Fogyasztas fogyasztas : fogyasztasok) {
-            fogyasztasDtoList.add(fogyasztas.getId());
+            fogyasztasDtoList.add(convertFogyasztasToDto(fogyasztas));
         }
         return fogyasztasDtoList;
     }
