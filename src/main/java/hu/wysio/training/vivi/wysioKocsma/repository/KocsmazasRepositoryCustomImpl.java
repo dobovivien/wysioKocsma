@@ -21,7 +21,8 @@ public class KocsmazasRepositoryCustomImpl implements KocsmazasRepositoryCustom 
         CriteriaQuery<Kocsmazas> criteriaQuery = criteriaBuilder.createQuery(Kocsmazas.class);
         Root<Kocsmazas> root = criteriaQuery.from(Kocsmazas.class);
         Join<Kocsmazas, Vendeg> joinVendeg = root.join(hu.wysio.training.vivi.wysioKocsma.model.Kocsmazas_.vendeg);
-        criteriaQuery.select(root).where(criteriaBuilder.equal(joinVendeg.get(hu.wysio.training.vivi.wysioKocsma.model.Vendeg_.id), vendegId));
+        criteriaQuery.select(root)
+                .where(criteriaBuilder.equal(joinVendeg.get(hu.wysio.training.vivi.wysioKocsma.model.Vendeg_.id), vendegId));
 
         Query<Kocsmazas> query = session.createQuery(criteriaQuery);
         session.close();

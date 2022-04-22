@@ -4,15 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import hu.wysio.training.vivi.wysioKocsma.configuration.HibernateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 @SpringBootApplication
-public class WysioKocsmaApplication {
+public class WysioKocsmaApplication implements ServletContextListener {
 
     @Autowired
     void configureObjectMapper(final ObjectMapper mapper) {
@@ -25,13 +26,10 @@ public class WysioKocsmaApplication {
         SpringApplication.run(WysioKocsmaApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> {
-
-            System.out.println("Lefutott :)");
-
-        };
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        ServletContextListener.super.contextDestroyed(sce);
+        System.out.println("Lefutott :)");
+        HibernateUtil.shutdown();
     }
-
 }

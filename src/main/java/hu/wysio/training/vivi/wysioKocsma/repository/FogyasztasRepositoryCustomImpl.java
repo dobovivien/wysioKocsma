@@ -15,7 +15,7 @@ import java.util.List;
 
 public class FogyasztasRepositoryCustomImpl implements FogyasztasRepositoryCustom {
 
-    private final int LIMIT = 3;
+    private static final int LIMIT = 3;
 
     @Override
     public List<ItalRangsorDto> getTopItal() {
