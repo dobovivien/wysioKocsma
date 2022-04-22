@@ -19,9 +19,9 @@ import java.util.Optional;
 @Service
 public class KocsmazasService {
 
-    private int maxDetox = 5;
-    private int maxKocsmazas = 4;
-    private int maxFogyasztas = 2000;
+    private static final int MAX_DETOX = 5;
+    private static final int MAX_KOCSMAZAS = 4;
+    private static final int MAX_FOGYASZTAS = 2000;
 
     @Autowired
     private KocsmazasRepository kocsmazasRepository;
@@ -78,7 +78,7 @@ public class KocsmazasService {
 
     public boolean vendegIsDetoxos(Long vendegId) {
         int allKocsmazasByVendegDetoxban = kocsmazasRepository.getKocsmazasCountByVendegDetoxban(vendegId);
-        if (allKocsmazasByVendegDetoxban > maxDetox) {
+        if (allKocsmazasByVendegDetoxban > MAX_DETOX) {
             return true;
         }
         return false;
@@ -107,7 +107,7 @@ public class KocsmazasService {
     }
 
     public boolean isAlkoholista(Long vendegId) {
-        return vendegIsDetoxos(vendegId) && getHetiAtlagosKocsmazasSzama(vendegId) > maxKocsmazas && getVendegAtlagosFogyasztasAdatok(vendegId) > maxFogyasztas;
+        return vendegIsDetoxos(vendegId) && getHetiAtlagosKocsmazasSzama(vendegId) > MAX_KOCSMAZAS && getVendegAtlagosFogyasztasAdatok(vendegId) > MAX_FOGYASZTAS;
     }
 
     public List<KocsmazasDto> isAlkoholistaWithCriteriaBuilder(Long vendegId) {

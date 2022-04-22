@@ -35,7 +35,7 @@ public class FogyasztasService {
         return fogyasztasRepository.save(fogyasztas);
     }
 
-    public List<ItalRangsorDto> getTopHaromItal() {
+    public List<ItalRangsorDto> getTopItal() {
         return fogyasztasRepository.getTopItal();
     }
 }

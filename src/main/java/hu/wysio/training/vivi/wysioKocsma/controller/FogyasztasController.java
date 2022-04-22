@@ -36,8 +36,8 @@ public class FogyasztasController {
         return ResponseEntity.ok(fogyasztasService.updateFogyasztas(id, fogyasztasAdat));
     }
 
-    @GetMapping("/getTopHaromItal")
-    public List<ItalRangsorDto> getTopHaromItal() {
-        return fogyasztasService.getTopHaromItal();
+    @GetMapping("/getTopItal")
+    public List<ItalRangsorDto> getTopItal() {
+        return fogyasztasService.getTopItal();
     }
 }
