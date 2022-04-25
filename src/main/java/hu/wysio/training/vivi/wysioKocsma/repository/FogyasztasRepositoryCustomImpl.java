@@ -18,7 +18,7 @@ public class FogyasztasRepositoryCustomImpl implements FogyasztasRepositoryCusto
     private static final int LIMIT = 3;
 
     @Override
-    public List<ItalRangsorDto> getTopItal() {
+    public List<ItalRangsorDto> getLegtobbetFogyasztottItal() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();

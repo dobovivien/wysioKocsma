@@ -1,6 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
 import hu.wysio.training.vivi.wysioKocsma.dto.TabellaDto;
+import hu.wysio.training.vivi.wysioKocsma.exception.BunyoException;
 import hu.wysio.training.vivi.wysioKocsma.service.BunyoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,12 @@ public class BunyoController {
 
     //bunyo tabella lekerdezese
     @GetMapping("/getAllBunyo")
-    public List<TabellaDto> getAllBunyoByNyertesek() {
-        return bunyoService.getTabellaEredmeny();
+    public ResponseEntity<List<TabellaDto>> getAllBunyoByNyertesek() throws BunyoException {
+        List<TabellaDto> allBunyo = bunyoService.getTabellaEredmeny();
+        if (allBunyo.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(allBunyo, HttpStatus.OK);
     }
 
     //create
@@ -32,7 +37,7 @@ public class BunyoController {
             long bunyoId = bunyoService.startBunyo();
             return new ResponseEntity<>(bunyoId, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
