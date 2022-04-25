@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface FogyasztasRepositoryCustom {
 
-    List<ItalRangsorDto> getTopItal();
+    List<ItalRangsorDto> getLegtobbetFogyasztottItal();
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -28,10 +29,9 @@ public class Kocsmazas extends AbstractEntity {
     private LocalDateTime meddig;
 
     @OneToMany(mappedBy = "kocsmazas", fetch = FetchType.LAZY)
-    private List<Fogyasztas> fogyasztasLista;
+    private List<Fogyasztas> fogyasztasLista = new ArrayList<>();
 
     @Column(name = "detoxba_kerult")
     private boolean detoxbaKerult;
-
 
 }
