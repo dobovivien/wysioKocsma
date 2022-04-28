@@ -11,8 +11,8 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BunyoDto implements Serializable {
-    
-    private String nyertes;
-    private long nyertesId;
+public class VendegFogyasztasSzerintDto implements Serializable {
+
+    private String becenev;
+    private long elfogyasztottMennyiseg;
 }

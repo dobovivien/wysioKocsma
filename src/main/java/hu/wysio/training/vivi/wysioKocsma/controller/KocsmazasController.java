@@ -1,7 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
-import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
-import hu.wysio.training.vivi.wysioKocsma.model.Kocsmazas;
+import hu.wysio.training.vivi.wysioKocsma.dto.KocsmazasDto;
+import hu.wysio.training.vivi.wysioKocsma.exception.KocsmazasException;
 import hu.wysio.training.vivi.wysioKocsma.service.KocsmazasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,38 +17,66 @@ public class KocsmazasController {
     @Autowired
     KocsmazasService kocsmazasService;
 
-    //get all
-    @GetMapping("/getAllKocsmazas")
-    public List<Kocsmazas> getAllKocsmazas() {
-        return kocsmazasService.findAll();
-    }
-
     //create
-    @PostMapping("/createKocsmazas")
-    public ResponseEntity<Kocsmazas> createKocsmazas(@RequestBody Kocsmazas kocsmazasAdat) {
+    @PostMapping("/startKocsmazas/{vendegId}")
+    public ResponseEntity<Long> startKocsmazas(@PathVariable(value = "vendegId") Long vendegId) {
         try {
-            Kocsmazas kocsmazas = kocsmazasService.createKocsmazas(kocsmazasAdat);
-            return new ResponseEntity<>(kocsmazas, HttpStatus.CREATED);
+            long kocsmazasId = kocsmazasService.startKocsmazas(vendegId);
+            return new ResponseEntity<>(kocsmazasId, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    //get by id
-    @GetMapping("/getKocsmazasById/{id}")
-    public ResponseEntity<Kocsmazas> getKocsmazasById(@PathVariable Long id) throws ResourceNotFoundException {
-        return ResponseEntity.ok(kocsmazasService.findById(id));
-    }
-
     //update
-    @PutMapping("/updateKocsmazas/{id}")
-    public ResponseEntity<Kocsmazas> updateKocsmazas(@PathVariable Long id, @RequestBody Kocsmazas kocsmazasAdat) throws ResourceNotFoundException {
-        return ResponseEntity.ok(kocsmazasService.updateKocsmazas(id, kocsmazasAdat));
+    @PutMapping("/finishKocsmazas/{vendegId}")
+    public ResponseEntity<Long> finishKocsmazas(@PathVariable(value = "vendegId") Long vendegId) {
+        try {
+            long finishedKocsmazasId = kocsmazasService.finishKocsmazas(vendegId);
+            return new ResponseEntity<>(finishedKocsmazasId, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    //delete
-    @DeleteMapping("/deleteKocsmazas/{id}")
-    public void deleteKocsmazas(@PathVariable Long id, @RequestBody Kocsmazas kocsmazasAdat) throws ResourceNotFoundException {
-        kocsmazasService.deleteKocsmazas(kocsmazasAdat);
+    //detoxba kerult
+    @PutMapping("/addToDetox/{vendegId}")
+    public ResponseEntity<Long> addToDetox(@PathVariable(value = "vendegId") Long vendegId) {
+        try {
+            kocsmazasService.addToDetox(vendegId);
+            return new ResponseEntity<>(vendegId, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //alkoholista-e
+    @GetMapping("/vendegIsDetoxos/{vendegId}")
+    public ResponseEntity<Boolean> vendegIsDetoxos(@PathVariable(value = "vendegId") Long vendegId) {
+        try {
+            boolean detoxos = kocsmazasService.vendegIsDetoxos(vendegId);
+            return new ResponseEntity<>(detoxos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("isAlkoholista/{vendegId}")
+    public ResponseEntity<Boolean> isAlkoholista(@PathVariable(value = "vendegId") Long vendegId) {
+        try {
+            boolean alkoholista = kocsmazasService.isAlkoholista(vendegId);
+            return new ResponseEntity<>(alkoholista, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("isAlkoholistaWithCriteriaBuilder/{vendegId}")
+    public ResponseEntity<List<KocsmazasDto>> isAlkoholistaWithCriteriaBuilder(@PathVariable(value = "vendegId") Long vendegId) throws KocsmazasException {
+        List<KocsmazasDto> alkoholistaList = kocsmazasService.isAlkoholistaWithCriteriaBuilder(vendegId);
+        if (alkoholistaList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(alkoholistaList, HttpStatus.OK);
     }
 }

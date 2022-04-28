@@ -7,15 +7,14 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "bunyo", schema = "public")
 public class Bunyo extends AbstractEntity {
 
     @Column
@@ -24,13 +23,12 @@ public class Bunyo extends AbstractEntity {
     @Column
     private LocalDateTime meddig;
 
-    @CollectionTable
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, unique = true)
-    private List<Vendeg> resztvevok = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "bunyo_vendeg", joinColumns = @JoinColumn(name = "bunyo_id"), inverseJoinColumns = @JoinColumn(name = "vendeg_id"))
+    private Set<Vendeg> vendegList;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nyertesId", nullable = false, unique = true)
+    @JoinColumn(name = "nyertes_id")
     private Vendeg nyertes;
 
 }

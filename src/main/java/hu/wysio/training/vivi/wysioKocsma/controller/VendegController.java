@@ -1,6 +1,8 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
-import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
+import hu.wysio.training.vivi.wysioKocsma.dto.VendegDto;
+import hu.wysio.training.vivi.wysioKocsma.dto.VendegFogyasztasSzerintDto;
+import hu.wysio.training.vivi.wysioKocsma.exception.VendegException;
 import hu.wysio.training.vivi.wysioKocsma.model.Vendeg;
 import hu.wysio.training.vivi.wysioKocsma.service.VendegService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,43 +19,49 @@ public class VendegController {
     @Autowired
     VendegService vendegService;
 
-    @GetMapping("/")
-    public String index() {
-        return "Greetings from Spring Boot!";
-    }
-
     //get all
     @GetMapping("/getAllVendeg")
-    public List<Vendeg> getAllVendeg() {
-        return vendegService.findAll();
+    public ResponseEntity<List<Vendeg>> getAllVendeg() throws VendegException {
+        List<Vendeg> allVendeg = vendegService.findAll();
+        if (allVendeg.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(allVendeg, HttpStatus.OK);
     }
 
     //create
     @PostMapping("/createVendeg")
-    public ResponseEntity<Vendeg> createVendeg(@RequestBody Vendeg vendegAdat) {
+    public ResponseEntity<Long> createVendeg(@RequestBody VendegDto vendegDto) {
         try {
-            Vendeg vendeg = vendegService.createVendeg(vendegAdat);
-            return new ResponseEntity<>(vendeg, HttpStatus.CREATED);
+            long vendegId = vendegService.createVendeg(vendegDto);
+            return new ResponseEntity<>(vendegId, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     //get by id
     @GetMapping("/getVendegById/{id}")
-    public ResponseEntity<Vendeg> getVendegById(@PathVariable Long id) throws ResourceNotFoundException {
-        return ResponseEntity.ok(vendegService.findById(id));
+    public ResponseEntity<Vendeg> getVendegById(@PathVariable Long id) throws VendegException {
+        Vendeg vendeg = vendegService.findById(id);
+        if (vendeg == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(vendeg, HttpStatus.OK);
     }
 
     //update
     @PutMapping("/updateVendeg/{id}")
-    public ResponseEntity<Vendeg> updateVendeg(@PathVariable Long id, @RequestBody Vendeg vendegAdatok) throws ResourceNotFoundException {
-        return ResponseEntity.ok(vendegService.updateVendeg(id, vendegAdatok));
+    public ResponseEntity<Vendeg> updateVendeg(@PathVariable Long id, @RequestBody Vendeg vendegAdatok) throws VendegException {
+        Vendeg updatedVendeg = vendegService.updateVendeg(id, vendegAdatok);
+        if (updatedVendeg == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(updatedVendeg, HttpStatus.OK);
     }
 
-    //delete
-    @DeleteMapping("/deleteVendeg/{id}")
-    public void deleteVendeg(@PathVariable Long id, @RequestBody Vendeg vendegAdatok) throws ResourceNotFoundException {
-        vendegService.deleteVendeg(vendegAdatok);
+    @GetMapping("/getVendegekByElfogyasztottMennyiseg")
+    public List<VendegFogyasztasSzerintDto> getVendegekByElfogyasztottMennyiseg() throws VendegException {
+        return vendegService.getVendegekByElfogyasztottMennyiseg();
     }
 }

@@ -1,33 +1,35 @@
 package hu.wysio.training.vivi.wysioKocsma;
 
-import org.springframework.boot.CommandLineRunner;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import hu.wysio.training.vivi.wysioKocsma.configuration.HibernateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 
-import java.util.Arrays;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 @SpringBootApplication
-public class WysioKocsmaApplication {
+public class WysioKocsmaApplication implements ServletContextListener {
+
+    @Autowired
+    void configureObjectMapper(final ObjectMapper mapper) {
+        mapper.registerModule(new ParameterNamesModule())
+                .registerModule(new Jdk8Module())
+                .registerModule(new JavaTimeModule());
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(WysioKocsmaApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> {
-
-            System.out.println("Lefutott :)");
-
-            String[] beanNames = ctx.getBeanDefinitionNames();
-            Arrays.sort(beanNames);
-            for (String beanName : beanNames) {
-//				System.out.println(beanName);
-            }
-
-        };
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        ServletContextListener.super.contextDestroyed(sce);
+        System.out.println("Lefutott :)");
+        HibernateUtil.shutdown();
     }
-
 }

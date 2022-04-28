@@ -1,6 +1,8 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
-import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
+import hu.wysio.training.vivi.wysioKocsma.dto.FogyasztasDto;
+import hu.wysio.training.vivi.wysioKocsma.dto.ItalRangsorDto;
+import hu.wysio.training.vivi.wysioKocsma.exception.FogyasztasException;
 import hu.wysio.training.vivi.wysioKocsma.model.Fogyasztas;
 import hu.wysio.training.vivi.wysioKocsma.service.FogyasztasService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,38 +19,34 @@ public class FogyasztasController {
     @Autowired
     FogyasztasService fogyasztasService;
 
-    //get all
-    @GetMapping("/getAllFogyasztas")
-    public List<Fogyasztas> getAllFogyasztas() {
-        return fogyasztasService.findAll();
-    }
-
     //create
     @PostMapping("/createFogyasztas")
-    public ResponseEntity<Fogyasztas> createFogyasztas(@RequestBody Fogyasztas fogyasztasAdat) {
+    public ResponseEntity<Long> createFogyasztas(@RequestBody FogyasztasDto fogyasztasDto) {
         try {
-            Fogyasztas fogyasztas = fogyasztasService.createFogyasztas(fogyasztasAdat);
-            return new ResponseEntity<>(fogyasztas, HttpStatus.CREATED);
+            long fogyasztasId = fogyasztasService.createFogyasztas(fogyasztasDto).getId();
+            return new ResponseEntity<>(fogyasztasId, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    //get by id
-    @GetMapping("/getFogyasztasById/{id}")
-    public ResponseEntity<Fogyasztas> getFogyasztasById(@PathVariable Long id) throws ResourceNotFoundException {
-        return ResponseEntity.ok(fogyasztasService.findById(id));
     }
 
     //update
     @PutMapping("/updateFogyasztas/{id}")
-    public ResponseEntity<Fogyasztas> updateFogyasztas(@PathVariable Long id, @RequestBody Fogyasztas fogyasztasAdat) throws ResourceNotFoundException {
-        return ResponseEntity.ok(fogyasztasService.updateFogyasztas(id, fogyasztasAdat));
+    public ResponseEntity<Fogyasztas> updateFogyasztas(@PathVariable Long id, @RequestBody Fogyasztas fogyasztasAdat) throws FogyasztasException {
+        try {
+            Fogyasztas fogyasztas = fogyasztasService.updateFogyasztas(id, fogyasztasAdat);
+            return new ResponseEntity<>(fogyasztas, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    //delete
-    @DeleteMapping("/deleteFogyasztas/{id}")
-    public void deleteFogyasztas(@PathVariable Long id, @RequestBody Fogyasztas fogyasztasAdat) throws ResourceNotFoundException {
-        fogyasztasService.deleteFogyasztas(fogyasztasAdat);
+    @GetMapping("/getTopItal")
+    public ResponseEntity<List<ItalRangsorDto>> getTopItal() {
+        List<ItalRangsorDto> italRangsorDtoList = fogyasztasService.getLegtobbetFogyasztottItal();
+        if (italRangsorDtoList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(italRangsorDtoList, HttpStatus.OK);
     }
 }

@@ -1,5 +1,8 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
+import hu.wysio.training.vivi.wysioKocsma.dto.ItalDto;
+import hu.wysio.training.vivi.wysioKocsma.exception.ItalException;
+import hu.wysio.training.vivi.wysioKocsma.dto.ItalDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Ital;
 import hu.wysio.training.vivi.wysioKocsma.service.ItalService;
@@ -19,36 +22,38 @@ public class ItalController {
 
     //get all
     @GetMapping("/getAllItal")
-    public List<Ital> getAllItal() {
-        return italService.findAll();
+    public ResponseEntity<List<Ital>> getAllItal() throws ItalException {
+        List<Ital> allItal = italService.findAll();
+        if (allItal.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(allItal, HttpStatus.OK);
     }
 
     //create
     @PostMapping("/createItal")
-    public ResponseEntity<Ital> createItal(@RequestBody Ital italAdat) {
+    public ResponseEntity<Long> createItal(@RequestBody ItalDto italDto) {
         try {
-            Ital ital = italService.createItal(italAdat);
-            return new ResponseEntity<>(ital, HttpStatus.CREATED);
+            long italId = italService.createItal(italDto);
+            return new ResponseEntity<>(italId, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    //get by id
-    @GetMapping("/getItalById/{id}")
-    public ResponseEntity<Ital> getItalById(@PathVariable Long id) throws ResourceNotFoundException {
-        return ResponseEntity.ok(italService.findById(id));
     }
 
     //update
     @PutMapping("/updateItal/{id}")
-    public ResponseEntity<Ital> updateItal(@PathVariable Long id, @RequestBody Ital italAdat) throws ResourceNotFoundException {
-        return ResponseEntity.ok(italService.updateItal(id, italAdat));
+    public ResponseEntity<Ital> updateItal(@PathVariable Long id, @RequestBody Ital italAdat) throws ItalException {
+        Ital updatedItal = italService.updateItal(id, italAdat);
+        if (updatedItal == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(updatedItal, HttpStatus.OK);
     }
 
     //delete
     @DeleteMapping("/deleteItal/{id}")
-    public void deleteItal(@PathVariable Long id, @RequestBody Ital italAdat) throws ResourceNotFoundException {
+    public void deleteItal(@PathVariable Long id, @RequestBody Ital italAdat) throws ItalException {
         italService.deleteItal(italAdat);
     }
 }

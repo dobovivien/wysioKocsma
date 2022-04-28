@@ -15,8 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "kocsmazas", schema = "public")
 public class Kocsmazas extends AbstractEntity {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vendeg_id", nullable = false)
+    private Vendeg vendeg;
 
     @Column
     private LocalDateTime mettol;
@@ -24,12 +28,10 @@ public class Kocsmazas extends AbstractEntity {
     @Column
     private LocalDateTime meddig;
 
-    @CollectionTable
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fogyasztasLista", nullable = false, unique = true)
+    @OneToMany(mappedBy = "kocsmazas", fetch = FetchType.LAZY)
     private List<Fogyasztas> fogyasztasLista = new ArrayList<>();
 
-    @Column
+    @Column(name = "detoxba_kerult")
     private boolean detoxbaKerult;
 
 }
