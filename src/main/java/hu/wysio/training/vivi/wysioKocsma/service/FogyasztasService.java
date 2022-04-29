@@ -26,7 +26,7 @@ public class FogyasztasService {
     public Fogyasztas createFogyasztas(FogyasztasDto fogyasztasDto) throws FogyasztasException {
         try {
             return fogyasztasRepository.save(fogyasztasConverter.convertDtoToFogyasztas(fogyasztasDto));
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new FogyasztasException(SIKERTELEN);
         }
     }
@@ -35,14 +35,14 @@ public class FogyasztasService {
         Fogyasztas fogyasztas;
         try {
             fogyasztas = fogyasztasRepository.findById(id).get();
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new FogyasztasException(NINCS_FOGYASZTAS + id);
         }
         try {
             fogyasztas.setItal(fogyasztasAdat.getItal());
             fogyasztas.setElfogyasztottMennyiseg(fogyasztasAdat.getElfogyasztottMennyiseg());
             return fogyasztasRepository.save(fogyasztas);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new FogyasztasException(SIKERTELEN);
         }
     }

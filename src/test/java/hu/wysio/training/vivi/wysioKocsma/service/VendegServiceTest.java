@@ -1,4 +1,4 @@
-package hu.wysio.training.vivi.wysioKocsma;
+package hu.wysio.training.vivi.wysioKocsma.service;
 
 import hu.wysio.training.vivi.wysioKocsma.converter.VendegConverter;
 import hu.wysio.training.vivi.wysioKocsma.dto.VendegDto;
@@ -9,7 +9,6 @@ import hu.wysio.training.vivi.wysioKocsma.model.Ital;
 import hu.wysio.training.vivi.wysioKocsma.model.Kocsmazas;
 import hu.wysio.training.vivi.wysioKocsma.model.Vendeg;
 import hu.wysio.training.vivi.wysioKocsma.repository.VendegRepository;
-import hu.wysio.training.vivi.wysioKocsma.service.VendegService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
