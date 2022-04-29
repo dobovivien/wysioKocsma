@@ -30,7 +30,7 @@ public class VendegService {
         try {
             Vendeg vendeg = vendegRepository.save(vendegConverter.convertDtoToVendeg(vendegDto));
             return vendeg.getId();
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new VendegException(SIKERTELEN);
         }
     }
@@ -39,7 +39,7 @@ public class VendegService {
         Vendeg vendeg;
         try {
             vendeg = vendegRepository.findById(id).get();
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new VendegException(NINCS_VENDEG + id);
         }
         try {
@@ -47,7 +47,7 @@ public class VendegService {
             vendeg.setMajerosseg(vendegAdat.getMajerosseg());
             vendeg.setBicepszmeret(vendegAdat.getBicepszmeret());
             return vendegRepository.save(vendeg);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new VendegException(SIKERTELEN);
         }
     }
@@ -83,7 +83,7 @@ public class VendegService {
         Optional<Vendeg> vendeg;
         try {
             vendeg = vendegRepository.findById(vendegId);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new VendegException(NINCS_VENDEG);
         }
         return vendeg.map(value -> value.getKocsmazasList().stream()
