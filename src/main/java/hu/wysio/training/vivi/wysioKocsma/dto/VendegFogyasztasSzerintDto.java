@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VendegFogyasztasSzerintDto implements Serializable {
-
+    
     private String becenev;
     private long elfogyasztottMennyiseg;
 }

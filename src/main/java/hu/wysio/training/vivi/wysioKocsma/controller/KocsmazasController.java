@@ -6,6 +6,7 @@ import hu.wysio.training.vivi.wysioKocsma.service.KocsmazasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class KocsmazasController {
 
     //create
     @PostMapping("/startKocsmazas/{vendegId}")
-    public ResponseEntity<Long> startKocsmazas(@PathVariable(value = "vendegId") Long vendegId) {
+    public ResponseEntity<Long> startKocsmazas(@Validated @PathVariable(value = "vendegId") Long vendegId) {
         try {
             long kocsmazasId = kocsmazasService.startKocsmazas(vendegId);
             return new ResponseEntity<>(kocsmazasId, HttpStatus.CREATED);

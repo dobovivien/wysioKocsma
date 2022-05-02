@@ -8,6 +8,7 @@ import hu.wysio.training.vivi.wysioKocsma.service.FogyasztasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class FogyasztasController {
 
     //create
     @PostMapping("/createFogyasztas")
-    public ResponseEntity<Long> createFogyasztas(@RequestBody FogyasztasDto fogyasztasDto) {
+    public ResponseEntity<Long> createFogyasztas(@Validated @RequestBody FogyasztasDto fogyasztasDto) {
         try {
             long fogyasztasId = fogyasztasService.createFogyasztas(fogyasztasDto).getId();
             return new ResponseEntity<>(fogyasztasId, HttpStatus.CREATED);
@@ -32,7 +33,7 @@ public class FogyasztasController {
 
     //update
     @PutMapping("/updateFogyasztas/{id}")
-    public ResponseEntity<Fogyasztas> updateFogyasztas(@PathVariable Long id, @RequestBody Fogyasztas fogyasztasAdat) throws FogyasztasException {
+    public ResponseEntity<Fogyasztas> updateFogyasztas(@Validated @PathVariable Long id, @RequestBody Fogyasztas fogyasztasAdat) throws FogyasztasException {
         try {
             Fogyasztas fogyasztas = fogyasztasService.updateFogyasztas(id, fogyasztasAdat);
             return new ResponseEntity<>(fogyasztas, HttpStatus.OK);

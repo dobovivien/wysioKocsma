@@ -8,6 +8,7 @@ import hu.wysio.training.vivi.wysioKocsma.service.VendegService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class VendegController {
 
     //create
     @PostMapping("/createVendeg")
-    public ResponseEntity<Long> createVendeg(@RequestBody VendegDto vendegDto) {
+    public ResponseEntity<Long> createVendeg(@Validated @RequestBody VendegDto vendegDto) {
         try {
             long vendegId = vendegService.createVendeg(vendegDto);
             return new ResponseEntity<>(vendegId, HttpStatus.CREATED);
@@ -52,7 +53,7 @@ public class VendegController {
 
     //update
     @PutMapping("/updateVendeg/{id}")
-    public ResponseEntity<Vendeg> updateVendeg(@PathVariable Long id, @RequestBody Vendeg vendegAdatok) throws VendegException {
+    public ResponseEntity<Vendeg> updateVendeg(@Validated @PathVariable Long id, @RequestBody Vendeg vendegAdatok) throws VendegException {
         Vendeg updatedVendeg = vendegService.updateVendeg(id, vendegAdatok);
         if (updatedVendeg == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

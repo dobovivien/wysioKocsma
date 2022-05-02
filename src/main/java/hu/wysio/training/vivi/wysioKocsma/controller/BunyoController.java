@@ -40,10 +40,4 @@ public class BunyoController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-//    //update
-//    @PutMapping("/updateBunyo/{id}")
-//    public ResponseEntity<Bunyo> finishBunyo(@PathVariable Long id, @RequestBody Bunyo bunyoAdat) throws ResourceNotFoundException {
-//        return ResponseEntity.ok(bunyoService.finishBunyo(id, bunyoAdat));
-//    }
 }

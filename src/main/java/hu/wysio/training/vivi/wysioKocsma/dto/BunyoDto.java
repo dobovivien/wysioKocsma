@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BunyoDto implements Serializable {
-    
+
     private String nyertes;
     private long nyertesId;
 }

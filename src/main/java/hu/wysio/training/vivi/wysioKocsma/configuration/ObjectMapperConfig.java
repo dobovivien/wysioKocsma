@@ -1,4 +1,4 @@
-package hu.wysio.training.vivi.wysioKocsma.config;
+package hu.wysio.training.vivi.wysioKocsma.configuration;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
