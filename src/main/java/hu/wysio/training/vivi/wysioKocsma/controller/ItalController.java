@@ -2,13 +2,12 @@ package hu.wysio.training.vivi.wysioKocsma.controller;
 
 import hu.wysio.training.vivi.wysioKocsma.dto.ItalDto;
 import hu.wysio.training.vivi.wysioKocsma.exception.ItalException;
-import hu.wysio.training.vivi.wysioKocsma.dto.ItalDto;
-import hu.wysio.training.vivi.wysioKocsma.exception.ResourceNotFoundException;
 import hu.wysio.training.vivi.wysioKocsma.model.Ital;
 import hu.wysio.training.vivi.wysioKocsma.service.ItalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +31,7 @@ public class ItalController {
 
     //create
     @PostMapping("/createItal")
-    public ResponseEntity<Long> createItal(@RequestBody ItalDto italDto) {
+    public ResponseEntity<Long> createItal(@Validated @RequestBody ItalDto italDto) {
         try {
             long italId = italService.createItal(italDto);
             return new ResponseEntity<>(italId, HttpStatus.CREATED);
@@ -43,7 +42,7 @@ public class ItalController {
 
     //update
     @PutMapping("/updateItal/{id}")
-    public ResponseEntity<Ital> updateItal(@PathVariable Long id, @RequestBody Ital italAdat) throws ItalException {
+    public ResponseEntity<Ital> updateItal(@Validated @PathVariable Long id, @RequestBody Ital italAdat) throws ItalException {
         Ital updatedItal = italService.updateItal(id, italAdat);
         if (updatedItal == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
