@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,7 +26,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class VendegServiceTest {
+
+    private static final Vendeg EXPECTED_VENDEG = new Vendeg("TesztNev", "babamaj", 10, null, null);
+    private static final VendegDto VENDEG_DTO = new VendegDto(1L, "TesztNev", "babamaj", 10, null, null);
+
+    private static final Vendeg EXPECTED_VENDEG_1 = new Vendeg("TesztNev1", "babamaj", 10, null, null);
+    private static final Vendeg EXPECTED_VENDEG_2 = new Vendeg("TesztNev2", "babamaj", 10, null, null);
+    private static final Vendeg EXPECTED_VENDEG_3 = new Vendeg("TesztNev3", "babamaj", 10, null, null);
+    private static final Vendeg EXPECTED_VENDEG_4 = new Vendeg("TesztNev4", "babamaj", 10, null, null);
 
     @MockBean
     private VendegConverter vendegConverter;
@@ -38,81 +48,59 @@ class VendegServiceTest {
 
     @Test
     void createVendeg_returns_vendegId() throws VendegException {
-        Vendeg expectedVendeg = new Vendeg("TesztNev", "babamaj", 10, null, null);
-        VendegDto vendegDto = new VendegDto(1L, "TesztNev", "babamaj", 10, null, null);
+        when(vendegConverter.convertDtoToVendeg(VENDEG_DTO)).thenReturn(EXPECTED_VENDEG);
+        when(vendegRepository.save(EXPECTED_VENDEG)).thenReturn(EXPECTED_VENDEG);
 
-        when(vendegConverter.convertDtoToVendeg(vendegDto)).thenReturn(expectedVendeg);
-        when(vendegRepository.save(expectedVendeg)).thenReturn(expectedVendeg);
+        vendegService.createVendeg(VENDEG_DTO);
 
-        vendegService.createVendeg(vendegDto);
-
-        verify(vendegConverter).convertDtoToVendeg(vendegDto);
-        verify(vendegRepository).save(expectedVendeg);
+        verify(vendegConverter).convertDtoToVendeg(VENDEG_DTO);
+        verify(vendegRepository).save(EXPECTED_VENDEG);
     }
 
     @Test
     void createVendeg_throws_siekrtelen_exception() {
-        VendegDto vendegDto = new VendegDto(1L, "TesztNev", "babamaj", 10, null, null);
-
         when(vendegRepository.save(any())).thenThrow(new IllegalArgumentException());
 
-        Assertions.assertThrows(VendegException.class, () -> vendegService.createVendeg(vendegDto));
+        Assertions.assertThrows(VendegException.class, () -> vendegService.createVendeg(VENDEG_DTO));
     }
 
     @Test
     void updateVendeg_finds_id() throws VendegException {
-        Vendeg expectedVendeg = new Vendeg("TesztNev", "babamaj", 10, null, null);
+        Vendeg vendegToUpdate = new Vendeg("TesztNevdfgh", "babamdfghaj", 10, null, null);
+        vendegToUpdate.setId(1L);
+        Vendeg updatedVendeg = new Vendeg("TesztNev", "babamaj", 10, null, null);
+        updatedVendeg.setId(1L);
 
-        when(vendegRepository.findById(1L)).thenReturn(Optional.of(expectedVendeg));
+        when(vendegRepository.findById(1L)).thenReturn(Optional.of(vendegToUpdate));
+        when(vendegRepository.save(vendegToUpdate)).thenReturn(vendegToUpdate);
 
-        vendegService.updateVendeg(1L, expectedVendeg);
+        Vendeg resultVendeg = vendegService.updateVendeg(1L, updatedVendeg);
 
-        verify(vendegRepository).findById(1L);
+        Assertions.assertEquals(updatedVendeg.getBecenev(), resultVendeg.getBecenev());
     }
 
     @Test
     void updateVendeg_throws_nincsVendeg_exception() {
-        Vendeg expectedVendeg = new Vendeg("TesztNev", "babamaj", 10, null, null);
-
         when(vendegRepository.findById(any())).thenThrow(new IllegalArgumentException());
 
-        Assertions.assertThrows(VendegException.class, () -> vendegService.updateVendeg(1L, expectedVendeg));
-    }
-
-    @Test
-    void updateVendeg_saves_vendeg() throws VendegException {
-        Vendeg expectedVendeg = new Vendeg("TesztNev", "babamaj", 10, null, null);
-
-        when(vendegRepository.findById(1L)).thenReturn(Optional.of(expectedVendeg));
-        when(vendegRepository.save(expectedVendeg)).thenReturn(expectedVendeg);
-
-        vendegService.updateVendeg(1L, expectedVendeg);
-
-        verify(vendegRepository).save(expectedVendeg);
+        Assertions.assertThrows(VendegException.class, () -> vendegService.updateVendeg(1L, EXPECTED_VENDEG));
     }
 
     @Test
     void updateVendeg_throws_sikertelen_exception() {
-        Vendeg expectedVendeg = new Vendeg("TesztNev", "babamaj", 10, null, null);
-
         when(vendegRepository.save(any())).thenThrow(new IllegalArgumentException());
-        when(vendegRepository.findById(1L)).thenReturn(Optional.of(expectedVendeg));
+        when(vendegRepository.findById(1L)).thenReturn(Optional.of(EXPECTED_VENDEG));
 
-        Assertions.assertThrows(VendegException.class, () -> vendegService.updateVendeg(1L, expectedVendeg));
+        Assertions.assertThrows(VendegException.class, () -> vendegService.updateVendeg(1L, EXPECTED_VENDEG));
     }
 
     @Test
     void findAll_returns_all_vendeg() throws VendegException {
-        Vendeg expectedVendeg1 = new Vendeg("TesztNev1", "babamaj", 10, null, null);
-        Vendeg expectedVendeg2 = new Vendeg("TesztNev2", "babamaj", 10, null, null);
-        Vendeg expectedVendeg3 = new Vendeg("TesztNev3", "babamaj", 10, null, null);
-        Vendeg expectedVendeg4 = new Vendeg("TesztNev4", "babamaj", 10, null, null);
-
         List<Vendeg> vendegList = new ArrayList<>();
-        vendegList.add(expectedVendeg1);
-        vendegList.add(expectedVendeg2);
-        vendegList.add(expectedVendeg3);
-        vendegList.add(expectedVendeg4);
+        vendegList.add(EXPECTED_VENDEG_1);
+        vendegList.add(EXPECTED_VENDEG_2);
+        vendegList.add(EXPECTED_VENDEG_3);
+        vendegList.add(EXPECTED_VENDEG_4);
 
         when(vendegRepository.findAll()).thenReturn(vendegList);
 
@@ -130,9 +118,7 @@ class VendegServiceTest {
 
     @Test
     void findById_returns_vendeg_by_id() throws VendegException {
-        Vendeg expectedVendeg = new Vendeg("TesztNev", "babamaj", 10, null, null);
-
-        when(vendegRepository.findById(1L)).thenReturn(Optional.of(expectedVendeg));
+        when(vendegRepository.findById(1L)).thenReturn(Optional.of(EXPECTED_VENDEG));
 
         vendegService.findById(1L);
 
@@ -148,36 +134,29 @@ class VendegServiceTest {
 
     @Test
     void getVendegekByElfogyasztottMennyiseg_returns_all_vendeg() throws VendegException {
-        Vendeg expectedVendeg1 = new Vendeg("TesztNev1", "babamaj", 10, null, null);
-        Vendeg expectedVendeg2 = new Vendeg("TesztNev2", "babamaj", 10, null, null);
-        Vendeg expectedVendeg3 = new Vendeg("TesztNev3", "babamaj", 10, null, null);
-        Vendeg expectedVendeg4 = new Vendeg("TesztNev4", "babamaj", 10, null, null);
-
         List<Vendeg> vendegList = new ArrayList<>();
-        vendegList.add(expectedVendeg1);
-        vendegList.add(expectedVendeg2);
-        vendegList.add(expectedVendeg3);
-        vendegList.add(expectedVendeg4);
+        vendegList.add(EXPECTED_VENDEG_1);
+        vendegList.add(EXPECTED_VENDEG_2);
+        vendegList.add(EXPECTED_VENDEG_3);
+        vendegList.add(EXPECTED_VENDEG_4);
 
-        long fogyasztasByVendegId = vendegService.getElfogyasztottMennyisegByVendegId(expectedVendeg1.getId());
+        long fogyasztasByVendegId = vendegService.getElfogyasztottMennyisegByVendegId(EXPECTED_VENDEG_1.getId());
 
         VendegFogyasztasSzerintDto vendegFogyasztasSzerintDto = new VendegFogyasztasSzerintDto("becenev", 1L);
 
         when(vendegRepository.findAll()).thenReturn(vendegList);
-        when(vendegConverter.convertVendegToVFSZDto(expectedVendeg1, fogyasztasByVendegId)).thenReturn(vendegFogyasztasSzerintDto);
+        when(vendegConverter.convertVendegToVFSZDto(EXPECTED_VENDEG_1, fogyasztasByVendegId)).thenReturn(vendegFogyasztasSzerintDto);
 
         vendegService.getVendegekByElfogyasztottMennyiseg();
 
         verify(vendegRepository).findAll();
-        verify(vendegConverter).convertVendegToVFSZDto(expectedVendeg1, fogyasztasByVendegId);
+        verify(vendegConverter).convertVendegToVFSZDto(EXPECTED_VENDEG_1, fogyasztasByVendegId);
     }
 
     @Test
     void getElfogyasztottMennyisegByVendegId_returns_vendeg() throws VendegException {
-        Vendeg expectedVendeg = new Vendeg("TesztNev", "babamaj", 10, null, null);
-
-        Kocsmazas kocsmazas1 = new Kocsmazas(expectedVendeg, LocalDateTime.now(), LocalDateTime.now(), null, false);
-        Kocsmazas kocsmazas2 = new Kocsmazas(expectedVendeg, LocalDateTime.now(), LocalDateTime.now(), null, false);
+        Kocsmazas kocsmazas1 = new Kocsmazas(EXPECTED_VENDEG, LocalDateTime.now(), LocalDateTime.now(), null, false);
+        Kocsmazas kocsmazas2 = new Kocsmazas(EXPECTED_VENDEG, LocalDateTime.now(), LocalDateTime.now(), null, false);
 
         List<Kocsmazas> kocsmazasList = new ArrayList<>();
         kocsmazasList.add(kocsmazas1);
@@ -194,9 +173,9 @@ class VendegServiceTest {
 
         kocsmazas1.setFogyasztasLista(fogyasztasList);
         kocsmazas2.setFogyasztasLista(fogyasztasList);
-        expectedVendeg.setKocsmazasList(kocsmazasList);
+        EXPECTED_VENDEG.setKocsmazasList(kocsmazasList);
 
-        when(vendegRepository.findById(1L)).thenReturn(Optional.of(expectedVendeg));
+        when(vendegRepository.findById(1L)).thenReturn(Optional.of(EXPECTED_VENDEG));
 
         vendegService.getElfogyasztottMennyisegByVendegId(1L);
 
