@@ -2,7 +2,7 @@ package hu.wysio.training.vivi.wysioKocsma.controller;
 
 import hu.wysio.training.vivi.wysioKocsma.dto.FogyasztasDto;
 import hu.wysio.training.vivi.wysioKocsma.dto.ItalRangsorDto;
-import hu.wysio.training.vivi.wysioKocsma.exception.FogyasztasException;
+import hu.wysio.training.vivi.wysioKocsma.exception.FogyasztasExceptionWysio;
 import hu.wysio.training.vivi.wysioKocsma.model.Fogyasztas;
 import hu.wysio.training.vivi.wysioKocsma.service.FogyasztasService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class FogyasztasController {
 
     //update
     @PutMapping("/updateFogyasztas/{id}")
-    public ResponseEntity<Fogyasztas> updateFogyasztas(@Validated @PathVariable Long id, @RequestBody Fogyasztas fogyasztasAdat) throws FogyasztasException {
+    public ResponseEntity<Fogyasztas> updateFogyasztas(@Validated @PathVariable Long id, @RequestBody Fogyasztas fogyasztasAdat) throws FogyasztasExceptionWysio {
         try {
             Fogyasztas fogyasztas = fogyasztasService.updateFogyasztas(id, fogyasztasAdat);
             return new ResponseEntity<>(fogyasztas, HttpStatus.OK);

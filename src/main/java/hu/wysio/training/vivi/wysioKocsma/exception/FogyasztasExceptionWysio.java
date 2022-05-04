@@ -1,10 +1,10 @@
 package hu.wysio.training.vivi.wysioKocsma.exception;
 
-public class ItalException extends Exception {
+public class FogyasztasExceptionWysio extends WysioKocsmaException {
 
     private static final long serialVersionUID = 1L;
 
-    public ItalException(String message) {
+    public FogyasztasExceptionWysio(String message) {
         super(message);
     }
 }
