@@ -29,8 +29,10 @@ import static org.mockito.Mockito.when;
 @ActiveProfiles("test")
 class VendegServiceTest {
 
+    public static final long ID = 1L;
+
     private static final Vendeg EXPECTED_VENDEG = new Vendeg("TesztNev", "babamaj", 10, null, null);
-    private static final VendegDto VENDEG_DTO = new VendegDto(1L, "TesztNev", "babamaj", 10, null, null);
+    private static final VendegDto VENDEG_DTO = new VendegDto(ID, "TesztNev", "babamaj", 10, null, null);
 
     private static final Vendeg EXPECTED_VENDEG_1 = new Vendeg("TesztNev1", "babamaj", 10, null, null);
     private static final Vendeg EXPECTED_VENDEG_2 = new Vendeg("TesztNev2", "babamaj", 10, null, null);
@@ -62,36 +64,46 @@ class VendegServiceTest {
         when(vendegRepository.save(any())).thenThrow(new IllegalArgumentException());
 
         Assertions.assertThrows(VendegException.class, () -> vendegService.createVendeg(VENDEG_DTO));
+
+        verify(vendegRepository).save(any());
     }
 
     @Test
     void updateVendeg_finds_id() throws VendegException {
-        Vendeg vendegToUpdate = new Vendeg("TesztNevdfgh", "babamdfghaj", 10, null, null);
-        vendegToUpdate.setId(1L);
+        Vendeg vendegById = new Vendeg("TesztNevToUpdate", "majToUpdate", 20, null, null);
+        vendegById.setId(ID);
         Vendeg updatedVendeg = new Vendeg("TesztNev", "babamaj", 10, null, null);
-        updatedVendeg.setId(1L);
+        updatedVendeg.setId(ID);
 
-        when(vendegRepository.findById(1L)).thenReturn(Optional.of(vendegToUpdate));
-        when(vendegRepository.save(vendegToUpdate)).thenReturn(vendegToUpdate);
+        when(vendegRepository.findById(ID)).thenReturn(Optional.of(vendegById));
+        when(vendegRepository.save(vendegById)).thenReturn(vendegById);
 
-        Vendeg resultVendeg = vendegService.updateVendeg(1L, updatedVendeg);
+        Vendeg resultVendeg = vendegService.updateVendeg(ID, updatedVendeg);
 
         Assertions.assertEquals(updatedVendeg.getBecenev(), resultVendeg.getBecenev());
+
+        verify(vendegRepository).findById(ID);
+        verify(vendegRepository).save(vendegById);
     }
 
     @Test
     void updateVendeg_throws_nincsVendeg_exception() {
         when(vendegRepository.findById(any())).thenThrow(new IllegalArgumentException());
 
-        Assertions.assertThrows(VendegException.class, () -> vendegService.updateVendeg(1L, EXPECTED_VENDEG));
+        Assertions.assertThrows(VendegException.class, () -> vendegService.updateVendeg(ID, EXPECTED_VENDEG));
+
+        verify(vendegRepository).findById(any());
     }
 
     @Test
     void updateVendeg_throws_sikertelen_exception() {
         when(vendegRepository.save(any())).thenThrow(new IllegalArgumentException());
-        when(vendegRepository.findById(1L)).thenReturn(Optional.of(EXPECTED_VENDEG));
+        when(vendegRepository.findById(ID)).thenReturn(Optional.of(EXPECTED_VENDEG));
 
-        Assertions.assertThrows(VendegException.class, () -> vendegService.updateVendeg(1L, EXPECTED_VENDEG));
+        Assertions.assertThrows(VendegException.class, () -> vendegService.updateVendeg(ID, EXPECTED_VENDEG));
+
+        verify(vendegRepository).save(any());
+        verify(vendegRepository).findById(ID);
     }
 
     @Test
@@ -114,22 +126,26 @@ class VendegServiceTest {
         when(vendegRepository.findAll()).thenThrow(new IllegalArgumentException());
 
         Assertions.assertThrows(VendegException.class, () -> vendegService.findAll());
+
+        verify(vendegRepository).findAll();
     }
 
     @Test
     void findById_returns_vendeg_by_id() throws VendegException {
-        when(vendegRepository.findById(1L)).thenReturn(Optional.of(EXPECTED_VENDEG));
+        when(vendegRepository.findById(ID)).thenReturn(Optional.of(EXPECTED_VENDEG));
 
-        vendegService.findById(1L);
+        vendegService.findById(ID);
 
-        verify(vendegRepository).findById(1L);
+        verify(vendegRepository).findById(ID);
     }
 
     @Test
     void findById_throws_nincsVendeg_exception() {
         when(vendegRepository.findById(any())).thenThrow(new IllegalArgumentException());
 
-        Assertions.assertThrows(VendegException.class, () -> vendegService.findById(1L));
+        Assertions.assertThrows(VendegException.class, () -> vendegService.findById(ID));
+
+        verify(vendegRepository).findById(any());
     }
 
     @Test
@@ -142,7 +158,7 @@ class VendegServiceTest {
 
         long fogyasztasByVendegId = vendegService.getElfogyasztottMennyisegByVendegId(EXPECTED_VENDEG_1.getId());
 
-        VendegFogyasztasSzerintDto vendegFogyasztasSzerintDto = new VendegFogyasztasSzerintDto("becenev", 1L);
+        VendegFogyasztasSzerintDto vendegFogyasztasSzerintDto = new VendegFogyasztasSzerintDto("becenev", ID);
 
         when(vendegRepository.findAll()).thenReturn(vendegList);
         when(vendegConverter.convertVendegToVFSZDto(EXPECTED_VENDEG_1, fogyasztasByVendegId)).thenReturn(vendegFogyasztasSzerintDto);
@@ -175,17 +191,19 @@ class VendegServiceTest {
         kocsmazas2.setFogyasztasLista(fogyasztasList);
         EXPECTED_VENDEG.setKocsmazasList(kocsmazasList);
 
-        when(vendegRepository.findById(1L)).thenReturn(Optional.of(EXPECTED_VENDEG));
+        when(vendegRepository.findById(ID)).thenReturn(Optional.of(EXPECTED_VENDEG));
 
-        vendegService.getElfogyasztottMennyisegByVendegId(1L);
+        vendegService.getElfogyasztottMennyisegByVendegId(ID);
 
-        verify(vendegRepository).findById(1L);
+        verify(vendegRepository).findById(ID);
     }
 
     @Test
     void getElfogyasztottMennyisegByVendegId_throws_nincsVendeg_exception() {
         when(vendegRepository.findById(any())).thenThrow(new IllegalArgumentException());
 
-        Assertions.assertThrows(VendegException.class, () -> vendegService.getElfogyasztottMennyisegByVendegId(1L));
+        Assertions.assertThrows(VendegException.class, () -> vendegService.getElfogyasztottMennyisegByVendegId(ID));
+
+        verify(vendegRepository).findById(any());
     }
 }
