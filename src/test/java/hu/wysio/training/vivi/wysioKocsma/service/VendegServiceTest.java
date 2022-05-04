@@ -70,20 +70,20 @@ class VendegServiceTest {
 
     @Test
     void updateVendeg_finds_id() throws VendegException {
-        Vendeg vendegById = new Vendeg("TesztNevToUpdate", "majToUpdate", 20, null, null);
-        vendegById.setId(ID);
+        Vendeg originalVendeg = new Vendeg("TesztNevToUpdate", "majToUpdate", 20, null, null);
+        originalVendeg.setId(ID);
         Vendeg updatedVendeg = new Vendeg("TesztNev", "babamaj", 10, null, null);
         updatedVendeg.setId(ID);
 
-        when(vendegRepository.findById(ID)).thenReturn(Optional.of(vendegById));
-        when(vendegRepository.save(vendegById)).thenReturn(vendegById);
+        when(vendegRepository.findById(ID)).thenReturn(Optional.of(originalVendeg));
+        when(vendegRepository.save(originalVendeg)).thenReturn(originalVendeg);
 
         Vendeg resultVendeg = vendegService.updateVendeg(ID, updatedVendeg);
 
         Assertions.assertEquals(updatedVendeg.getBecenev(), resultVendeg.getBecenev());
 
         verify(vendegRepository).findById(ID);
-        verify(vendegRepository).save(vendegById);
+        verify(vendegRepository).save(originalVendeg);
     }
 
     @Test
