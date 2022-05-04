@@ -1,11 +1,6 @@
 package hu.wysio.training.vivi.wysioKocsma.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
 
-@AllArgsConstructor
-@Getter
 public enum Majerosseg {
 
     BABAMAJ("Babamaj", 0.5),
@@ -16,4 +11,17 @@ public enum Majerosseg {
 
     private final String erosseg;
     private final double erossegFoka;
+
+    Majerosseg(String erosseg, double erossegFoka) {
+        this.erosseg = erosseg;
+        this.erossegFoka = erossegFoka;
+    }
+
+    public String erosseg() {
+        return erosseg;
+    }
+
+    public double erossegFoka() {
+        return erossegFoka;
+    }
 }

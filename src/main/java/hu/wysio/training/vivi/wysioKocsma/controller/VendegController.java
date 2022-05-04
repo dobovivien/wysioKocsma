@@ -2,7 +2,7 @@ package hu.wysio.training.vivi.wysioKocsma.controller;
 
 import hu.wysio.training.vivi.wysioKocsma.dto.VendegDto;
 import hu.wysio.training.vivi.wysioKocsma.dto.VendegFogyasztasSzerintDto;
-import hu.wysio.training.vivi.wysioKocsma.exception.VendegExceptionWysio;
+import hu.wysio.training.vivi.wysioKocsma.exception.VendegException;
 import hu.wysio.training.vivi.wysioKocsma.model.Vendeg;
 import hu.wysio.training.vivi.wysioKocsma.service.VendegService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class VendegController {
 
     //get all
     @GetMapping("/getAllVendeg")
-    public ResponseEntity<List<Vendeg>> getAllVendeg() throws VendegExceptionWysio {
+    public ResponseEntity<List<Vendeg>> getAllVendeg() throws VendegException {
         List<Vendeg> allVendeg = vendegService.findAll();
         if (allVendeg.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -43,7 +43,7 @@ public class VendegController {
 
     //get by id
     @GetMapping("/getVendegById/{id}")
-    public ResponseEntity<Vendeg> getVendegById(@PathVariable Long id) throws VendegExceptionWysio {
+    public ResponseEntity<Vendeg> getVendegById(@PathVariable Long id) throws VendegException {
         Vendeg vendeg = vendegService.findById(id);
         if (vendeg == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -53,7 +53,7 @@ public class VendegController {
 
     //update
     @PutMapping("/updateVendeg/{id}")
-    public ResponseEntity<Vendeg> updateVendeg(@Validated @PathVariable Long id, @RequestBody Vendeg vendegAdatok) throws VendegExceptionWysio {
+    public ResponseEntity<Vendeg> updateVendeg(@Validated @PathVariable Long id, @RequestBody Vendeg vendegAdatok) throws VendegException {
         Vendeg updatedVendeg = vendegService.updateVendeg(id, vendegAdatok);
         if (updatedVendeg == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -62,7 +62,7 @@ public class VendegController {
     }
 
     @GetMapping("/getVendegekByElfogyasztottMennyiseg")
-    public List<VendegFogyasztasSzerintDto> getVendegekByElfogyasztottMennyiseg() throws VendegExceptionWysio {
+    public List<VendegFogyasztasSzerintDto> getVendegekByElfogyasztottMennyiseg() throws VendegException {
         return vendegService.getVendegekByElfogyasztottMennyiseg();
     }
 }

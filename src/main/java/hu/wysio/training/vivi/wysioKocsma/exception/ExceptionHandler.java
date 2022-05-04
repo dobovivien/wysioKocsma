@@ -4,21 +4,23 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 @ResponseBody
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -31,7 +33,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(WysioKocsmaException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = {FogyasztasException.class, ItalException.class, KocsmazasException.class, VendegException.class, BunyoException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorMessage> resourceNotFoundException(Exception ex, WebRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
@@ -43,7 +45,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(Exception.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorMessage> globalExceptionHandler(Exception ex, WebRequest request) {
         ErrorMessage message = new ErrorMessage(
