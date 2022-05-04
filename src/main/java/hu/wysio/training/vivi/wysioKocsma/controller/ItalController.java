@@ -1,7 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
 import hu.wysio.training.vivi.wysioKocsma.dto.ItalDto;
-import hu.wysio.training.vivi.wysioKocsma.exception.ItalException;
+import hu.wysio.training.vivi.wysioKocsma.exception.ItalExceptionWysio;
 import hu.wysio.training.vivi.wysioKocsma.model.Ital;
 import hu.wysio.training.vivi.wysioKocsma.service.ItalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class ItalController {
 
     //get all
     @GetMapping("/getAllItal")
-    public ResponseEntity<List<Ital>> getAllItal() throws ItalException {
+    public ResponseEntity<List<Ital>> getAllItal() throws ItalExceptionWysio {
         List<Ital> allItal = italService.findAll();
         if (allItal.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -42,7 +42,7 @@ public class ItalController {
 
     //update
     @PutMapping("/updateItal/{id}")
-    public ResponseEntity<Ital> updateItal(@Validated @PathVariable Long id, @RequestBody Ital italAdat) throws ItalException {
+    public ResponseEntity<Ital> updateItal(@Validated @PathVariable Long id, @RequestBody Ital italAdat) throws ItalExceptionWysio {
         Ital updatedItal = italService.updateItal(id, italAdat);
         if (updatedItal == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -52,7 +52,7 @@ public class ItalController {
 
     //delete
     @DeleteMapping("/deleteItal/{id}")
-    public void deleteItal(@PathVariable Long id, @RequestBody Ital italAdat) throws ItalException {
+    public void deleteItal(@PathVariable Long id, @RequestBody Ital italAdat) throws ItalExceptionWysio {
         italService.deleteItal(italAdat);
     }
 }

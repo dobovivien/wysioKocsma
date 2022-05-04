@@ -3,7 +3,7 @@ package hu.wysio.training.vivi.wysioKocsma.service;
 import hu.wysio.training.vivi.wysioKocsma.comparator.TabellaDtoComparator;
 import hu.wysio.training.vivi.wysioKocsma.converter.VendegConverter;
 import hu.wysio.training.vivi.wysioKocsma.dto.TabellaDto;
-import hu.wysio.training.vivi.wysioKocsma.exception.BunyoException;
+import hu.wysio.training.vivi.wysioKocsma.exception.BunyoExceptionWysio;
 import hu.wysio.training.vivi.wysioKocsma.model.Bunyo;
 import hu.wysio.training.vivi.wysioKocsma.model.Kocsmazas;
 import hu.wysio.training.vivi.wysioKocsma.model.Vendeg;
@@ -37,7 +37,7 @@ public class BunyoService {
     @Autowired
     private VendegConverter vendegConverter;
 
-    public long startBunyo() throws BunyoException {
+    public long startBunyo() throws BunyoExceptionWysio {
         try {
             Set<Vendeg> vendegSet = new HashSet<>();
             Bunyo bunyo = new Bunyo();
@@ -49,7 +49,7 @@ public class BunyoService {
             bunyo.setVendegList(vendegSet);
             return bunyoRepository.save(bunyo).getId();
         } catch (Exception e) {
-            throw new BunyoException(SIKERTELEN);
+            throw new BunyoExceptionWysio(SIKERTELEN);
         }
     }
 
@@ -65,7 +65,7 @@ public class BunyoService {
 //        return bunyoRepository.save(bunyo);
 //    } todo: később kelleni fog
 
-    public List<TabellaDto> getTabellaEredmeny() throws BunyoException {
+    public List<TabellaDto> getTabellaEredmeny() throws BunyoExceptionWysio {
         try {
             Set<TabellaDto> tabellaDtoSet = new HashSet<>();
             List<Vendeg> vendegList = vendegRepository.findAll();
@@ -77,11 +77,11 @@ public class BunyoService {
             List<TabellaDto> tabellaDtoList = new ArrayList<>(tabellaDtoSet);
             return tabellaDtoList.stream().sorted(tabellaDtoComparator).collect(Collectors.toList());
         } catch (Exception e) {
-            throw new BunyoException(SIKERTELEN);
+            throw new BunyoExceptionWysio(SIKERTELEN);
         }
     }
 
-    public int getGyozelmekSzama(Long vendegId) throws BunyoException {
+    public int getGyozelmekSzama(Long vendegId) throws BunyoExceptionWysio {
         int gyozelmekSzama = 0;
         try {
             List<Bunyo> bunyoList = bunyoRepository.findAll();
@@ -92,7 +92,7 @@ public class BunyoService {
             }
             return gyozelmekSzama;
         } catch (Exception e) {
-            throw new BunyoException(SIKERTELEN);
+            throw new BunyoExceptionWysio(SIKERTELEN);
         }
     }
 }
