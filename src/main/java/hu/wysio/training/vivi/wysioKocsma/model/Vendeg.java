@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,13 +17,14 @@ import java.util.List;
 @Table(name = "vendeg", schema = "public")
 public class Vendeg extends AbstractEntity {
 
-    @Column
+    @Column(nullable = false)
     private String becenev;
 
-    @Column
-    private String majerosseg;
+    @Column(nullable = false)
+    @Enumerated
+    private Majerosseg majerosseg;
 
-    @Column
+    @Column(nullable = false)
     private int bicepszmeret;
 
     @OneToMany(mappedBy = "vendeg", fetch = FetchType.LAZY)

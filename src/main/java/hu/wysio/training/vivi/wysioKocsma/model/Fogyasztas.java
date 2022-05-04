@@ -19,7 +19,7 @@ public class Fogyasztas extends AbstractEntity {
     @JoinColumn(name = "ital_id", nullable = false)
     private Ital ital;
 
-    @Column(name = "elfogyasztott_mennyiseg")
+    @Column(name = "elfogyasztott_mennyiseg", nullable = false)
     private int elfogyasztottMennyiseg;
 
     @ManyToOne(fetch = FetchType.LAZY)

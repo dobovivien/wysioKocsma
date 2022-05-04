@@ -22,7 +22,7 @@ public class Kocsmazas extends AbstractEntity {
     @JoinColumn(name = "vendeg_id", nullable = false)
     private Vendeg vendeg;
 
-    @Column
+    @Column (nullable = false)
     private LocalDateTime mettol;
 
     @Column

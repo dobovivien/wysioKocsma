@@ -9,6 +9,19 @@ public enum Majerosseg {
     GYEMANTMAJ("Gyemantmaj", 4),
     FANNIMAJ("Fannimaj", Double.POSITIVE_INFINITY);
 
+    private final String erosseg;
+    private final double erossegFoka;
+
     Majerosseg(String erosseg, double erossegFoka) {
+        this.erosseg = erosseg;
+        this.erossegFoka = erossegFoka;
+    }
+
+    public String erosseg() {
+        return erosseg;
+    }
+
+    public double erossegFoka() {
+        return erossegFoka;
     }
 }

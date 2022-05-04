@@ -17,13 +17,13 @@ import javax.persistence.Table;
 @Table(name = "ital", schema = "public")
 public class Ital extends AbstractEntity {
 
-    @Column
+    @Column(nullable = false)
     private String nev;
 
-    @Column(name = "alkohol_tartalom")
+    @Column(name = "alkohol_tartalom", nullable = false)
     private int alkoholTartalom;
 
-    @Column(name = "adag_mennyisege")
+    @Column(name = "adag_mennyisege", nullable = false)
     private int adagMennyisege;
 
 }

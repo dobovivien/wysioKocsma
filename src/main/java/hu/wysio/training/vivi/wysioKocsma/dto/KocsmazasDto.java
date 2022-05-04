@@ -20,8 +20,11 @@ public class KocsmazasDto implements Serializable {
     @NotEmpty
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd hh:mm:ss")
     LocalDateTime mettol;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd hh:mm:ss")
     LocalDateTime meddig;
+
     private List<Long> fogyasztasLista;
+
     private boolean detoxbaKerult;
 }

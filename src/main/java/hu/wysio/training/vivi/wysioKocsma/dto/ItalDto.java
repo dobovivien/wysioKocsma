@@ -18,9 +18,11 @@ public class ItalDto implements Serializable {
 
     @NotEmpty
     private String italNev;
+
     @NotNull
     @Positive
     private int alkoholTartalom;
+
     @NotNull
     @Positive
     private int adagMennyisege;
