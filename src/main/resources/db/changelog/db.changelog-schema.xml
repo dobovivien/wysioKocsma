@@ -1,0 +1,141 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="dobo.vivien" id="2022-05-05-1">
+        <createTable tableName="bunyo_resztvevok">
+            <column name="bunyo_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resztvevok_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-2">
+        <createTable tableName="kocsmazas_fogyasztas_lista">
+            <column name="kocsmazas_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fogyasztas_lista_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-3">
+        <addUniqueConstraint columnNames="resztvevok_id" constraintName="uk_2rga192pgthortltfe5ewr33u" tableName="bunyo_resztvevok"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-4">
+        <addUniqueConstraint columnNames="fogyasztas_lista_id" constraintName="uk_a8jnp0p73p3mrl9i6v6fn2bn7" tableName="kocsmazas_fogyasztas_lista"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-5">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="hibernate_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-6">
+        <createTable tableName="bunyo">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="bunyo_pkey"/>
+            </column>
+            <column name="meddig" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="mettol" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="nyertes_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-7">
+        <createTable tableName="bunyo_vendeg">
+            <column name="bunyo_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vendeg_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-8">
+        <createTable tableName="fogyasztas">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="fogyasztas_pkey"/>
+            </column>
+            <column name="elfogyasztott_mennyiseg" type="INTEGER"/>
+            <column name="ital_id" type="BIGINT"/>
+            <column name="kocsmazas_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-9">
+        <createTable tableName="ital">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ital_pkey"/>
+            </column>
+            <column name="adag_mennyisege" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="alkohol_tartalom" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nev" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-10">
+        <createTable tableName="kocsmazas">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="kocsmazas_pkey"/>
+            </column>
+            <column name="detoxba_kerult" type="BOOLEAN"/>
+            <column name="meddig" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="mettol" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="vendeg_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-11">
+        <createTable tableName="vendeg">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="vendeg_pkey"/>
+            </column>
+            <column name="becenev" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bicepszmeret" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="majerosseg" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fogyasztas" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-12">
+        <addForeignKeyConstraint baseColumnNames="ital_id" baseTableName="fogyasztas" constraintName="fk1lj55sgfllt48cai0goe1d1sa" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="ital" validate="true"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-13">
+        <addForeignKeyConstraint baseColumnNames="bunyo_id" baseTableName="bunyo_vendeg" constraintName="fk3lxv1uf55giypig9fvf16d203" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="bunyo" validate="true"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-14">
+        <addForeignKeyConstraint baseColumnNames="fogyasztas_lista_id" baseTableName="kocsmazas_fogyasztas_lista" constraintName="fk40vlc4j6avv51oqwukos8qgwi" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="fogyasztas" validate="true"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-15">
+        <addForeignKeyConstraint baseColumnNames="nyertes_id" baseTableName="bunyo" constraintName="fk4a9alv59fh6xxlgx9tyqh78cr" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="vendeg" validate="true"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-16">
+        <addForeignKeyConstraint baseColumnNames="kocsmazas_id" baseTableName="fogyasztas" constraintName="fk4jkill5pmva2rmr9dqxvan6u3" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="kocsmazas" validate="true"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-17">
+        <addForeignKeyConstraint baseColumnNames="vendeg_id" baseTableName="kocsmazas" constraintName="fk845898o0adp4okfusdmdv8ttn" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="vendeg" validate="true"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-18">
+        <addForeignKeyConstraint baseColumnNames="kocsmazas_id" baseTableName="kocsmazas_fogyasztas_lista" constraintName="fkdggq18xfes7wlenew6usnm1cc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="kocsmazas" validate="true"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-19">
+        <addForeignKeyConstraint baseColumnNames="bunyo_id" baseTableName="bunyo_resztvevok" constraintName="fkecojxkbtqpr2btvt1ho0bgpfs" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="bunyo" validate="true"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-20">
+        <addForeignKeyConstraint baseColumnNames="vendeg_id" baseTableName="bunyo_vendeg" constraintName="fknpf1l8yk5n0fuc4lyiy7s6xol" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="vendeg" validate="true"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-21">
+        <addForeignKeyConstraint baseColumnNames="resztvevok_id" baseTableName="bunyo_resztvevok" constraintName="fkp7p7fvs7o9qwhhvkmypgmlgd4" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="vendeg" validate="true"/>
+    </changeSet>
+    <changeSet author="dobo.vivien" id="2022-05-05-22">
+        <addForeignKeyConstraint baseColumnNames="fogyasztas" baseTableName="vendeg" constraintName="fktn4kgyeunqh0e3dcukbn28iab" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="fogyasztas" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
