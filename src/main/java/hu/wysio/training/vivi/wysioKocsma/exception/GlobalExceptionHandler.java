@@ -1,5 +1,6 @@
 package hu.wysio.training.vivi.wysioKocsma.exception;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +23,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                               HttpHeaders headers, HttpStatus status, WebRequest request) {
+                                                                HttpHeaders headers,
+                                                                HttpStatus status,
+                                                                WebRequest request) {
 
-        Map<String, String> errors = ex.getBindingResult().getAllErrors()
+        Map<String, String> errors = ex.getBindingResult().getFieldErrors()
                 .stream()
-                .collect(Collectors.toMap(error -> ((FieldError) error).getField(), error -> error.getDefaultMessage()));
+                .collect(Collectors.toMap(FieldError::getField, DefaultMessageSourceResolvable::getDefaultMessage));
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }

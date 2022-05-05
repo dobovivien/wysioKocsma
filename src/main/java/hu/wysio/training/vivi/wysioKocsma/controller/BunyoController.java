@@ -1,7 +1,7 @@
 package hu.wysio.training.vivi.wysioKocsma.controller;
 
 import hu.wysio.training.vivi.wysioKocsma.dto.TabellaDto;
-import hu.wysio.training.vivi.wysioKocsma.exception.BunyoExceptionWysio;
+import hu.wysio.training.vivi.wysioKocsma.exception.BunyoException;
 import hu.wysio.training.vivi.wysioKocsma.service.BunyoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class BunyoController {
 
     //bunyo tabella lekerdezese
     @GetMapping("/getAllBunyo")
-    public ResponseEntity<List<TabellaDto>> getAllBunyoByNyertesek() throws BunyoExceptionWysio {
+    public ResponseEntity<List<TabellaDto>> getAllBunyoByNyertesek() throws BunyoException {
         List<TabellaDto> allBunyo = bunyoService.getTabellaEredmeny();
         if (allBunyo.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
