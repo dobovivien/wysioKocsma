@@ -1,5 +1,6 @@
 package hu.wysio.training.vivi.wysiokocsma.controller;
 
+import hu.wysio.training.vivi.wysiokocsma.converter.ItalConverter;
 import hu.wysio.training.vivi.wysiokocsma.dto.ItalDto;
 import hu.wysio.training.vivi.wysiokocsma.exception.ItalException;
 import hu.wysio.training.vivi.wysiokocsma.model.Ital;
@@ -12,15 +13,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8080")
-@RestController("/italok")
+@RestController
+@RequestMapping("/ital")
 public class ItalController {
 
     @Autowired
-    ItalService italService;
+    private ItalService italService;
 
-    //get all
-    @GetMapping("/getAllItal")
+    @Autowired
+    private ItalConverter italConverter;
+
+    @GetMapping("/get-all-ital")
     public ResponseEntity<List<Ital>> getAllItal() throws ItalException {
         List<Ital> allItal = italService.findAll();
         if (allItal.isEmpty()) {
@@ -29,8 +32,7 @@ public class ItalController {
         return new ResponseEntity<>(allItal, HttpStatus.OK);
     }
 
-    //create
-    @PostMapping("/createItal")
+    @PostMapping("/create-ital")
     public ResponseEntity<Long> createItal(@Validated @RequestBody ItalDto italDto) {
         try {
             long italId = italService.createItal(italDto);
@@ -40,19 +42,19 @@ public class ItalController {
         }
     }
 
-    //update
-    @PutMapping("/updateItal/{id}")
-    public ResponseEntity<Ital> updateItal(@Validated @PathVariable Long id, @RequestBody Ital italAdat) throws ItalException {
-        Ital updatedItal = italService.updateItal(id, italAdat);
+    @PutMapping("/update-ital/{id}")
+    public ResponseEntity<Ital> updateItal(
+            @PathVariable Long id,
+            @Validated @RequestBody ItalDto italDto) throws ItalException {
+        Ital updatedItal = italService.updateItal(id, italConverter.convertDtoToItal(italDto));
         if (updatedItal == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(updatedItal, HttpStatus.OK);
     }
 
-    //delete
-    @DeleteMapping("/deleteItal/{id}")
-    public void deleteItal(@PathVariable Long id, @RequestBody Ital italAdat) throws ItalException {
-        italService.deleteItal(italAdat);
+    @DeleteMapping("/delete-ital/{id}")
+    public void deleteItal(@PathVariable Long id, @RequestBody ItalDto italDto) throws ItalException {
+        italService.deleteItal(italConverter.convertDtoToItal(italDto));
     }
 }

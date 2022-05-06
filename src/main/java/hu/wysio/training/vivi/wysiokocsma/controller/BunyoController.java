@@ -6,22 +6,18 @@ import hu.wysio.training.vivi.wysiokocsma.service.BunyoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8080")
-@RestController("/bunyok")
+@RestController
+@RequestMapping("/bunyo")
 public class BunyoController {
 
     @Autowired
-    BunyoService bunyoService;
+    private BunyoService bunyoService;
 
-    //bunyo tabella lekerdezese
-    @GetMapping("/getAllBunyo")
+    @GetMapping("/get-all-bunyo")
     public ResponseEntity<List<TabellaDto>> getAllBunyoByNyertesek() throws BunyoException {
         List<TabellaDto> allBunyo = bunyoService.getTabellaEredmeny();
         if (allBunyo.isEmpty()) {
@@ -30,8 +26,7 @@ public class BunyoController {
         return new ResponseEntity<>(allBunyo, HttpStatus.OK);
     }
 
-    //create
-    @PostMapping("/startBunyo")
+    @PostMapping("/start-bunyo")
     public ResponseEntity<Long> startBunyo() {
         try {
             long bunyoId = bunyoService.startBunyo();

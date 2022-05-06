@@ -1,5 +1,6 @@
 package hu.wysio.training.vivi.wysiokocsma.controller;
 
+import hu.wysio.training.vivi.wysiokocsma.converter.VendegConverter;
 import hu.wysio.training.vivi.wysiokocsma.dto.VendegDto;
 import hu.wysio.training.vivi.wysiokocsma.dto.VendegFogyasztasSzerintDto;
 import hu.wysio.training.vivi.wysiokocsma.exception.VendegException;
@@ -13,15 +14,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8080")
-@RestController("/vendegek")
+@RestController
+@RequestMapping("/vendeg")
 public class VendegController {
 
     @Autowired
-    VendegService vendegService;
+    private VendegService vendegService;
 
-    //get all
-    @GetMapping("/getAllVendeg")
+    @Autowired
+    private VendegConverter vendegConverter;
+
+    @GetMapping("/get-all-vendeg")
     public ResponseEntity<List<Vendeg>> getAllVendeg() throws VendegException {
         List<Vendeg> allVendeg = vendegService.findAll();
         if (allVendeg.isEmpty()) {
@@ -30,8 +33,7 @@ public class VendegController {
         return new ResponseEntity<>(allVendeg, HttpStatus.OK);
     }
 
-    //create
-    @PostMapping("/createVendeg")
+    @PostMapping("/create-vendeg")
     public ResponseEntity<Long> createVendeg(@Validated @RequestBody VendegDto vendegDto) {
         try {
             long vendegId = vendegService.createVendeg(vendegDto);
@@ -41,8 +43,7 @@ public class VendegController {
         }
     }
 
-    //get by id
-    @GetMapping("/getVendegById/{id}")
+    @GetMapping("/get-vendeg-by-id/{id}")
     public ResponseEntity<Vendeg> getVendegById(@PathVariable Long id) throws VendegException {
         Vendeg vendeg = vendegService.findById(id);
         if (vendeg == null) {
@@ -51,17 +52,16 @@ public class VendegController {
         return new ResponseEntity<>(vendeg, HttpStatus.OK);
     }
 
-    //update
-    @PutMapping("/updateVendeg/{id}")
-    public ResponseEntity<Vendeg> updateVendeg(@Validated @PathVariable Long id, @RequestBody Vendeg vendegAdatok) throws VendegException {
-        Vendeg updatedVendeg = vendegService.updateVendeg(id, vendegAdatok);
+    @PutMapping("/update-vendeg/{id}")
+    public ResponseEntity<Vendeg> updateVendeg(@PathVariable Long id, @Validated @RequestBody VendegDto vendegDto) throws VendegException {
+        Vendeg updatedVendeg = vendegService.updateVendeg(id, vendegConverter.convertDtoToVendeg(vendegDto));
         if (updatedVendeg == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(updatedVendeg, HttpStatus.OK);
     }
 
-    @GetMapping("/getVendegekByElfogyasztottMennyiseg")
+    @GetMapping("/get-vendegek-by-elfogyasztott-mennyiseg")
     public List<VendegFogyasztasSzerintDto> getVendegekByElfogyasztottMennyiseg() throws VendegException {
         return vendegService.getVendegekByElfogyasztottMennyiseg();
     }

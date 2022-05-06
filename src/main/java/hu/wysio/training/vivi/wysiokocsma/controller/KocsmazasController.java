@@ -6,21 +6,19 @@ import hu.wysio.training.vivi.wysiokocsma.service.KocsmazasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8080")
-@RestController("/kocsmazas")
+@RestController
+@RequestMapping("/kocsmazas")
 public class KocsmazasController {
 
     @Autowired
-    KocsmazasService kocsmazasService;
+    private KocsmazasService kocsmazasService;
 
-    //create
-    @PostMapping("/startKocsmazas/{vendegId}")
-    public ResponseEntity<Long> startKocsmazas(@Validated @PathVariable(value = "vendegId") Long vendegId) {
+    @PostMapping("/start-kocsmazas/{vendegId}")
+    public ResponseEntity<Long> startKocsmazas(@PathVariable(value = "vendegId") Long vendegId) {
         try {
             long kocsmazasId = kocsmazasService.startKocsmazas(vendegId);
             return new ResponseEntity<>(kocsmazasId, HttpStatus.CREATED);
@@ -29,8 +27,7 @@ public class KocsmazasController {
         }
     }
 
-    //update
-    @PutMapping("/finishKocsmazas/{vendegId}")
+    @PutMapping("/finish-kocsmazas/{vendegId}")
     public ResponseEntity<Long> finishKocsmazas(@PathVariable(value = "vendegId") Long vendegId) {
         try {
             long finishedKocsmazasId = kocsmazasService.finishKocsmazas(vendegId);
@@ -40,8 +37,7 @@ public class KocsmazasController {
         }
     }
 
-    //detoxba kerult
-    @PutMapping("/addToDetox/{vendegId}")
+    @PutMapping("/add-to-detox/{vendegId}")
     public ResponseEntity<Long> addToDetox(@PathVariable(value = "vendegId") Long vendegId) {
         try {
             kocsmazasService.addToDetox(vendegId);
@@ -51,8 +47,7 @@ public class KocsmazasController {
         }
     }
 
-    //alkoholista-e
-    @GetMapping("/vendegIsDetoxos/{vendegId}")
+    @GetMapping("/vendeg-is-detoxos/{vendegId}")
     public ResponseEntity<Boolean> vendegIsDetoxos(@PathVariable(value = "vendegId") Long vendegId) {
         try {
             boolean detoxos = kocsmazasService.vendegIsDetoxos(vendegId);
@@ -62,7 +57,7 @@ public class KocsmazasController {
         }
     }
 
-    @GetMapping("isAlkoholista/{vendegId}")
+    @GetMapping("is-alkoholista/{vendegId}")
     public ResponseEntity<Boolean> isAlkoholista(@PathVariable(value = "vendegId") Long vendegId) {
         try {
             boolean alkoholista = kocsmazasService.isAlkoholista(vendegId);
@@ -72,7 +67,7 @@ public class KocsmazasController {
         }
     }
 
-    @GetMapping("isAlkoholistaWithCriteriaBuilder/{vendegId}")
+    @GetMapping("is-alkoholista-with-criteria-builder/{vendegId}")
     public ResponseEntity<List<KocsmazasDto>> isAlkoholistaWithCriteriaBuilder(@PathVariable(value = "vendegId") Long vendegId) throws KocsmazasException {
         List<KocsmazasDto> alkoholistaList = kocsmazasService.isAlkoholistaWithCriteriaBuilder(vendegId);
         if (alkoholistaList.isEmpty()) {
