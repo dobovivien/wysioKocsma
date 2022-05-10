@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class ItalRangsorDto implements Serializable {
 
     private String italNeve;
-    private long fogyasztottMennyiseg;
+    private Long fogyasztottMennyiseg;
 
     public ItalRangsorDto(Tuple tuple) {
         this.italNeve = tuple.get(0, String.class);

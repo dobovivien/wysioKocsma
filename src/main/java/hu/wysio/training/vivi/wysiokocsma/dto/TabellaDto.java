@@ -14,9 +14,9 @@ import java.io.Serializable;
 public class TabellaDto implements Serializable, Comparable<TabellaDto> {
 
     private String resztvevoNeve;
-    private int gyozelmekSzama;
-    private long bunyokbanReszvetelSzama;
-    private double gyozelmiArany;
+    private Integer gyozelmekSzama;
+    private Long bunyokbanReszvetelSzama;
+    private Double gyozelmiArany;
 
     @Override
     public int compareTo(TabellaDto masikDto) {

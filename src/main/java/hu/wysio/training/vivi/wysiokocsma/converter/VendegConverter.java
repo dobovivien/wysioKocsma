@@ -22,7 +22,7 @@ public class VendegConverter {
         return vendeg;
     }
 
-    public TabellaDto toTabellaDto(Vendeg vendeg, int bunyokSzama, int gyozelmekSzama) {
+    public TabellaDto toTabellaDto(Vendeg vendeg, long bunyokSzama, int gyozelmekSzama) {
         TabellaDto tabellaDto = new TabellaDto();
 
         tabellaDto.setResztvevoNeve(vendeg.getBecenev());

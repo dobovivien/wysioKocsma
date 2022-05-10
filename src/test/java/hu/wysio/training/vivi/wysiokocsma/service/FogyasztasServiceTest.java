@@ -100,9 +100,9 @@ class FogyasztasServiceTest {
 
     @Test
     void getLegtobbetFogyasztottItal_returns_ItalRongsorDto() {
-        ItalRangsorDto italRangsorDto1 = new ItalRangsorDto("italNeve1", 10);
-        ItalRangsorDto italRangsorDto2 = new ItalRangsorDto("italNeve2", 10);
-        ItalRangsorDto italRangsorDto3 = new ItalRangsorDto("italNeve3", 10);
+        ItalRangsorDto italRangsorDto1 = new ItalRangsorDto("italNeve1", 10L);
+        ItalRangsorDto italRangsorDto2 = new ItalRangsorDto("italNeve2", 10L);
+        ItalRangsorDto italRangsorDto3 = new ItalRangsorDto("italNeve3", 10L);
 
         List<ItalRangsorDto> italRangsorDtoList = new ArrayList<>();
         italRangsorDtoList.add(italRangsorDto1);
