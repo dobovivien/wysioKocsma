@@ -26,6 +26,7 @@ public class FogyasztasService {
     public Fogyasztas createFogyasztas(FogyasztasDto fogyasztasDto) throws FogyasztasException {
         try {
             return fogyasztasRepository.save(fogyasztasConverter.convertDtoToFogyasztas(fogyasztasDto));
+
         } catch (IllegalArgumentException e) {
             throw new FogyasztasException(SIKERTELEN);
         }
@@ -33,18 +34,26 @@ public class FogyasztasService {
 
     public Fogyasztas updateFogyasztas(long id, Fogyasztas fogyasztasAdat) throws FogyasztasException {
         Fogyasztas fogyasztas;
-        try {
-            fogyasztas = fogyasztasRepository.findById(id).get();
-        } catch (IllegalArgumentException e) {
-            throw new FogyasztasException(NINCS_FOGYASZTAS + id);
+
+        if (fogyasztasRepository.findById(id).isPresent()) {
+            try {
+                fogyasztas = fogyasztasRepository.getById(id);
+
+            } catch (IllegalArgumentException e) {
+                throw new FogyasztasException(NINCS_FOGYASZTAS + id);
+            }
+
+            try {
+                fogyasztas.setItal(fogyasztasAdat.getItal());
+                fogyasztas.setElfogyasztottMennyiseg(fogyasztasAdat.getElfogyasztottMennyiseg());
+
+                return fogyasztasRepository.save(fogyasztas);
+
+            } catch (IllegalArgumentException e) {
+                throw new FogyasztasException(SIKERTELEN);
+            }
         }
-        try {
-            fogyasztas.setItal(fogyasztasAdat.getItal());
-            fogyasztas.setElfogyasztottMennyiseg(fogyasztasAdat.getElfogyasztottMennyiseg());
-            return fogyasztasRepository.save(fogyasztas);
-        } catch (IllegalArgumentException e) {
-            throw new FogyasztasException(SIKERTELEN);
-        }
+        throw new FogyasztasException(NINCS_FOGYASZTAS + id);
     }
 
     public List<ItalRangsorDto> getLegtobbetFogyasztottItal() {

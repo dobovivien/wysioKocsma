@@ -158,7 +158,7 @@ class VendegServiceTest {
         vendegList.add(EXPECTED_VENDEG_3);
         vendegList.add(EXPECTED_VENDEG_4);
 
-        long fogyasztasByVendegId = vendegService.getElfogyasztottMennyisegByVendegId(EXPECTED_VENDEG_1.getId());
+        long fogyasztasByVendegId = vendegService.getElfogyasztottMennyisegByVendeg(EXPECTED_VENDEG_1);
 
         VendegFogyasztasSzerintDto vendegFogyasztasSzerintDto = new VendegFogyasztasSzerintDto("becenev", ID);
 
@@ -195,7 +195,7 @@ class VendegServiceTest {
 
         when(vendegRepository.findById(ID)).thenReturn(Optional.of(EXPECTED_VENDEG));
 
-        vendegService.getElfogyasztottMennyisegByVendegId(ID);
+        vendegService.getElfogyasztottMennyisegByVendeg(EXPECTED_VENDEG);
 
         verify(vendegRepository).findById(ID);
     }
@@ -204,7 +204,7 @@ class VendegServiceTest {
     void getElfogyasztottMennyisegByVendegId_throws_nincsVendeg_exception() {
         when(vendegRepository.findById(any())).thenThrow(new IllegalArgumentException());
 
-        Assertions.assertThrows(VendegException.class, () -> vendegService.getElfogyasztottMennyisegByVendegId(ID));
+        Assertions.assertThrows(VendegException.class, () -> vendegService.getElfogyasztottMennyisegByVendeg(EXPECTED_VENDEG));
 
         verify(vendegRepository).findById(any());
     }

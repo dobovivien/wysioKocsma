@@ -57,7 +57,7 @@ public class VendegConverter {
 
     public TabellaDto convertVendegToTabellaDto(Vendeg vendeg, int bunyokSzama, int gyozelmekSzama) {
         TabellaDto tabellaDto = new TabellaDto();
-        tabellaDto.setResztvevoNeve(vendegRepository.getById(vendeg.getId()).getBecenev());
+        tabellaDto.setResztvevoNeve(vendeg.getBecenev());
         tabellaDto.setBunyokbanReszvetelSzama(bunyokSzama);
         tabellaDto.setGyozelmekSzama(gyozelmekSzama);
         tabellaDto.setGyozelmiArany((double) gyozelmekSzama / bunyokSzama * 100);
@@ -66,7 +66,7 @@ public class VendegConverter {
 
     public VendegFogyasztasSzerintDto convertVendegToVFSZDto(Vendeg vendeg, long fogyasztottMennyiseg) {
         VendegFogyasztasSzerintDto vendegFogyasztasSzerintDto = new VendegFogyasztasSzerintDto();
-        vendegFogyasztasSzerintDto.setBecenev(vendegRepository.getById(vendeg.getId()).getBecenev());
+        vendegFogyasztasSzerintDto.setBecenev(vendeg.getBecenev());
         vendegFogyasztasSzerintDto.setElfogyasztottMennyiseg(fogyasztottMennyiseg);
         return vendegFogyasztasSzerintDto;
     }

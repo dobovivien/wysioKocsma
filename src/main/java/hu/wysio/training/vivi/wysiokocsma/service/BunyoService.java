@@ -40,57 +40,63 @@ public class BunyoService {
     public long startBunyo() throws BunyoException {
         try {
             Set<Vendeg> vendegSet = new HashSet<>();
+
             Bunyo bunyo = new Bunyo();
             bunyo.setMettol(LocalDateTime.now());
+
             List<Kocsmazas> befejezetlenKocsmazasokList = kocsmazasService.getAllBefejezetlenKocsmazas();
             for (Kocsmazas kocsmazas : befejezetlenKocsmazasokList) {
                 vendegSet.add(kocsmazas.getVendeg());
             }
+
             bunyo.setVendegList(vendegSet);
+
             return bunyoRepository.save(bunyo).getId();
+
         } catch (Exception e) {
             throw new BunyoException(SIKERTELEN);
         }
     }
-
-//    public Bunyo finishBunyo(long id, Bunyo bunyoAdat) throws ResourceNotFoundException {
-//        Bunyo bunyo = bunyoRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Nincs ilyen bunyo az alabbi id-val: " + id));
-//
-//        bunyo.setMettol(bunyoAdat.getMettol());
-//        bunyo.setMeddig(bunyoAdat.getMeddig());
-//        bunyo.setVendegList(bunyoAdat.getVendegList());
-//        bunyo.setNyertes(bunyoAdat.getNyertes());
-//
-//        return bunyoRepository.save(bunyo);
-//    } todo: később kelleni fog
 
     public List<TabellaDto> getTabellaEredmeny() throws BunyoException {
         try {
-            Set<TabellaDto> tabellaDtoSet = new HashSet<>();
+            Set<TabellaDto> tabellaDtoSet;
+
             List<Vendeg> vendegList = vendegRepository.findAll();
-            for (Vendeg vendeg : vendegList) {
-                int bunyokSzama = vendeg.getBunyoList().size();
-                tabellaDtoSet.add(vendegConverter.convertVendegToTabellaDto(vendeg, bunyokSzama, getGyozelmekSzama(vendeg.getId())));
-            }
+
+            tabellaDtoSet = vendegList.stream()
+                    .map(vendeg -> {
+                        try {
+                            return vendegConverter.convertVendegToTabellaDto(vendeg, vendeg.getBunyoList().size(),
+                                    (int) getGyozelmekSzama(vendeg.getId()));
+                        } catch (BunyoException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    })
+                    .collect(Collectors.toSet());
+
             TabellaDtoComparator tabellaDtoComparator = new TabellaDtoComparator();
             List<TabellaDto> tabellaDtoList = new ArrayList<>(tabellaDtoSet);
-            return tabellaDtoList.stream().sorted(tabellaDtoComparator).collect(Collectors.toList());
+
+            return tabellaDtoList.stream()
+                    .sorted(tabellaDtoComparator)
+                    .collect(Collectors
+                            .toList());
+
         } catch (Exception e) {
             throw new BunyoException(SIKERTELEN);
         }
     }
 
-    public int getGyozelmekSzama(Long vendegId) throws BunyoException {
-        int gyozelmekSzama = 0;
+    public long getGyozelmekSzama(Long vendegId) throws BunyoException {
         try {
             List<Bunyo> bunyoList = bunyoRepository.findAll();
-            for (Bunyo bunyo : bunyoList) {
-                if (bunyo.getNyertes() != null && vendegId != null && vendegId.equals(bunyo.getNyertes().getId())) {
-                    gyozelmekSzama++;
-                }
-            }
-            return gyozelmekSzama;
+
+            return bunyoList.stream()
+                    .filter(bunyo -> bunyo.getNyertes() != null && vendegId != null && vendegId.equals(bunyo.getNyertes().getId()))
+                    .count();
+
         } catch (Exception e) {
             throw new BunyoException(SIKERTELEN);
         }

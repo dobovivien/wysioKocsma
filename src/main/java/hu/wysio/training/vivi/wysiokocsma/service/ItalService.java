@@ -26,7 +26,9 @@ public class ItalService {
     public long createItal(ItalDto italDto) throws ItalException {
         try {
             Ital ital = italRepository.save(italConverter.convertDtoToItal(italDto));
+
             return ital.getId();
+
         } catch (Exception e) {
             throw new ItalException(SIKERTELEN);
         }
@@ -34,24 +36,34 @@ public class ItalService {
 
     public Ital updateItal(long id, Ital italAdat) throws ItalException {
         Ital ital;
-        try {
-            ital = italRepository.findById(id).get();
-        } catch (Exception e) {
-            throw new ItalException(NINCS_ITAL + id);
+
+        if (italRepository.findById(id).isPresent()) {
+            try {
+                ital = italRepository.getById(id);
+
+            } catch (Exception e) {
+                throw new ItalException(NINCS_ITAL + id);
+            }
+
+            try {
+                ital.setNev(italAdat.getNev());
+                ital.setAdagMennyisege(italAdat.getAdagMennyisege());
+                ital.setAlkoholTartalom(italAdat.getAlkoholTartalom());
+
+                return italRepository.save(ital);
+
+            } catch (Exception e) {
+                throw new ItalException(SIKERTELEN);
+            }
         }
-        try {
-            ital.setNev(italAdat.getNev());
-            ital.setAdagMennyisege(italAdat.getAdagMennyisege());
-            ital.setAlkoholTartalom(italAdat.getAlkoholTartalom());
-            return italRepository.save(ital);
-        } catch (Exception e) {
-            throw new ItalException(SIKERTELEN);
-        }
+
+        throw new ItalException(NINCS_ITAL + id);
     }
 
     public List<Ital> findAll() throws ItalException {
         try {
             return italRepository.findAll();
+
         } catch (Exception e) {
             throw new ItalException(SIKERTELEN);
         }
@@ -60,6 +72,7 @@ public class ItalService {
     public void deleteItal(Ital italAdat) throws ItalException {
         try {
             italRepository.delete(italAdat);
+            
         } catch (Exception e) {
             throw new ItalException(NINCS_ITAL + italAdat.getId());
         }
