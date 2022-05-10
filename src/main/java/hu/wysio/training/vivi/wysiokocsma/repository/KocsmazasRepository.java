@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface KocsmazasRepository extends JpaRepository<Kocsmazas, Long>, KocsmazasRepositoryCustom {
 
-    List<Kocsmazas> findAllByVendeg_Id(Long vendegId);
+    List<Kocsmazas> findAllByVendegId(Long vendegId);
 
     @Query("select count (k) from Kocsmazas k where k.vendeg.id = :vendegId and k.detoxbaKerult = true ")
     int getKocsmazasCountByVendegDetoxban(Long vendegId);

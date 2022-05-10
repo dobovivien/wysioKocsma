@@ -67,7 +67,7 @@ public class KocsmazasService {
         List<Kocsmazas> kocsmazasList;
 
         try {
-            kocsmazasList = kocsmazasRepository.findAllByVendeg_Id(vendegId);
+            kocsmazasList = kocsmazasRepository.findAllByVendegId(vendegId);
 
         } catch (Exception e) {
             throw new KocsmazasException(NINCS_VENDEG + vendegId);
@@ -137,7 +137,7 @@ public class KocsmazasService {
         int kocsmazasokSzama;
 
         try {
-            kocsmazasokSzama = kocsmazasRepository.findAllByVendeg_Id(vendegId).size();
+            kocsmazasokSzama = kocsmazasRepository.findAllByVendegId(vendegId).size();
 
         } catch (Exception e) {
             throw new KocsmazasException(SIKERTELEN);
