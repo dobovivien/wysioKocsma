@@ -27,7 +27,7 @@ public class VendegService {
 
     public long createVendeg(VendegDto vendegDto) throws VendegException {
         try {
-            Vendeg vendeg = vendegRepository.save(vendegConverter.convertDtoToVendeg(vendegDto));
+            Vendeg vendeg = vendegRepository.save(vendegConverter.toVendeg(vendegDto));
 
             return vendeg.getId();
 
@@ -84,7 +84,7 @@ public class VendegService {
 
     public List<VendegFogyasztasSzerintDto> getVendegekByElfogyasztottMennyiseg() {
         return vendegRepository.findAll().stream()
-                .map(vendeg -> vendegConverter.convertVendegToVFSZDto(vendeg, getElfogyasztottMennyisegByVendeg(vendeg)))
+                .map(vendeg -> vendegConverter.toVendegFogyasztasSzerintDto(vendeg, getElfogyasztottMennyisegByVendeg(vendeg)))
                 .collect(Collectors.toList());
     }
 

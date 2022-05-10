@@ -54,7 +54,7 @@ public class VendegController {
 
     @PutMapping("/update-vendeg/{id}")
     public ResponseEntity<Vendeg> updateVendeg(@PathVariable Long id, @Validated @RequestBody VendegDto vendegDto) throws VendegException {
-        Vendeg updatedVendeg = vendegService.updateVendeg(id, vendegConverter.convertDtoToVendeg(vendegDto));
+        Vendeg updatedVendeg = vendegService.updateVendeg(id, vendegConverter.toVendeg(vendegDto));
         if (updatedVendeg == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

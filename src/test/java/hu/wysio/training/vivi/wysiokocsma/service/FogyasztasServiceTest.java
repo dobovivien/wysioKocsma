@@ -49,12 +49,12 @@ class FogyasztasServiceTest {
 
     @Test
     void createFogyasztas_returns_fogyasztas() throws FogyasztasException {
-        when(fogyasztasConverter.convertDtoToFogyasztas(FOGYASZTAS_DTO)).thenReturn(EXPECTED_FOGYASZTAS);
+        when(fogyasztasConverter.toFogyasztas(FOGYASZTAS_DTO)).thenReturn(EXPECTED_FOGYASZTAS);
         when(fogyasztasRepository.save(EXPECTED_FOGYASZTAS)).thenReturn(EXPECTED_FOGYASZTAS);
 
         fogyasztasService.createFogyasztas(FOGYASZTAS_DTO);
 
-        verify(fogyasztasConverter).convertDtoToFogyasztas(FOGYASZTAS_DTO);
+        verify(fogyasztasConverter).toFogyasztas(FOGYASZTAS_DTO);
         verify(fogyasztasRepository).save(EXPECTED_FOGYASZTAS);
     }
 

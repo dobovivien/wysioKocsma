@@ -25,7 +25,7 @@ public class FogyasztasService {
 
     public Fogyasztas createFogyasztas(FogyasztasDto fogyasztasDto) throws FogyasztasException {
         try {
-            return fogyasztasRepository.save(fogyasztasConverter.convertDtoToFogyasztas(fogyasztasDto));
+            return fogyasztasRepository.save(fogyasztasConverter.toFogyasztas(fogyasztasDto));
 
         } catch (IllegalArgumentException e) {
             throw new FogyasztasException(SIKERTELEN);

@@ -67,7 +67,7 @@ public class BunyoService {
             tabellaDtoSet = vendegList.stream()
                     .map(vendeg -> {
                         try {
-                            return vendegConverter.convertVendegToTabellaDto(vendeg, vendeg.getBunyoList().size(),
+                            return vendegConverter.toTabellaDto(vendeg, vendeg.getBunyoList().size(),
                                     (int) getGyozelmekSzama(vendeg.getId()));
                         } catch (BunyoException e) {
                             e.printStackTrace();

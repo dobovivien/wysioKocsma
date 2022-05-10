@@ -25,7 +25,7 @@ public class ItalService {
 
     public long createItal(ItalDto italDto) throws ItalException {
         try {
-            Ital ital = italRepository.save(italConverter.convertDtoToItal(italDto));
+            Ital ital = italRepository.save(italConverter.toItal(italDto));
 
             return ital.getId();
 

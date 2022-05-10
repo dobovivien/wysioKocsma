@@ -185,7 +185,7 @@ public class KocsmazasService {
 
     public List<KocsmazasDto> isAlkoholistaWithCriteriaBuilder(Long vendegId) throws KocsmazasException {
         try {
-            return kocsmazasConverter.convertKocsmazasListToKocsmazasDtoList(
+            return kocsmazasConverter.toKocsmazasDtoList(
                     kocsmazasRepository.isAlkoholistaWithCriteriaBuilder(vendegId));
 
         } catch (Exception e) {

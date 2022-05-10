@@ -52,12 +52,12 @@ class VendegServiceTest {
 
     @Test
     void createVendeg_returns_vendegId() throws VendegException {
-        when(vendegConverter.convertDtoToVendeg(VENDEG_DTO)).thenReturn(EXPECTED_VENDEG);
+        when(vendegConverter.toVendeg(VENDEG_DTO)).thenReturn(EXPECTED_VENDEG);
         when(vendegRepository.save(EXPECTED_VENDEG)).thenReturn(EXPECTED_VENDEG);
 
         vendegService.createVendeg(VENDEG_DTO);
 
-        verify(vendegConverter).convertDtoToVendeg(VENDEG_DTO);
+        verify(vendegConverter).toVendeg(VENDEG_DTO);
         verify(vendegRepository).save(EXPECTED_VENDEG);
     }
 
@@ -163,12 +163,12 @@ class VendegServiceTest {
         VendegFogyasztasSzerintDto vendegFogyasztasSzerintDto = new VendegFogyasztasSzerintDto("becenev", ID);
 
         when(vendegRepository.findAll()).thenReturn(vendegList);
-        when(vendegConverter.convertVendegToVFSZDto(EXPECTED_VENDEG_1, fogyasztasByVendegId)).thenReturn(vendegFogyasztasSzerintDto);
+        when(vendegConverter.toVendegFogyasztasSzerintDto(EXPECTED_VENDEG_1, fogyasztasByVendegId)).thenReturn(vendegFogyasztasSzerintDto);
 
         vendegService.getVendegekByElfogyasztottMennyiseg();
 
         verify(vendegRepository).findAll();
-        verify(vendegConverter).convertVendegToVFSZDto(EXPECTED_VENDEG_1, fogyasztasByVendegId);
+        verify(vendegConverter).toVendegFogyasztasSzerintDto(EXPECTED_VENDEG_1, fogyasztasByVendegId);
     }
 
     @Test

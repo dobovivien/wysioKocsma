@@ -46,7 +46,7 @@ public class ItalController {
     public ResponseEntity<Ital> updateItal(
             @PathVariable Long id,
             @Validated @RequestBody ItalDto italDto) throws ItalException {
-        Ital updatedItal = italService.updateItal(id, italConverter.convertDtoToItal(italDto));
+        Ital updatedItal = italService.updateItal(id, italConverter.toItal(italDto));
         if (updatedItal == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -55,6 +55,6 @@ public class ItalController {
 
     @DeleteMapping("/delete-ital/{id}")
     public void deleteItal(@PathVariable Long id, @RequestBody ItalDto italDto) throws ItalException {
-        italService.deleteItal(italConverter.convertDtoToItal(italDto));
+        italService.deleteItal(italConverter.toItal(italDto));
     }
 }

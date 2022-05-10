@@ -38,7 +38,7 @@ public class FogyasztasController {
             @PathVariable Long id,
             @Validated @RequestBody FogyasztasDto fogyasztasDto) {
         try {
-            Fogyasztas fogyasztas = fogyasztasService.updateFogyasztas(id, fogyasztasConverter.convertDtoToFogyasztas(fogyasztasDto));
+            Fogyasztas fogyasztas = fogyasztasService.updateFogyasztas(id, fogyasztasConverter.toFogyasztas(fogyasztasDto));
             return new ResponseEntity<>(fogyasztas, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
