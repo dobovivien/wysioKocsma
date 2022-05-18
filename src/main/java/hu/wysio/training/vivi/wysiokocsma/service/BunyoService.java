@@ -5,6 +5,7 @@ import hu.wysio.training.vivi.wysiokocsma.converter.VendegConverter;
 import hu.wysio.training.vivi.wysiokocsma.dto.TabellaDto;
 import hu.wysio.training.vivi.wysiokocsma.exception.BunyoException;
 import hu.wysio.training.vivi.wysiokocsma.model.Bunyo;
+import hu.wysio.training.vivi.wysiokocsma.model.ExceptionMessage;
 import hu.wysio.training.vivi.wysiokocsma.model.Kocsmazas;
 import hu.wysio.training.vivi.wysiokocsma.model.Vendeg;
 import hu.wysio.training.vivi.wysiokocsma.repository.BunyoRepository;
@@ -22,8 +23,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class BunyoService {
-
-    private static final String SIKERTELEN = "Sikertelen művelet.";
 
     @Autowired
     private BunyoRepository bunyoRepository;
@@ -54,27 +53,19 @@ public class BunyoService {
             return bunyoRepository.save(bunyo).getId();
 
         } catch (Exception e) {
-            throw new BunyoException(SIKERTELEN);
+            throw new BunyoException(ExceptionMessage.SIKERTELEN.getMessage());
         }
     }
 
     public List<TabellaDto> getTabellaEredmeny() throws BunyoException {
         try {
-            Set<TabellaDto> tabellaDtoSet;
-
             List<Vendeg> vendegList = vendegRepository.findAll();
 
-            tabellaDtoSet = vendegList.stream()
+            Set<TabellaDto> tabellaDtoSet = vendegList.stream()
                     .map(vendeg -> {
-                        try {
-                            return vendegConverter.toTabellaDto(vendeg, vendeg.getBunyoList().size(),
-                                    (int) getGyozelmekSzama(vendeg.getId()));
-                        } catch (BunyoException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
-                    })
-                    .collect(Collectors.toSet());
+                        long gyozelmekSzamaByVendeg = getGyozelmekSzama(vendeg.getId());
+                        return vendegConverter.toTabellaDto(vendeg, gyozelmekSzamaByVendeg);
+                    }).collect(Collectors.toSet());
 
             TabellaDtoComparator tabellaDtoComparator = new TabellaDtoComparator();
             List<TabellaDto> tabellaDtoList = new ArrayList<>(tabellaDtoSet);
@@ -85,20 +76,19 @@ public class BunyoService {
                             .toList());
 
         } catch (Exception e) {
-            throw new BunyoException(SIKERTELEN);
+            throw new BunyoException(ExceptionMessage.SIKERTELEN.getMessage());
         }
     }
 
-    public long getGyozelmekSzama(Long vendegId) throws BunyoException {
-        try {
-            List<Bunyo> bunyoList = bunyoRepository.findAll();
+    public boolean isBunyoNyertese(Bunyo bunyo, Long vendegId) {
+        return bunyo.getNyertes() != null && vendegId != null && vendegId.equals(bunyo.getNyertes().getId());
+    }
 
-            return bunyoList.stream()
-                    .filter(bunyo -> bunyo.getNyertes() != null && vendegId != null && vendegId.equals(bunyo.getNyertes().getId()))
-                    .count();
+    private long getGyozelmekSzama(Long vendegId) {
+        List<Bunyo> bunyoList = bunyoRepository.findAll();
 
-        } catch (Exception e) {
-            throw new BunyoException(SIKERTELEN);
-        }
+        return bunyoList.stream()
+                .filter(bunyo -> isBunyoNyertese(bunyo, vendegId))
+                .count();
     }
 }

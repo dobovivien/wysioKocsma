@@ -3,10 +3,7 @@ package hu.wysio.training.vivi.wysiokocsma.service;
 import hu.wysio.training.vivi.wysiokocsma.converter.KocsmazasConverter;
 import hu.wysio.training.vivi.wysiokocsma.dto.KocsmazasDto;
 import hu.wysio.training.vivi.wysiokocsma.exception.KocsmazasException;
-import hu.wysio.training.vivi.wysiokocsma.model.FogyasztasAdatok;
-import hu.wysio.training.vivi.wysiokocsma.model.Kocsmazas;
-import hu.wysio.training.vivi.wysiokocsma.model.KocsmazasIdotartam;
-import hu.wysio.training.vivi.wysiokocsma.model.Vendeg;
+import hu.wysio.training.vivi.wysiokocsma.model.*;
 import hu.wysio.training.vivi.wysiokocsma.repository.FogyasztasRepository;
 import hu.wysio.training.vivi.wysiokocsma.repository.KocsmazasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +12,11 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class KocsmazasService {
 
-    private static final String NINCS_KOCSMAZAS = "Nincs ilyen kocsmázás az alabbi vendég id-val: ";
-    private static final String NINCS_VENDEG = "Nincs ilyen vendég az alabbi id-val: ";
-    private static final String NINCS_FOGYASZTAS = "Nincs ilyen fogyasztás az alabbi vendég id-val: ";
-    private static final String SIKERTELEN = "Sikertelen művelet.";
     private static final int MAX_DETOX = 5;
     private static final int MAX_KOCSMAZAS = 4;
     private static final int MAX_FOGYASZTAS = 2000;
@@ -48,7 +40,7 @@ public class KocsmazasService {
             vendeg = vendegService.findById(vendegId);
 
         } catch (Exception e) {
-            throw new KocsmazasException(NINCS_VENDEG);
+            throw new KocsmazasException(ExceptionMessage.NINCS_VENDEG.getMessage());
         }
 
         try {
@@ -59,7 +51,7 @@ public class KocsmazasService {
             return kocsmazasRepository.save(kocsmazas).getId();
 
         } catch (Exception e) {
-            throw new KocsmazasException(SIKERTELEN);
+            throw new KocsmazasException(ExceptionMessage.SIKERTELEN.getMessage());
         }
     }
 
@@ -70,22 +62,20 @@ public class KocsmazasService {
             kocsmazasList = kocsmazasRepository.findAllByVendegId(vendegId);
 
         } catch (Exception e) {
-            throw new KocsmazasException(NINCS_VENDEG + vendegId);
+            throw new KocsmazasException(ExceptionMessage.NINCS_VENDEG.getMessage() + vendegId);
         }
 
-        Optional<Kocsmazas> befejezetlenKocsmazas = kocsmazasList.stream()
+        return kocsmazasList.stream()
                 .filter(kocsmazas -> kocsmazas.getMeddig() == null)
-                .findFirst();
-
-        return befejezetlenKocsmazas.orElse(null);
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Kocsmazas> getAllBefejezetlenKocsmazas() {
         List<Kocsmazas> kocsmazasList = kocsmazasRepository.findAll();
         return kocsmazasList.stream()
                 .filter(kocsmazas -> kocsmazas.getMeddig() == null)
-                .collect(Collectors
-                        .toList());
+                .collect(Collectors.toList());
     }
 
     public long finishKocsmazas(long vendegId) throws KocsmazasException {
@@ -97,7 +87,7 @@ public class KocsmazasService {
             return kocsmazasRepository.save(befejezetlenKocsmazas).getId();
 
         } else {
-            throw new KocsmazasException(NINCS_VENDEG + vendegId);
+            throw new KocsmazasException(ExceptionMessage.NINCS_VENDEG.getMessage() + vendegId);
         }
     }
 
@@ -110,37 +100,31 @@ public class KocsmazasService {
                 kocsmazasRepository.save(kocsmazas);
 
             } catch (Exception e) {
-                throw new KocsmazasException(SIKERTELEN);
+                throw new KocsmazasException(ExceptionMessage.SIKERTELEN.getMessage());
             }
             finishKocsmazas(vendegId);
 
         } else {
-            throw new KocsmazasException(NINCS_VENDEG + vendegId);
+            throw new KocsmazasException(ExceptionMessage.NINCS_VENDEG.getMessage() + vendegId);
         }
     }
 
-    public boolean vendegIsDetoxos(Long vendegId) throws KocsmazasException {
+    public boolean vendegIsDetoxos(Long vendegId) {
         int allKocsmazasByVendegDetoxban;
 
-        try {
-            allKocsmazasByVendegDetoxban = kocsmazasRepository.getKocsmazasCountByVendegDetoxban(vendegId);
-
-        } catch (Exception e) {
-            throw new KocsmazasException(NINCS_VENDEG + vendegId);
-        }
+        allKocsmazasByVendegDetoxban = kocsmazasRepository.getKocsmazasCountByVendegDetoxban(vendegId);
 
         return allKocsmazasByVendegDetoxban > MAX_DETOX;
     }
 
     public double getHetiAtlagosKocsmazasSzama(Long vendegId) throws KocsmazasException {
-        int napokSzama = 0;
         int kocsmazasokSzama;
 
         try {
             kocsmazasokSzama = kocsmazasRepository.findAllByVendegId(vendegId).size();
 
         } catch (Exception e) {
-            throw new KocsmazasException(SIKERTELEN);
+            throw new KocsmazasException(ExceptionMessage.SIKERTELEN.getMessage());
         }
 
         KocsmazasIdotartam kocsmazasIdotartam;
@@ -148,11 +132,11 @@ public class KocsmazasService {
             kocsmazasIdotartam = kocsmazasRepository.findElsoEsUtolsoKocsmazasByVendegId(vendegId);
 
         } catch (Exception e) {
-            throw new KocsmazasException(NINCS_KOCSMAZAS + vendegId);
+            throw new KocsmazasException(ExceptionMessage.NINCS_KOCSMAZAS.getMessage() + vendegId);
         }
 
         if (kocsmazasIdotartam.getMettol() != null && kocsmazasIdotartam.getMeddig() != null) {
-            napokSzama = (int) Duration.between(kocsmazasIdotartam.getMettol(), kocsmazasIdotartam.getMeddig()).toDays() + 1;
+            int napokSzama = (int) Duration.between(kocsmazasIdotartam.getMettol(), kocsmazasIdotartam.getMeddig()).toDays() + 1;
             int hetekSzama = (int) Math.ceil(napokSzama / 7.0);
 
             return (double) kocsmazasokSzama / hetekSzama;
@@ -160,14 +144,14 @@ public class KocsmazasService {
         return 0.0;
     }
 
-    public double getVendegAtlagosFogyasztasAdatok(Long vendegId) throws KocsmazasException {
+    private double getVendegAtlagosFogyasztasAdatok(Long vendegId) throws KocsmazasException {
         List<FogyasztasAdatok> fogyasztasAdatok;
 
         try {
             fogyasztasAdatok = fogyasztasRepository.getFogyasztasAdatok(vendegId);
 
         } catch (Exception e) {
-            throw new KocsmazasException(NINCS_FOGYASZTAS);
+            throw new KocsmazasException(ExceptionMessage.NINCS_FOGYASZTAS.getMessage());
         }
 
         int fogyasztasSuly = fogyasztasAdatok.stream()
@@ -185,11 +169,11 @@ public class KocsmazasService {
 
     public List<KocsmazasDto> isAlkoholistaWithCriteriaBuilder(Long vendegId) throws KocsmazasException {
         try {
-            return kocsmazasConverter.toKocsmazasDtoList(
+            return kocsmazasConverter.toDtoList(
                     kocsmazasRepository.isAlkoholistaWithCriteriaBuilder(vendegId));
 
         } catch (Exception e) {
-            throw new KocsmazasException(NINCS_VENDEG);
+            throw new KocsmazasException(ExceptionMessage.NINCS_VENDEG.getMessage());
         }
     }
 }
