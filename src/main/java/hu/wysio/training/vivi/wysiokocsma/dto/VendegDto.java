@@ -20,8 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VendegDto implements Serializable {
-
-    @NotNull
+    
     private Long id;
 
     @NotEmpty
