@@ -12,14 +12,13 @@ import java.util.stream.Collectors;
 public class KocsmazasConverter {
 
     public KocsmazasDto toDto(Kocsmazas kocsmazas) {
-        List<Long> fogyasztasDtoList;
         KocsmazasDto kocsmazasDto = new KocsmazasDto();
 
         kocsmazasDto.setMettol(kocsmazas.getMettol());
         kocsmazasDto.setMeddig(kocsmazas.getMeddig());
         kocsmazasDto.setDetoxbaKerult(kocsmazas.isDetoxbaKerult());
 
-        fogyasztasDtoList = kocsmazas.getFogyasztasLista().stream()
+        List<Long> fogyasztasDtoList = kocsmazas.getFogyasztasLista().stream()
                 .map(AbstractEntity::getId)
                 .collect(Collectors.toList());
 
@@ -28,13 +27,9 @@ public class KocsmazasConverter {
         return kocsmazasDto;
     }
 
-    public List<KocsmazasDto> toKocsmazasDtoList(List<Kocsmazas> kocsmazasList) {
-        List<KocsmazasDto> kocsmazasDtoList;
-
-        kocsmazasDtoList = kocsmazasList.stream()
+    public List<KocsmazasDto> toDtoList(List<Kocsmazas> kocsmazasList) {
+        return kocsmazasList.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
-
-        return kocsmazasDtoList;
     }
 }

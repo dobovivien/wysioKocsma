@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FogyasztasConverter {
 
-    public Fogyasztas toFogyasztas(FogyasztasDto fogyasztasDto) {
+    public Fogyasztas toEntity(FogyasztasDto fogyasztasDto) {
         Ital ital = new Ital();
         ital.setId(fogyasztasDto.getItalId());
 
