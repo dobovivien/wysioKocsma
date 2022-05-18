@@ -19,7 +19,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static hu.wysio.training.vivi.wysiokocsma.model.Majerosseg.BABAMAJ;
 import static org.mockito.ArgumentMatchers.any;
@@ -49,12 +48,12 @@ class FogyasztasServiceTest {
 
     @Test
     void createFogyasztas_returns_fogyasztas() throws FogyasztasException {
-        when(fogyasztasConverter.toFogyasztas(FOGYASZTAS_DTO)).thenReturn(EXPECTED_FOGYASZTAS);
+        when(fogyasztasConverter.toEntity(FOGYASZTAS_DTO)).thenReturn(EXPECTED_FOGYASZTAS);
         when(fogyasztasRepository.save(EXPECTED_FOGYASZTAS)).thenReturn(EXPECTED_FOGYASZTAS);
 
         fogyasztasService.createFogyasztas(FOGYASZTAS_DTO);
 
-        verify(fogyasztasConverter).toFogyasztas(FOGYASZTAS_DTO);
+        verify(fogyasztasConverter).toEntity(FOGYASZTAS_DTO);
         verify(fogyasztasRepository).save(EXPECTED_FOGYASZTAS);
     }
 
@@ -69,32 +68,36 @@ class FogyasztasServiceTest {
 
     @Test
     void updateFogyasztas_throws_nincsFogyasztas_exception() {
-        when(fogyasztasRepository.findById(any())).thenThrow(new IllegalArgumentException());
+        when(fogyasztasRepository.getById(any())).thenThrow(new IllegalArgumentException());
 
-        Assertions.assertThrows(FogyasztasException.class, () -> fogyasztasService.updateFogyasztas(ID, EXPECTED_FOGYASZTAS));
+        Assertions.assertThrows(FogyasztasException.class, () -> fogyasztasService.updateFogyasztas(ID, FOGYASZTAS_DTO));
 
-        verify(fogyasztasRepository).findById(any());
+        verify(fogyasztasRepository).getById(any());
     }
 
     @Test
     void updateFogyasztas_saves_fogyasztas() throws FogyasztasException {
-        when(fogyasztasRepository.findById(ID)).thenReturn(Optional.of(EXPECTED_FOGYASZTAS));
+        when(fogyasztasConverter.toEntity(FOGYASZTAS_DTO)).thenReturn(EXPECTED_FOGYASZTAS);
+        when(fogyasztasRepository.getById(ID)).thenReturn(EXPECTED_FOGYASZTAS);
         when(fogyasztasRepository.save(EXPECTED_FOGYASZTAS)).thenReturn(EXPECTED_FOGYASZTAS);
 
-        fogyasztasService.updateFogyasztas(ID, EXPECTED_FOGYASZTAS);
+        fogyasztasService.updateFogyasztas(ID, FOGYASZTAS_DTO);
 
-        verify(fogyasztasRepository).findById(ID);
+        verify(fogyasztasConverter).toEntity(FOGYASZTAS_DTO);
+        verify(fogyasztasRepository).getById(ID);
         verify(fogyasztasRepository).save(EXPECTED_FOGYASZTAS);
     }
 
     @Test
     void updateFogyasztas_throws_sikertelen_exception() {
-        when(fogyasztasRepository.findById(ID)).thenReturn(Optional.of(EXPECTED_FOGYASZTAS));
+        when(fogyasztasConverter.toEntity(FOGYASZTAS_DTO)).thenReturn(EXPECTED_FOGYASZTAS);
+        when(fogyasztasRepository.getById(ID)).thenReturn(EXPECTED_FOGYASZTAS);
         when(fogyasztasRepository.save(any())).thenThrow(new IllegalArgumentException());
 
-        Assertions.assertThrows(FogyasztasException.class, () -> fogyasztasService.updateFogyasztas(ID, EXPECTED_FOGYASZTAS));
+        Assertions.assertThrows(FogyasztasException.class, () -> fogyasztasService.updateFogyasztas(ID, FOGYASZTAS_DTO));
 
-        verify(fogyasztasRepository).findById(ID);
+        verify(fogyasztasConverter).toEntity(FOGYASZTAS_DTO);
+        verify(fogyasztasRepository).getById(ID);
         verify(fogyasztasRepository).save(any());
     }
 
