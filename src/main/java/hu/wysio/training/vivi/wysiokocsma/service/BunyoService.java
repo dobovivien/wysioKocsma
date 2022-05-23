@@ -77,14 +77,13 @@ public class BunyoService {
         }
     }
 
-    public boolean isBunyoNyertese(Bunyo bunyo, Long vendegId) {
-        return bunyo.getNyertes() != null && vendegId != null && vendegId.equals(bunyo.getNyertes().getId());
-    }
-
     private long getGyozelmekSzama(Long vendegId) {
-
         return bunyoRepository.findAll().stream()
                 .filter(bunyo -> isBunyoNyertese(bunyo, vendegId))
                 .count();
+    }
+
+    private boolean isBunyoNyertese(Bunyo bunyo, Long vendegId) {
+        return bunyo.getNyertes() != null && vendegId != null && vendegId.equals(bunyo.getNyertes().getId());
     }
 }
