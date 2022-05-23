@@ -33,7 +33,7 @@ public class KocsmazasService {
     @Autowired
     private KocsmazasConverter kocsmazasConverter;
 
-    public long startKocsmazas(long vendegId) throws KocsmazasException {
+    public long startKocsmazas(Long vendegId) throws KocsmazasException {
         Vendeg vendeg;
 
         try {
@@ -55,7 +55,7 @@ public class KocsmazasService {
         }
     }
 
-    public Kocsmazas getBefejezetlenKocsmazasByVendegId(long vendegId) throws KocsmazasException {
+    public Kocsmazas getBefejezetlenKocsmazasByVendegId(Long vendegId) throws KocsmazasException {
         List<Kocsmazas> kocsmazasList;
 
         try {
@@ -78,7 +78,7 @@ public class KocsmazasService {
                 .collect(Collectors.toList());
     }
 
-    public long finishKocsmazas(long vendegId) throws KocsmazasException {
+    public long finishKocsmazas(Long vendegId) throws KocsmazasException {
         Kocsmazas befejezetlenKocsmazas = getBefejezetlenKocsmazasByVendegId(vendegId);
 
         if (befejezetlenKocsmazas != null) {
@@ -91,7 +91,7 @@ public class KocsmazasService {
         }
     }
 
-    public void addToDetox(long vendegId) throws KocsmazasException {
+    public void addToDetox(Long vendegId) throws KocsmazasException {
         Kocsmazas kocsmazas = getBefejezetlenKocsmazasByVendegId(vendegId);
         if (kocsmazas != null) {
             kocsmazas.setDetoxbaKerult(true);

@@ -30,7 +30,7 @@ public class FogyasztasService {
         }
     }
 
-    public Fogyasztas updateFogyasztas(long id, FogyasztasDto fogyasztasDto) throws FogyasztasException {
+    public Fogyasztas updateFogyasztas(Long id, FogyasztasDto fogyasztasDto) throws FogyasztasException {
         Fogyasztas fogyasztas;
         Fogyasztas updatedFogyasztas = fogyasztasConverter.toEntity(fogyasztasDto);
 

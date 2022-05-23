@@ -36,7 +36,7 @@ public class VendegService {
         }
     }
 
-    public Vendeg updateVendeg(long id, VendegDto vendegDto) throws VendegException {
+    public Vendeg updateVendeg(Long id, VendegDto vendegDto) throws VendegException {
         Vendeg vendeg;
         Vendeg updatedVendeg = vendegConverter.toEntity(vendegDto);
 

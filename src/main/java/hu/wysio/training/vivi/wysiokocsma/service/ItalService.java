@@ -32,10 +32,10 @@ public class ItalService {
         }
     }
 
-    public Ital updateItal(long id, ItalDto italDto) throws ItalException {
+    public Ital updateItal(Long id, ItalDto italDto) throws ItalException {
         Ital ital;
         Ital updatedItal = italConverter.toEntity(italDto);
-        
+
         try {
             ital = italRepository.getById(id);
 
@@ -64,7 +64,7 @@ public class ItalService {
         }
     }
 
-    public void deleteItal(long italId) throws ItalException {
+    public void deleteItal(Long italId) throws ItalException {
         try {
             italRepository.deleteById(italId);
 
