@@ -68,7 +68,7 @@ public class VendegService {
         }
     }
 
-    public Vendeg findById(long id) throws VendegException {
+    public Vendeg findById(Long id) throws VendegException {
         try {
             return vendegRepository.getById(id);
 
