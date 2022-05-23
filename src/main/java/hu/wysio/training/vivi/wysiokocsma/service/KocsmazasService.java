@@ -110,9 +110,7 @@ public class KocsmazasService {
     }
 
     public boolean vendegIsDetoxos(Long vendegId) {
-        int allKocsmazasByVendegDetoxban = kocsmazasRepository.getKocsmazasCountByVendegDetoxban(vendegId);
-
-        return allKocsmazasByVendegDetoxban > MAX_DETOX;
+        return kocsmazasRepository.getKocsmazasCountByVendegDetoxban(vendegId) > MAX_DETOX;
     }
 
     public double getHetiAtlagosKocsmazasSzama(Long vendegId) throws KocsmazasException {
