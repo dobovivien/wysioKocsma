@@ -57,18 +57,14 @@ public class BunyoService {
     }
 
     public List<TabellaDto> getTabellaEredmeny() throws BunyoException {
-        try {
-            List<Vendeg> vendegList = vendegRepository.findAll();
+        TabellaDtoComparator tabellaDtoComparator = new TabellaDtoComparator();
 
-            Set<TabellaDto> tabellaDtoSet = vendegList.stream()
+        try {
+            return vendegRepository.findAll().stream()
                     .map(vendeg -> {
                         long gyozelmekSzamaByVendeg = getGyozelmekSzama(vendeg.getId());
                         return vendegConverter.toTabellaDto(vendeg, gyozelmekSzamaByVendeg);
-                    }).collect(Collectors.toSet());
-
-            TabellaDtoComparator tabellaDtoComparator = new TabellaDtoComparator();
-
-            return tabellaDtoSet.stream()
+                    })
                     .sorted(tabellaDtoComparator)
                     .collect(Collectors.toList());
 
