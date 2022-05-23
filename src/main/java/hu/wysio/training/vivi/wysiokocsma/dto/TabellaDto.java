@@ -1,9 +1,6 @@
 package hu.wysio.training.vivi.wysiokocsma.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -11,6 +8,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class TabellaDto implements Serializable, Comparable<TabellaDto> {
 
     private String resztvevoNeve;
@@ -21,15 +19,5 @@ public class TabellaDto implements Serializable, Comparable<TabellaDto> {
     @Override
     public int compareTo(TabellaDto masikDto) {
         return Integer.compare(Math.toIntExact(getGyozelmekSzama()), Math.toIntExact(masikDto.getGyozelmekSzama()));
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
     }
 }
