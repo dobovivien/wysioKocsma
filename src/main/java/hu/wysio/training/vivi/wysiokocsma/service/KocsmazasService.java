@@ -110,9 +110,7 @@ public class KocsmazasService {
     }
 
     public boolean vendegIsDetoxos(Long vendegId) {
-        int allKocsmazasByVendegDetoxban;
-
-        allKocsmazasByVendegDetoxban = kocsmazasRepository.getKocsmazasCountByVendegDetoxban(vendegId);
+        int allKocsmazasByVendegDetoxban = kocsmazasRepository.getKocsmazasCountByVendegDetoxban(vendegId);
 
         return allKocsmazasByVendegDetoxban > MAX_DETOX;
     }
@@ -163,7 +161,8 @@ public class KocsmazasService {
     }
 
     public boolean isAlkoholista(Long vendegId) throws KocsmazasException {
-        return vendegIsDetoxos(vendegId) && getHetiAtlagosKocsmazasSzama(vendegId) > MAX_KOCSMAZAS
+        return vendegIsDetoxos(vendegId)
+                && getHetiAtlagosKocsmazasSzama(vendegId) > MAX_KOCSMAZAS
                 && getVendegAtlagosFogyasztasAdatok(vendegId) > MAX_FOGYASZTAS;
     }
 

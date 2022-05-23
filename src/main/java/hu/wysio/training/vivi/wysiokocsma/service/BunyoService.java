@@ -84,6 +84,8 @@ public class BunyoService {
     }
 
     private boolean isBunyoNyertese(Bunyo bunyo, Long vendegId) {
-        return bunyo.getNyertes() != null && vendegId != null && vendegId.equals(bunyo.getNyertes().getId());
+        return bunyo.getNyertes() != null
+                && vendegId != null
+                && vendegId.equals(bunyo.getNyertes().getId());
     }
 }
