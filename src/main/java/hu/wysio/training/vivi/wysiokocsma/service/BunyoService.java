@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -68,12 +67,10 @@ public class BunyoService {
                     }).collect(Collectors.toSet());
 
             TabellaDtoComparator tabellaDtoComparator = new TabellaDtoComparator();
-            List<TabellaDto> tabellaDtoList = new ArrayList<>(tabellaDtoSet);
 
-            return tabellaDtoList.stream()
+            return tabellaDtoSet.stream()
                     .sorted(tabellaDtoComparator)
-                    .collect(Collectors
-                            .toList());
+                    .collect(Collectors.toList());
 
         } catch (Exception e) {
             throw new BunyoException(ExceptionMessage.SIKERTELEN.getMessage());
@@ -85,9 +82,8 @@ public class BunyoService {
     }
 
     private long getGyozelmekSzama(Long vendegId) {
-        List<Bunyo> bunyoList = bunyoRepository.findAll();
 
-        return bunyoList.stream()
+        return bunyoRepository.findAll().stream()
                 .filter(bunyo -> isBunyoNyertese(bunyo, vendegId))
                 .count();
     }
