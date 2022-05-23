@@ -6,24 +6,30 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "fogyasztas", schema = "public")
+@Table
 public class Fogyasztas extends AbstractEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ital_id", nullable = false)
+    @JoinColumn(nullable = false)
+    @NotNull
     private Ital ital;
 
-    @Column(name = "elfogyasztott_mennyiseg", nullable = false)
+    @Column(nullable = false)
+    @Positive
+    @NotNull
     private int elfogyasztottMennyiseg;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "kocsmazas_id", nullable = false)
+    @JoinColumn(nullable = false)
+    @NotNull
     private Kocsmazas kocsmazas;
 
 }
