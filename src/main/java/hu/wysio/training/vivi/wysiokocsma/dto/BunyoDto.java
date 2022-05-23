@@ -14,5 +14,5 @@ import java.io.Serializable;
 public class BunyoDto implements Serializable {
 
     private String nyertes;
-    private long nyertesId;
+    private Long nyertesId;
 }

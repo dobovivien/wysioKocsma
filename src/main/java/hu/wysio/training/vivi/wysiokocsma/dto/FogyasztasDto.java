@@ -16,13 +16,13 @@ import java.io.Serializable;
 public class FogyasztasDto implements Serializable {
 
     @NotNull
-    private long kocsmazasId;
+    private Long kocsmazasId;
 
     @NotNull
-    private long italId;
+    private Long italId;
 
     @NotNull
     @Positive
-    private int elfogyasztottMennyiseg;
+    private Integer elfogyasztottMennyiseg;
 
 }

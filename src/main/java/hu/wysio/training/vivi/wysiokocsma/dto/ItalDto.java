@@ -21,9 +21,9 @@ public class ItalDto implements Serializable {
 
     @NotNull
     @Positive
-    private int alkoholTartalom;
+    private Integer alkoholTartalom;
 
     @NotNull
     @Positive
-    private int adagMennyisege;
+    private Integer adagMennyisege;
 }

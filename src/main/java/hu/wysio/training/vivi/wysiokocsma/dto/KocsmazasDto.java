@@ -26,5 +26,5 @@ public class KocsmazasDto implements Serializable {
 
     private List<Long> fogyasztasLista;
 
-    private boolean detoxbaKerult;
+    private Boolean detoxbaKerult;
 }

@@ -20,9 +20,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VendegDto implements Serializable {
-
-    @NotNull
-    private long id;
+    
+    private Long id;
 
     @NotEmpty
     private String nev;
@@ -33,7 +32,7 @@ public class VendegDto implements Serializable {
 
     @NotNull
     @Positive
-    private int bicepszmeret;
+    private Integer bicepszmeret;
 
     private List<Bunyo> bunyoList;
 

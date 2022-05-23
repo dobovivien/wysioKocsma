@@ -14,5 +14,5 @@ import java.io.Serializable;
 public class VendegFogyasztasSzerintDto implements Serializable {
     
     private String becenev;
-    private long elfogyasztottMennyiseg;
+    private Long elfogyasztottMennyiseg;
 }
