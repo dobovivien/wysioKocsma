@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 @Service
 public class BunyoService {
 
+    private static final TabellaDtoComparator TABELLA_DTO_COMPARATOR = new TabellaDtoComparator();
+
     @Autowired
     private BunyoRepository bunyoRepository;
 
@@ -57,15 +59,13 @@ public class BunyoService {
     }
 
     public List<TabellaDto> getTabellaEredmeny() throws BunyoException {
-        TabellaDtoComparator tabellaDtoComparator = new TabellaDtoComparator();
-
         try {
             return vendegRepository.findAll().stream()
                     .map(vendeg -> {
                         long gyozelmekSzamaByVendeg = getGyozelmekSzama(vendeg.getId());
                         return vendegConverter.toTabellaDto(vendeg, gyozelmekSzamaByVendeg);
                     })
-                    .sorted(tabellaDtoComparator)
+                    .sorted(TABELLA_DTO_COMPARATOR)
                     .collect(Collectors.toList());
 
         } catch (Exception e) {
