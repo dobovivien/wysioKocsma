@@ -1,8 +1,10 @@
 package hu.wysio.training.vivi.wysiokocsma.exception;
 
+import hu.wysio.training.vivi.wysiokocsma.model.ExceptionMessage;
+
 public class VendegException extends WysioKocsmaException {
 
-    public VendegException(String message) {
+    public VendegException(ExceptionMessage message) {
         super(message);
     }
 }
