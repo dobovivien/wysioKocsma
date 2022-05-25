@@ -3,8 +3,6 @@ package hu.wysio.training.vivi.wysiokocsma.service;
 import hu.wysio.training.vivi.wysiokocsma.converter.FogyasztasConverter;
 import hu.wysio.training.vivi.wysiokocsma.dto.FogyasztasDto;
 import hu.wysio.training.vivi.wysiokocsma.dto.ItalRangsorDto;
-import hu.wysio.training.vivi.wysiokocsma.exception.FogyasztasException;
-import hu.wysio.training.vivi.wysiokocsma.model.ExceptionMessage;
 import hu.wysio.training.vivi.wysiokocsma.model.Fogyasztas;
 import hu.wysio.training.vivi.wysiokocsma.repository.FogyasztasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,36 +19,20 @@ public class FogyasztasService {
     @Autowired
     private FogyasztasConverter fogyasztasConverter;
 
-    public Fogyasztas createFogyasztas(FogyasztasDto fogyasztasDto) throws FogyasztasException {
-        try {
-            return fogyasztasRepository.save(fogyasztasConverter.toEntity(fogyasztasDto));
-
-        } catch (IllegalArgumentException e) {
-            throw new FogyasztasException(ExceptionMessage.SIKERTELEN.getMessage());
-        }
+    public Fogyasztas createFogyasztas(FogyasztasDto fogyasztasDto) {
+        return fogyasztasRepository.save(fogyasztasConverter.toEntity(fogyasztasDto));
     }
 
-    public Fogyasztas updateFogyasztas(Long id, FogyasztasDto fogyasztasDto) throws FogyasztasException {
-        Fogyasztas fogyasztas;
+    public Fogyasztas updateFogyasztas(Long id, FogyasztasDto fogyasztasDto) {
         Fogyasztas updatedFogyasztas = fogyasztasConverter.toEntity(fogyasztasDto);
 
-        try {
-            fogyasztas = fogyasztasRepository.getById(id);
+        Fogyasztas fogyasztas = fogyasztasRepository.getById(id);
 
-        } catch (IllegalArgumentException e) {
-            throw new FogyasztasException(ExceptionMessage.NINCS_FOGYASZTAS.getMessage() + id);
-        }
+        fogyasztas.setKocsmazas(updatedFogyasztas.getKocsmazas());
+        fogyasztas.setItal(updatedFogyasztas.getItal());
+        fogyasztas.setElfogyasztottMennyiseg(updatedFogyasztas.getElfogyasztottMennyiseg());
 
-        try {
-            fogyasztas.setKocsmazas(updatedFogyasztas.getKocsmazas());
-            fogyasztas.setItal(updatedFogyasztas.getItal());
-            fogyasztas.setElfogyasztottMennyiseg(updatedFogyasztas.getElfogyasztottMennyiseg());
-
-            return fogyasztasRepository.save(fogyasztas);
-
-        } catch (IllegalArgumentException e) {
-            throw new FogyasztasException(ExceptionMessage.SIKERTELEN.getMessage());
-        }
+        return fogyasztasRepository.save(fogyasztas);
     }
 
     public List<ItalRangsorDto> getLegtobbetFogyasztottItal() {

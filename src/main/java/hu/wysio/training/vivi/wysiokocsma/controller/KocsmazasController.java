@@ -19,7 +19,7 @@ public class KocsmazasController {
 
 
     @PostMapping("/{id}")
-    public ResponseEntity<Long> startKocsmazas(@PathVariable(value = "id") Long id) throws WysioKocsmaException {
+    public ResponseEntity<Long> startKocsmazas(@PathVariable(value = "id") Long id) {
         return new ResponseEntity<>(kocsmazasService.startKocsmazas(id), HttpStatus.CREATED);
     }
 
@@ -40,12 +40,12 @@ public class KocsmazasController {
     }
 
     @GetMapping("/alkoholista/{id}")
-    public ResponseEntity<Boolean> isAlkoholista(@PathVariable(value = "id") Long id) throws WysioKocsmaException {
+    public ResponseEntity<Boolean> isAlkoholista(@PathVariable(value = "id") Long id) {
         return new ResponseEntity<>(kocsmazasService.isAlkoholista(id), HttpStatus.OK);
     }
 
     @GetMapping("/alkoholista-with-criteria-builder/{id}")
-    public ResponseEntity<List<KocsmazasDto>> isAlkoholistaWithCriteriaBuilder(@PathVariable(value = "id") Long id) throws WysioKocsmaException {
+    public ResponseEntity<List<KocsmazasDto>> isAlkoholistaWithCriteriaBuilder(@PathVariable(value = "id") Long id) {
         return new ResponseEntity<>(kocsmazasService.isAlkoholistaWithCriteriaBuilder(id), HttpStatus.OK);
     }
 }

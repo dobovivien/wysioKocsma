@@ -1,7 +1,6 @@
 package hu.wysio.training.vivi.wysiokocsma.controller;
 
 import hu.wysio.training.vivi.wysiokocsma.dto.TabellaDto;
-import hu.wysio.training.vivi.wysiokocsma.exception.WysioKocsmaException;
 import hu.wysio.training.vivi.wysiokocsma.service.BunyoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +21,12 @@ public class BunyoController {
 
 
     @GetMapping
-    public ResponseEntity<List<TabellaDto>> getAllBunyoByNyertesek() throws WysioKocsmaException {
+    public ResponseEntity<List<TabellaDto>> getAllBunyoByNyertesek() {
         return new ResponseEntity<>(bunyoService.getTabellaEredmeny(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Long> startBunyo() throws WysioKocsmaException {
+    public ResponseEntity<Long> startBunyo() {
         return new ResponseEntity<>(bunyoService.startBunyo(), HttpStatus.CREATED);
     }
 }

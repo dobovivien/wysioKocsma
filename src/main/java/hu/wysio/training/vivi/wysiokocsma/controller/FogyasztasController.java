@@ -2,7 +2,6 @@ package hu.wysio.training.vivi.wysiokocsma.controller;
 
 import hu.wysio.training.vivi.wysiokocsma.dto.FogyasztasDto;
 import hu.wysio.training.vivi.wysiokocsma.dto.ItalRangsorDto;
-import hu.wysio.training.vivi.wysiokocsma.exception.WysioKocsmaException;
 import hu.wysio.training.vivi.wysiokocsma.model.Fogyasztas;
 import hu.wysio.training.vivi.wysiokocsma.service.FogyasztasService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +21,13 @@ public class FogyasztasController {
 
 
     @PostMapping
-    public ResponseEntity<Long> createFogyasztas(@Validated @RequestBody FogyasztasDto fogyasztasDto) throws WysioKocsmaException {
+    public ResponseEntity<Long> createFogyasztas(@Validated @RequestBody FogyasztasDto fogyasztasDto) {
         long fogyasztasId = fogyasztasService.createFogyasztas(fogyasztasDto).getId();
         return new ResponseEntity<>(fogyasztasId, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Fogyasztas> updateFogyasztas(@PathVariable Long id, @Validated @RequestBody FogyasztasDto fogyasztasDto) throws WysioKocsmaException {
+    public ResponseEntity<Fogyasztas> updateFogyasztas(@PathVariable Long id, @Validated @RequestBody FogyasztasDto fogyasztasDto) {
         Fogyasztas fogyasztas = fogyasztasService.updateFogyasztas(id, fogyasztasDto);
         return new ResponseEntity<>(fogyasztas, HttpStatus.OK);
     }
