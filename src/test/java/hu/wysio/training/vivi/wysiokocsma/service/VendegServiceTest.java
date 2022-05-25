@@ -3,7 +3,6 @@ package hu.wysio.training.vivi.wysiokocsma.service;
 import hu.wysio.training.vivi.wysiokocsma.converter.VendegConverter;
 import hu.wysio.training.vivi.wysiokocsma.dto.VendegDto;
 import hu.wysio.training.vivi.wysiokocsma.dto.VendegFogyasztasSzerintDto;
-import hu.wysio.training.vivi.wysiokocsma.exception.VendegException;
 import hu.wysio.training.vivi.wysiokocsma.model.Fogyasztas;
 import hu.wysio.training.vivi.wysiokocsma.model.Ital;
 import hu.wysio.training.vivi.wysiokocsma.model.Kocsmazas;
@@ -21,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static hu.wysio.training.vivi.wysiokocsma.model.Majerosseg.BABAMAJ;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -64,7 +62,7 @@ class VendegServiceTest {
     private VendegService vendegService;
 
     @Test
-    void createVendeg_returns_vendegId() throws VendegException {
+    void createVendeg_returns_vendegId() {
         when(vendegConverter.toEntity(VENDEG_DTO)).thenReturn(EXPECTED_VENDEG);
         when(vendegRepository.save(EXPECTED_VENDEG)).thenReturn(EXPECTED_VENDEG);
 
@@ -75,17 +73,7 @@ class VendegServiceTest {
     }
 
     @Test
-    void createVendeg_throws_siekrtelen_exception() {
-        when(vendegRepository.save(any())).thenThrow(new IllegalArgumentException());
-
-        Assertions.assertThrows(VendegException.class, () -> vendegService.createVendeg(VENDEG_DTO));
-
-        verify(vendegRepository).save(any());
-    }
-
-    @Test
-    void updateVendeg_finds_id() throws VendegException {
-
+    void updateVendeg_finds_id() {
         originalVendeg.setId(ID);
         VENDEG_DTO.setId(ID);
 
@@ -103,29 +91,7 @@ class VendegServiceTest {
     }
 
     @Test
-    void updateVendeg_throws_nincsVendeg_exception() {
-        when(vendegRepository.getById(any())).thenThrow(new IllegalArgumentException());
-
-        Assertions.assertThrows(VendegException.class, () -> vendegService.updateVendeg(ID, VENDEG_DTO));
-
-        verify(vendegRepository).getById(any());
-    }
-
-    @Test
-    void updateVendeg_throws_sikertelen_exception() {
-        when(vendegConverter.toEntity(VENDEG_DTO)).thenReturn(originalVendeg);
-        when(vendegRepository.getById(ID)).thenReturn(EXPECTED_VENDEG);
-        when(vendegRepository.save(any())).thenThrow(new IllegalArgumentException());
-
-        Assertions.assertThrows(VendegException.class, () -> vendegService.updateVendeg(ID, VENDEG_DTO));
-
-        verify(vendegConverter).toEntity(VENDEG_DTO);
-        verify(vendegRepository).save(any());
-        verify(vendegRepository).getById(ID);
-    }
-
-    @Test
-    void findAll_returns_all_vendeg() throws VendegException {
+    void findAll_returns_all_vendeg() {
         List<Vendeg> vendegList = new ArrayList<>();
         vendegList.add(EXPECTED_VENDEG_1);
         vendegList.add(EXPECTED_VENDEG_2);
@@ -140,16 +106,7 @@ class VendegServiceTest {
     }
 
     @Test
-    void findAll_throws_nincsVendeg_exception() {
-        when(vendegRepository.findAll()).thenThrow(new IllegalArgumentException());
-
-        Assertions.assertThrows(VendegException.class, () -> vendegService.findAll());
-
-        verify(vendegRepository).findAll();
-    }
-
-    @Test
-    void findById_returns_vendeg_by_id() throws VendegException {
+    void findById_returns_vendeg_by_id() {
         when(vendegRepository.getById(ID)).thenReturn(EXPECTED_VENDEG);
 
         vendegService.findById(ID);
@@ -158,21 +115,11 @@ class VendegServiceTest {
     }
 
     @Test
-    void findById_throws_nincsVendeg_exception() {
-        when(vendegRepository.getById(any())).thenThrow(new IllegalArgumentException());
-
-        Assertions.assertThrows(VendegException.class, () -> vendegService.findById(ID));
-
-        verify(vendegRepository).getById(any());
-    }
-
-    @Test
     void getVendegekByElfogyasztottMennyiseg_returns_all_vendeg() {
         List<Vendeg> vendegList = new ArrayList<>();
         vendegList.add(EXPECTED_VENDEG);
         vendegList.add(EXPECTED_VENDEG_1);
         vendegList.add(EXPECTED_VENDEG_2);
-
 
         FOGYASZTAS_LIST.add(FOGYASZTAS_1);
         FOGYASZTAS_LIST.add(FOGYASZTAS_2);
