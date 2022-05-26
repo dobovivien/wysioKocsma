@@ -1,6 +1,7 @@
 package hu.wysio.training.vivi.wysiokocsma.controller;
 
 import hu.wysio.training.vivi.wysiokocsma.dto.ItalDto;
+import hu.wysio.training.vivi.wysiokocsma.exception.WysioKocsmaException;
 import hu.wysio.training.vivi.wysiokocsma.model.Ital;
 import hu.wysio.training.vivi.wysiokocsma.service.ItalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +31,12 @@ public class ItalController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Ital> updateItal(@PathVariable Long id, @Validated @RequestBody ItalDto italDto) {
+    public ResponseEntity<Ital> updateItal(@PathVariable Long id, @Validated @RequestBody ItalDto italDto) throws WysioKocsmaException {
         return new ResponseEntity<>(italService.updateItal(id, italDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteItal(@PathVariable Long id) {
+    public ResponseEntity<HttpStatus> deleteItal(@PathVariable Long id) throws WysioKocsmaException {
         italService.deleteItal(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

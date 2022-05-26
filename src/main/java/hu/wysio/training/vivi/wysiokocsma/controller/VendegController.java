@@ -2,6 +2,7 @@ package hu.wysio.training.vivi.wysiokocsma.controller;
 
 import hu.wysio.training.vivi.wysiokocsma.dto.VendegDto;
 import hu.wysio.training.vivi.wysiokocsma.dto.VendegFogyasztasSzerintDto;
+import hu.wysio.training.vivi.wysiokocsma.exception.WysioKocsmaException;
 import hu.wysio.training.vivi.wysiokocsma.model.Vendeg;
 import hu.wysio.training.vivi.wysiokocsma.service.VendegService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,12 @@ public class VendegController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Vendeg> getVendegById(@PathVariable Long id) {
+    public ResponseEntity<Vendeg> getVendegById(@PathVariable Long id) throws WysioKocsmaException {
         return new ResponseEntity<>(vendegService.findById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vendeg> updateVendeg(@PathVariable Long id, @Validated @RequestBody VendegDto vendegDto) {
+    public ResponseEntity<Vendeg> updateVendeg(@PathVariable Long id, @Validated @RequestBody VendegDto vendegDto) throws WysioKocsmaException {
         return new ResponseEntity<>(vendegService.updateVendeg(id, vendegDto), HttpStatus.OK);
     }
 
