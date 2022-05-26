@@ -11,6 +11,7 @@ public enum ExceptionMessage {
 	NINCS_FOGYASZTAS("Nincs ilyen fogyasztás a megadott id-val.", HttpStatus.NOT_FOUND),
 	NINCS_ITAL("Nincs ilyen ital a megadott id-val.", HttpStatus.NOT_FOUND),
 	NINCS_VENDEG("Nincs ilyen vendég a megadott id-val.", HttpStatus.NOT_FOUND),
+	NINCS_KOCSMAZAS("Nincs ilyen kocsmázás a megadott id-val.", HttpStatus.NOT_FOUND),
 	ISMERETLEN_HIBA("Ismeretlen hiba!", HttpStatus.INTERNAL_SERVER_ERROR);
 
 	private final String message;
