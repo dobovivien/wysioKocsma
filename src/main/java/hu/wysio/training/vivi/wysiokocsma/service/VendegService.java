@@ -34,19 +34,21 @@ public class VendegService {
     }
 
     public Vendeg updateVendeg(Long id, VendegDto vendegDto) throws WysioKocsmaException {
-        Optional<Vendeg> vendeg = vendegRepository.findById(id);
+        Optional<Vendeg> vendegOptional = vendegRepository.findById(id);
 
-        if (vendeg.isEmpty()) {
+        if (vendegOptional.isEmpty()) {
             throw new VendegException(ExceptionMessage.NINCS_VENDEG);
         }
 
         Vendeg updatedVendeg = vendegConverter.toEntity(vendegDto);
 
-        vendeg.get().setBecenev(updatedVendeg.getBecenev());
-        vendeg.get().setMajerosseg(updatedVendeg.getMajerosseg());
-        vendeg.get().setBicepszmeret(updatedVendeg.getBicepszmeret());
+        Vendeg vendeg = vendegOptional.get();
 
-        return vendegRepository.save(vendeg.get());
+        vendeg.setBecenev(updatedVendeg.getBecenev());
+        vendeg.setMajerosseg(updatedVendeg.getMajerosseg());
+        vendeg.setBicepszmeret(updatedVendeg.getBicepszmeret());
+
+        return vendegRepository.save(vendeg);
     }
 
     public List<Vendeg> findAll() {

@@ -30,18 +30,21 @@ public class ItalService {
     }
 
     public Ital updateItal(Long id, ItalDto italDto) throws WysioKocsmaException {
-        Optional<Ital> ital = italRepository.findById(id);
+        Optional<Ital> italOptional = italRepository.findById(id);
 
-        if (ital.isEmpty()) {
+        if (italOptional.isEmpty()) {
             throw new ItalException(ExceptionMessage.NINCS_ITAL);
         }
+
         Ital updatedItal = italConverter.toEntity(italDto);
 
-        ital.get().setNev(updatedItal.getNev());
-        ital.get().setAdagMennyisege(updatedItal.getAdagMennyisege());
-        ital.get().setAlkoholTartalom(updatedItal.getAlkoholTartalom());
+        Ital ital = italOptional.get();
 
-        return italRepository.save(ital.get());
+        ital.setNev(updatedItal.getNev());
+        ital.setAdagMennyisege(updatedItal.getAdagMennyisege());
+        ital.setAlkoholTartalom(updatedItal.getAlkoholTartalom());
+
+        return italRepository.save(ital);
     }
 
     public List<Ital> findAll() {

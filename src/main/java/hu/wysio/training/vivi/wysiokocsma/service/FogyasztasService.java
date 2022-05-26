@@ -28,19 +28,21 @@ public class FogyasztasService {
     }
 
     public Fogyasztas updateFogyasztas(Long id, FogyasztasDto fogyasztasDto) throws WysioKocsmaException {
-        Optional<Fogyasztas> fogyasztas = fogyasztasRepository.findById(id);
+        Optional<Fogyasztas> fogyasztasOptional = fogyasztasRepository.findById(id);
 
-        if (fogyasztas.isEmpty()) {
+        if (fogyasztasOptional.isEmpty()) {
             throw new FogyasztasException(ExceptionMessage.NINCS_FOGYASZTAS);
         }
 
         Fogyasztas updatedFogyasztas = fogyasztasConverter.toEntity(fogyasztasDto);
 
-        fogyasztas.get().setKocsmazas(updatedFogyasztas.getKocsmazas());
-        fogyasztas.get().setItal(updatedFogyasztas.getItal());
-        fogyasztas.get().setElfogyasztottMennyiseg(updatedFogyasztas.getElfogyasztottMennyiseg());
+        Fogyasztas fogyasztas = fogyasztasOptional.get();
 
-        return fogyasztasRepository.save(fogyasztas.get());
+        fogyasztas.setKocsmazas(updatedFogyasztas.getKocsmazas());
+        fogyasztas.setItal(updatedFogyasztas.getItal());
+        fogyasztas.setElfogyasztottMennyiseg(updatedFogyasztas.getElfogyasztottMennyiseg());
+
+        return fogyasztasRepository.save(fogyasztas);
     }
 
     public List<ItalRangsorDto> getLegtobbetFogyasztottItal() {
