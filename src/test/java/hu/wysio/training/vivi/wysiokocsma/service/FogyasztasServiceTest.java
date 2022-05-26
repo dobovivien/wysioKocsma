@@ -3,11 +3,14 @@ package hu.wysio.training.vivi.wysiokocsma.service;
 import hu.wysio.training.vivi.wysiokocsma.converter.FogyasztasConverter;
 import hu.wysio.training.vivi.wysiokocsma.dto.FogyasztasDto;
 import hu.wysio.training.vivi.wysiokocsma.dto.ItalRangsorDto;
+import hu.wysio.training.vivi.wysiokocsma.exception.FogyasztasException;
+import hu.wysio.training.vivi.wysiokocsma.exception.WysioKocsmaException;
 import hu.wysio.training.vivi.wysiokocsma.model.Fogyasztas;
 import hu.wysio.training.vivi.wysiokocsma.model.Ital;
 import hu.wysio.training.vivi.wysiokocsma.model.Kocsmazas;
 import hu.wysio.training.vivi.wysiokocsma.model.Vendeg;
 import hu.wysio.training.vivi.wysiokocsma.repository.FogyasztasRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,8 +20,10 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static hu.wysio.training.vivi.wysiokocsma.model.Majerosseg.BABAMAJ;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -55,16 +60,25 @@ class FogyasztasServiceTest {
     }
 
     @Test
-    void updateFogyasztas_saves_fogyasztas() {
+    void updateFogyasztas_saves_fogyasztas() throws WysioKocsmaException {
         when(fogyasztasConverter.toEntity(FOGYASZTAS_DTO)).thenReturn(EXPECTED_FOGYASZTAS);
-        when(fogyasztasRepository.getById(ID)).thenReturn(EXPECTED_FOGYASZTAS);
+        when(fogyasztasRepository.findById(ID)).thenReturn(Optional.of(EXPECTED_FOGYASZTAS));
         when(fogyasztasRepository.save(EXPECTED_FOGYASZTAS)).thenReturn(EXPECTED_FOGYASZTAS);
 
         fogyasztasService.updateFogyasztas(ID, FOGYASZTAS_DTO);
 
         verify(fogyasztasConverter).toEntity(FOGYASZTAS_DTO);
-        verify(fogyasztasRepository).getById(ID);
+        verify(fogyasztasRepository).findById(ID);
         verify(fogyasztasRepository).save(EXPECTED_FOGYASZTAS);
+    }
+
+    @Test
+    void updateFogyasztas_throws_nincsFogyasztas_exception() {
+        when(fogyasztasRepository.findById(any())).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(FogyasztasException.class, () -> fogyasztasService.updateFogyasztas(ID, FOGYASZTAS_DTO));
+
+        verify(fogyasztasRepository).findById(any());
     }
 
     @Test
