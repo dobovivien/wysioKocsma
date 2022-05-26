@@ -45,16 +45,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 LocalDateTime.now(),
                 exceptionMessage.getMessage());
 
+        logger.error(ex.getMessage(), ex);
+
         return new ResponseEntity<>(errorMessage, httpStatus);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorMessage> handleGlobalException() {
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> handleGlobalException(Exception ex) {
 
         ErrorMessage message = new ErrorMessage(
                 ExceptionMessage.ISMERETLEN_HIBA.getHttpStatus().toString(),
                 LocalDateTime.now(),
                 ExceptionMessage.ISMERETLEN_HIBA.getMessage());
+
+        logger.error(message.getMessage(), ex);
 
         return new ResponseEntity<>(message, ExceptionMessage.ISMERETLEN_HIBA.getHttpStatus());
     }
