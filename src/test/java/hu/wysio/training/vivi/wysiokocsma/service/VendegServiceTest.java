@@ -81,15 +81,13 @@ class VendegServiceTest {
         originalVendeg.setId(ID);
         VENDEG_DTO.setId(ID);
 
-        when(vendegConverter.toEntity(VENDEG_DTO)).thenReturn(originalVendeg);
         when(vendegRepository.findById(ID)).thenReturn(Optional.of(originalVendeg));
         when(vendegRepository.save(originalVendeg)).thenReturn(originalVendeg);
 
         Vendeg resultVendeg = vendegService.updateVendeg(ID, VENDEG_DTO);
 
         Assertions.assertEquals(VENDEG_DTO.getNev(), resultVendeg.getBecenev());
-
-        verify(vendegConverter).toEntity(VENDEG_DTO);
+        
         verify(vendegRepository).findById(ID);
         verify(vendegRepository).save(originalVendeg);
     }
@@ -122,7 +120,7 @@ class VendegServiceTest {
     void findById_returns_vendeg_by_id() throws WysioKocsmaException {
         when(vendegRepository.findById(ID)).thenReturn(Optional.of(EXPECTED_VENDEG));
 
-        vendegService.findById(ID);
+        vendegService.getById(ID);
 
         verify(vendegRepository).findById(ID);
     }
@@ -131,7 +129,7 @@ class VendegServiceTest {
     void findById_throws_nincsVendege_exception() {
         when(vendegRepository.findById(any())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(VendegException.class, () -> vendegService.findById(ID));
+        Assertions.assertThrows(VendegException.class, () -> vendegService.getById(ID));
 
         verify(vendegRepository).findById(any());
     }
