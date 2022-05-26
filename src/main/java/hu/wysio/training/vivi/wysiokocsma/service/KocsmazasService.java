@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +41,7 @@ public class KocsmazasService {
     private KocsmazasConverter kocsmazasConverter;
 
     public long startKocsmazas(Long vendegId) throws WysioKocsmaException {
-        Vendeg vendeg = vendegService.findById(vendegId);
+        Vendeg vendeg = vendegService.getById(vendegId);
 
         Kocsmazas kocsmazas = new Kocsmazas();
         kocsmazas.setMettol(LocalDateTime.now());
@@ -49,15 +50,14 @@ public class KocsmazasService {
         return kocsmazasRepository.save(kocsmazas).getId();
     }
 
-    public Kocsmazas getBefejezetlenKocsmazasByVendegId(Long vendegId) throws WysioKocsmaException {
+    public Optional<Kocsmazas> findBefejezetlenKocsmazasByVendegId(Long vendegId) throws WysioKocsmaException {
         if (vendegRepository.findById(vendegId).isEmpty()) {
             throw new VendegException(ExceptionMessage.NINCS_VENDEG);
         }
 
         return kocsmazasRepository.findAllByVendegId(vendegId).stream()
                 .filter(kocsmazas -> kocsmazas.getMeddig() == null)
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     public List<Kocsmazas> getAllBefejezetlenKocsmazas() {
@@ -68,11 +68,13 @@ public class KocsmazasService {
     }
 
     public long finishKocsmazas(Long vendegId) throws WysioKocsmaException {
-        Kocsmazas befejezetlenKocsmazas = getBefejezetlenKocsmazasByVendegId(vendegId);
+        Optional<Kocsmazas> befejezetlenKocsmazasOptional = findBefejezetlenKocsmazasByVendegId(vendegId);
 
-        if (befejezetlenKocsmazas == null) {
-            throw new KocsmazasException(ExceptionMessage.NINCS_VENDEG);
+        if (befejezetlenKocsmazasOptional.isEmpty()) {
+            throw new VendegException(ExceptionMessage.NINCS_VENDEG);
         }
+
+        Kocsmazas befejezetlenKocsmazas = befejezetlenKocsmazasOptional.get();
 
         befejezetlenKocsmazas.setMeddig(LocalDateTime.now());
 
@@ -80,11 +82,13 @@ public class KocsmazasService {
     }
 
     public void addToDetox(Long vendegId) throws WysioKocsmaException {
-        Kocsmazas kocsmazas = getBefejezetlenKocsmazasByVendegId(vendegId);
+        Optional<Kocsmazas> kocsmazasOptional = findBefejezetlenKocsmazasByVendegId(vendegId);
 
-        if (kocsmazas == null) {
-            throw new KocsmazasException(ExceptionMessage.NINCS_VENDEG);
+        if (kocsmazasOptional.isEmpty()) {
+            throw new VendegException(ExceptionMessage.NINCS_VENDEG);
         }
+
+        Kocsmazas kocsmazas = kocsmazasOptional.get();
 
         kocsmazas.setDetoxbaKerult(true);
 

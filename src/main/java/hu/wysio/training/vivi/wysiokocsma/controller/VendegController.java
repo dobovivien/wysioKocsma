@@ -33,7 +33,7 @@ public class VendegController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Vendeg> getVendegById(@PathVariable Long id) throws WysioKocsmaException {
-        return new ResponseEntity<>(vendegService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(vendegService.getById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

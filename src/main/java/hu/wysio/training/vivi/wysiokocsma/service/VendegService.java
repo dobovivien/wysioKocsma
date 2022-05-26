@@ -40,13 +40,11 @@ public class VendegService {
             throw new VendegException(ExceptionMessage.NINCS_VENDEG);
         }
 
-        Vendeg updatedVendeg = vendegConverter.toEntity(vendegDto);
-
         Vendeg vendeg = vendegOptional.get();
 
-        vendeg.setBecenev(updatedVendeg.getBecenev());
-        vendeg.setMajerosseg(updatedVendeg.getMajerosseg());
-        vendeg.setBicepszmeret(updatedVendeg.getBicepszmeret());
+        vendeg.setBecenev(vendegDto.getNev());
+        vendeg.setMajerosseg(vendegDto.getMajerosseg());
+        vendeg.setBicepszmeret(vendegDto.getBicepszmeret());
 
         return vendegRepository.save(vendeg);
     }
@@ -55,14 +53,14 @@ public class VendegService {
         return vendegRepository.findAll();
     }
 
-    public Vendeg findById(Long id) throws WysioKocsmaException {
-        Optional<Vendeg> vendeg = vendegRepository.findById(id);
+    public Vendeg getById(Long id) throws WysioKocsmaException {
+        Optional<Vendeg> vendegOptional = vendegRepository.findById(id);
 
-        if (vendeg.isEmpty()) {
+        if (vendegOptional.isEmpty()) {
             throw new VendegException(ExceptionMessage.NINCS_VENDEG);
         }
 
-        return vendeg.get();
+        return vendegOptional.get();
     }
 
     public List<VendegFogyasztasSzerintDto> getVendegekByElfogyasztottMennyiseg() {

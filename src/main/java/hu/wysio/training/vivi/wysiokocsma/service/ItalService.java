@@ -36,13 +36,11 @@ public class ItalService {
             throw new ItalException(ExceptionMessage.NINCS_ITAL);
         }
 
-        Ital updatedItal = italConverter.toEntity(italDto);
-
         Ital ital = italOptional.get();
 
-        ital.setNev(updatedItal.getNev());
-        ital.setAdagMennyisege(updatedItal.getAdagMennyisege());
-        ital.setAlkoholTartalom(updatedItal.getAlkoholTartalom());
+        ital.setNev(italDto.getItalNev());
+        ital.setAdagMennyisege(italDto.getAdagMennyisege());
+        ital.setAlkoholTartalom(italDto.getAlkoholTartalom());
 
         return italRepository.save(ital);
     }
