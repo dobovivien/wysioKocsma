@@ -1,0 +1,63 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="2022-05-26-7" author="dobo.vivien">
+        <dropForeignKeyConstraint baseTableName="bunyo_vendeg" constraintName="fk3lxv1uf55giypig9fvf16d203"/>
+    </changeSet>
+    <changeSet id="2022-05-26-8" author="dobo.vivien">
+        <dropForeignKeyConstraint baseTableName="kocsmazas_fogyasztas_lista"
+                                  constraintName="fk40vlc4j6avv51oqwukos8qgwi"/>
+    </changeSet>
+    <changeSet id="2022-05-26-9" author="dobo.vivien">
+        <dropForeignKeyConstraint baseTableName="kocsmazas_fogyasztas_lista"
+                                  constraintName="fkdggq18xfes7wlenew6usnm1cc"/>
+    </changeSet>
+    <changeSet id="2022-05-26-10" author="dobo.vivien">
+        <dropForeignKeyConstraint baseTableName="bunyo_resztvevok" constraintName="fkecojxkbtqpr2btvt1ho0bgpfs"/>
+    </changeSet>
+    <changeSet id="2022-05-26-11" author="dobo.vivien">
+        <dropForeignKeyConstraint baseTableName="bunyo_vendeg" constraintName="fknpf1l8yk5n0fuc4lyiy7s6xol"/>
+    </changeSet>
+    <changeSet id="2022-05-26-12" author="dobo.vivien">
+        <dropForeignKeyConstraint baseTableName="bunyo_resztvevok" constraintName="fkp7p7fvs7o9qwhhvkmypgmlgd4"/>
+    </changeSet>
+    <changeSet id="2022-05-26-13" author="dobo.vivien">
+        <dropForeignKeyConstraint baseTableName="vendeg" constraintName="fktn4kgyeunqh0e3dcukbn28iab"/>
+    </changeSet>
+    <changeSet id="2022-05-26-16" author="dobo.vivien">
+        <dropTable cascadeConstraints="true" tableName="bunyo_resztvevok"/>
+    </changeSet>
+    <changeSet id="2022-05-26-17" author="dobo.vivien">
+        <dropTable cascadeConstraints="true" tableName="bunyo_vendeg"/>
+    </changeSet>
+    <changeSet id="2022-05-26-18" author="dobo.vivien">
+        <dropTable cascadeConstraints="true" tableName="kocsmazas_fogyasztas_lista"/>
+    </changeSet>
+    <changeSet id="2022-05-26-19" author="dobo.vivien">
+        <dropColumn columnName="fogyasztas" tableName="vendeg"/>
+
+        <dropColumn columnName="majerosseg" tableName="vendeg"/>
+    </changeSet>
+    <changeSet id="2022-05-26-1" author="dobo.vivien">
+        <addNotNullConstraint columnDataType="INT" columnName="elfogyasztott_mennyiseg" tableName="fogyasztas"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="2022-05-26-2" author="dobo.vivien">
+        <addNotNullConstraint columnDataType="BIGINT" columnName="ital_id" tableName="fogyasztas" validate="true"/>
+    </changeSet>
+    <changeSet id="2022-05-26-3" author="dobo.vivien">
+        <addNotNullConstraint columnDataType="BIGINT" columnName="kocsmazas_id" tableName="fogyasztas" validate="true"/>
+    </changeSet>
+    <changeSet id="2022-05-26-5" author="dobo.vivien">
+        <addColumn tableName="vendeg">
+            <column name="majerosseg" type="INT">
+                <constraints nullable="false" validateNullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2022-05-26-6" author="dobo.vivien">
+        <addNotNullConstraint columnDataType="DATETIME" columnName="mettol" tableName="kocsmazas" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

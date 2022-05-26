@@ -8,22 +8,30 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "ital", schema = "public")
+@Table
 public class Ital extends AbstractEntity {
 
     @Column(nullable = false)
+    @NotEmpty
     private String nev;
 
-    @Column(name = "alkohol_tartalom", nullable = false)
+    @Column(nullable = false)
+    @NotNull
+    @Positive
     private int alkoholTartalom;
 
-    @Column(name = "adag_mennyisege", nullable = false)
+    @Column(nullable = false)
+    @NotNull
+    @Positive
     private int adagMennyisege;
 
 }

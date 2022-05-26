@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,23 +17,25 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "kocsmazas", schema = "public")
+@Table
 public class Kocsmazas extends AbstractEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vendeg_id", nullable = false)
-    private Vendeg vendeg;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false)
+	@NotNull
+	private Vendeg vendeg;
 
-    @Column (nullable = false)
-    private LocalDateTime mettol;
+	@Column(nullable = false)
+	@NotEmpty
+	private LocalDateTime mettol;
 
-    @Column
-    private LocalDateTime meddig;
+	@Column
+	private LocalDateTime meddig;
 
-    @OneToMany(mappedBy = "kocsmazas", fetch = FetchType.LAZY)
-    private List<Fogyasztas> fogyasztasLista = new ArrayList<>();
+	@OneToMany(mappedBy = "kocsmazas", fetch = FetchType.LAZY)
+	private List<Fogyasztas> fogyasztasLista = new ArrayList<>();
 
-    @Column(name = "detoxba_kerult")
-    private boolean detoxbaKerult;
+	@Column
+	private boolean detoxbaKerult;
 
 }

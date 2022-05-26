@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Setter
@@ -13,17 +16,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "vendeg", schema = "public")
+@Table
 public class Vendeg extends AbstractEntity {
 
     @Column(nullable = false)
+    @NotEmpty
     private String becenev;
 
     @Column(nullable = false)
     @Enumerated
+    @NotNull
     private Majerosseg majerosseg;
 
     @Column(nullable = false)
+    @NotNull
+    @Positive
     private int bicepszmeret;
 
     @OneToMany(mappedBy = "vendeg", fetch = FetchType.LAZY)
