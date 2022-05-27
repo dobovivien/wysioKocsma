@@ -4,7 +4,6 @@ import hu.wysio.training.vivi.wysiokocsma.comparator.TabellaDtoComparator;
 import hu.wysio.training.vivi.wysiokocsma.converter.VendegConverter;
 import hu.wysio.training.vivi.wysiokocsma.dto.TabellaDto;
 import hu.wysio.training.vivi.wysiokocsma.model.Bunyo;
-import hu.wysio.training.vivi.wysiokocsma.model.Kocsmazas;
 import hu.wysio.training.vivi.wysiokocsma.model.Vendeg;
 import hu.wysio.training.vivi.wysiokocsma.repository.BunyoRepository;
 import hu.wysio.training.vivi.wysiokocsma.repository.VendegRepository;
@@ -41,10 +40,8 @@ public class BunyoService {
         Bunyo bunyo = new Bunyo();
         bunyo.setMettol(LocalDateTime.now());
 
-        List<Kocsmazas> befejezetlenKocsmazasokList = kocsmazasService.getAllBefejezetlenKocsmazas();
-        for (Kocsmazas kocsmazas : befejezetlenKocsmazasokList) {
-            vendegSet.add(kocsmazas.getVendeg());
-        }
+        kocsmazasService.getAllBefejezetlenKocsmazas()
+                .forEach(kocsmazas -> vendegSet.add(kocsmazas.getVendeg()));
 
         bunyo.setVendegList(vendegSet);
 
