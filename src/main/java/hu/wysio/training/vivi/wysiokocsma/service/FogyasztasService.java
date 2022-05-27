@@ -39,15 +39,16 @@ public class FogyasztasService {
 
     public Fogyasztas updateFogyasztas(Long id, FogyasztasDto fogyasztasDto) throws WysioKocsmaException {
         Optional<Fogyasztas> fogyasztasOptional = fogyasztasRepository.findById(id);
-        Optional<Kocsmazas> kocsmazasOptional = kocsmazasRepository.findById(fogyasztasDto.getKocsmazasId());
-        Optional<Ital> italOptional = italRepository.findById(fogyasztasDto.getItalId());
-
         if (fogyasztasOptional.isEmpty()) {
             throw new FogyasztasException(ExceptionMessage.NINCS_FOGYASZTAS);
         }
+
+        Optional<Kocsmazas> kocsmazasOptional = kocsmazasRepository.findById(fogyasztasDto.getKocsmazasId());
         if (kocsmazasOptional.isEmpty()) {
             throw new FogyasztasException(ExceptionMessage.NINCS_KOCSMAZAS);
         }
+        
+        Optional<Ital> italOptional = italRepository.findById(fogyasztasDto.getItalId());
         if (italOptional.isEmpty()) {
             throw new FogyasztasException(ExceptionMessage.NINCS_ITAL);
         }
