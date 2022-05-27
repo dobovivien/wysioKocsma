@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class Kocsmazas extends AbstractEntity {
 	private Vendeg vendeg;
 
 	@Column(nullable = false)
-	@NotEmpty
+	@NotNull
 	private LocalDateTime mettol;
 
 	@Column
