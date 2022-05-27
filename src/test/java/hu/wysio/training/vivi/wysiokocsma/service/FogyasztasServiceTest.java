@@ -96,6 +96,7 @@ class FogyasztasServiceTest {
 
     @Test
     void updateFogyasztas_throws_nincsKocsmazas_exception() {
+        when(fogyasztasRepository.findById(any())).thenReturn(Optional.of(FOGYASZTAS));
         when(kocsmazasRepository.findById(any())).thenReturn(Optional.empty());
 
         Assertions.assertThrows(FogyasztasException.class, () -> fogyasztasService.updateFogyasztas(ID, FOGYASZTAS_DTO));
@@ -105,6 +106,8 @@ class FogyasztasServiceTest {
 
     @Test
     void updateFogyasztas_throws_nincsItal_exception() {
+        when(fogyasztasRepository.findById(any())).thenReturn(Optional.of(FOGYASZTAS));
+        when(kocsmazasRepository.findById(any())).thenReturn(Optional.of(KOCSMAZAS));
         when(italRepository.findById(any())).thenReturn(Optional.empty());
 
         Assertions.assertThrows(FogyasztasException.class, () -> fogyasztasService.updateFogyasztas(ID, FOGYASZTAS_DTO));
