@@ -4,6 +4,7 @@ import hu.wysio.training.vivi.wysiokocsma.converter.VendegConverter;
 import hu.wysio.training.vivi.wysiokocsma.dto.VendegDto;
 import hu.wysio.training.vivi.wysiokocsma.dto.VendegFogyasztasSzerintDto;
 import hu.wysio.training.vivi.wysiokocsma.exception.VendegException;
+import hu.wysio.training.vivi.wysiokocsma.exception.WysioKocsmaException;
 import hu.wysio.training.vivi.wysiokocsma.model.ExceptionMessage;
 import hu.wysio.training.vivi.wysiokocsma.model.Fogyasztas;
 import hu.wysio.training.vivi.wysiokocsma.model.Vendeg;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,58 +25,42 @@ public class VendegService {
     @Autowired
     private VendegConverter vendegConverter;
 
-    public long createVendeg(VendegDto vendegDto) throws VendegException {
+    public long createVendeg(VendegDto vendegDto) {
         Vendeg vendegToSave = vendegConverter.toEntity(vendegDto);
 
-        try {
-            Vendeg vendeg = vendegRepository.save(vendegToSave);
+        Vendeg vendeg = vendegRepository.save(vendegToSave);
 
-            return vendeg.getId();
-
-        } catch (IllegalArgumentException e) {
-            throw new VendegException(ExceptionMessage.SIKERTELEN.getMessage());
-        }
+        return vendeg.getId();
     }
 
-    public Vendeg updateVendeg(Long id, VendegDto vendegDto) throws VendegException {
-        Vendeg vendeg;
-        Vendeg updatedVendeg = vendegConverter.toEntity(vendegDto);
+    public Vendeg updateVendeg(Long id, VendegDto vendegDto) throws WysioKocsmaException {
+        Optional<Vendeg> vendegOptional = vendegRepository.findById(id);
 
-        try {
-            vendeg = vendegRepository.getById(id);
-
-        } catch (IllegalArgumentException e) {
-            throw new VendegException(ExceptionMessage.NINCS_VENDEG.getMessage() + id);
+        if (vendegOptional.isEmpty()) {
+            throw new VendegException(ExceptionMessage.NINCS_VENDEG);
         }
 
-        try {
-            vendeg.setBecenev(updatedVendeg.getBecenev());
-            vendeg.setMajerosseg(updatedVendeg.getMajerosseg());
-            vendeg.setBicepszmeret(updatedVendeg.getBicepszmeret());
+        Vendeg vendeg = vendegOptional.get();
 
-            return vendegRepository.save(vendeg);
+        vendeg.setBecenev(vendegDto.getNev());
+        vendeg.setMajerosseg(vendegDto.getMajerosseg());
+        vendeg.setBicepszmeret(vendegDto.getBicepszmeret());
 
-        } catch (IllegalArgumentException e) {
-            throw new VendegException(ExceptionMessage.SIKERTELEN.getMessage());
-        }
+        return vendegRepository.save(vendeg);
     }
 
-    public List<Vendeg> findAll() throws VendegException {
-        try {
-            return vendegRepository.findAll();
-
-        } catch (Exception e) {
-            throw new VendegException(ExceptionMessage.SIKERTELEN.getMessage());
-        }
+    public List<Vendeg> findAll() {
+        return vendegRepository.findAll();
     }
 
-    public Vendeg findById(Long id) throws VendegException {
-        try {
-            return vendegRepository.getById(id);
+    public Vendeg getById(Long id) throws WysioKocsmaException {
+        Optional<Vendeg> vendegOptional = vendegRepository.findById(id);
 
-        } catch (Exception e) {
-            throw new VendegException(ExceptionMessage.NINCS_VENDEG.getMessage() + id);
+        if (vendegOptional.isEmpty()) {
+            throw new VendegException(ExceptionMessage.NINCS_VENDEG);
         }
+
+        return vendegOptional.get();
     }
 
     public List<VendegFogyasztasSzerintDto> getVendegekByElfogyasztottMennyiseg() {

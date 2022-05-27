@@ -22,7 +22,7 @@ public class FogyasztasController {
 
 
     @PostMapping
-    public ResponseEntity<Long> createFogyasztas(@Validated @RequestBody FogyasztasDto fogyasztasDto) throws WysioKocsmaException {
+    public ResponseEntity<Long> createFogyasztas(@Validated @RequestBody FogyasztasDto fogyasztasDto) {
         long fogyasztasId = fogyasztasService.createFogyasztas(fogyasztasDto).getId();
         return new ResponseEntity<>(fogyasztasId, HttpStatus.CREATED);
     }

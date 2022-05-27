@@ -3,6 +3,7 @@ package hu.wysio.training.vivi.wysiokocsma.service;
 import hu.wysio.training.vivi.wysiokocsma.converter.ItalConverter;
 import hu.wysio.training.vivi.wysiokocsma.dto.ItalDto;
 import hu.wysio.training.vivi.wysiokocsma.exception.ItalException;
+import hu.wysio.training.vivi.wysiokocsma.exception.WysioKocsmaException;
 import hu.wysio.training.vivi.wysiokocsma.model.ExceptionMessage;
 import hu.wysio.training.vivi.wysiokocsma.model.Ital;
 import hu.wysio.training.vivi.wysiokocsma.repository.ItalRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -21,55 +23,37 @@ public class ItalService {
     @Autowired
     private ItalConverter italConverter;
 
-    public long createItal(ItalDto italDto) throws ItalException {
-        try {
-            Ital ital = italRepository.save(italConverter.toEntity(italDto));
+    public long createItal(ItalDto italDto) {
+        Ital ital = italRepository.save(italConverter.toEntity(italDto));
 
-            return ital.getId();
-
-        } catch (Exception e) {
-            throw new ItalException(ExceptionMessage.SIKERTELEN.getMessage());
-        }
+        return ital.getId();
     }
 
-    public Ital updateItal(Long id, ItalDto italDto) throws ItalException {
-        Ital ital;
-        Ital updatedItal = italConverter.toEntity(italDto);
+    public Ital updateItal(Long id, ItalDto italDto) throws WysioKocsmaException {
+        Optional<Ital> italOptional = italRepository.findById(id);
 
-        try {
-            ital = italRepository.getById(id);
-
-        } catch (Exception e) {
-            throw new ItalException(ExceptionMessage.NINCS_ITAL.getMessage() + id);
+        if (italOptional.isEmpty()) {
+            throw new ItalException(ExceptionMessage.NINCS_ITAL);
         }
 
-        try {
-            ital.setNev(updatedItal.getNev());
-            ital.setAdagMennyisege(updatedItal.getAdagMennyisege());
-            ital.setAlkoholTartalom(updatedItal.getAlkoholTartalom());
+        Ital ital = italOptional.get();
 
-            return italRepository.save(ital);
+        ital.setNev(italDto.getItalNev());
+        ital.setAdagMennyisege(italDto.getAdagMennyisege());
+        ital.setAlkoholTartalom(italDto.getAlkoholTartalom());
 
-        } catch (Exception e) {
-            throw new ItalException(ExceptionMessage.SIKERTELEN.getMessage());
-        }
+        return italRepository.save(ital);
     }
 
-    public List<Ital> findAll() throws ItalException {
-        try {
-            return italRepository.findAll();
-
-        } catch (Exception e) {
-            throw new ItalException(ExceptionMessage.SIKERTELEN.getMessage());
-        }
+    public List<Ital> findAll() {
+        return italRepository.findAll();
     }
 
-    public void deleteItal(Long italId) throws ItalException {
-        try {
-            italRepository.deleteById(italId);
-
-        } catch (Exception e) {
-            throw new ItalException(ExceptionMessage.NINCS_ITAL.getMessage() + italId);
+    public void deleteItal(Long italId) throws WysioKocsmaException {
+        if (italRepository.findById(italId).isEmpty()) {
+            throw new ItalException(ExceptionMessage.NINCS_ITAL);
         }
+
+        italRepository.deleteById(italId);
     }
 }

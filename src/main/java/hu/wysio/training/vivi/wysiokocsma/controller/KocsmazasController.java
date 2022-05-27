@@ -35,7 +35,7 @@ public class KocsmazasController {
     }
 
     @GetMapping("/detox/{id}")
-    public ResponseEntity<Boolean> vendegIsDetoxos(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Boolean> vendegIsDetoxos(@PathVariable(value = "id") Long id) throws WysioKocsmaException {
         return new ResponseEntity<>(kocsmazasService.vendegIsDetoxos(id), HttpStatus.OK);
     }
 

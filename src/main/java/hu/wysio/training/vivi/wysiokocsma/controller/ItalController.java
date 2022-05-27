@@ -21,12 +21,12 @@ public class ItalController {
 
 
     @GetMapping
-    public ResponseEntity<List<Ital>> getAllItal() throws WysioKocsmaException {
+    public ResponseEntity<List<Ital>> getAllItal() {
         return new ResponseEntity<>(italService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Long> createItal(@Validated @RequestBody ItalDto italDto) throws WysioKocsmaException {
+    public ResponseEntity<Long> createItal(@Validated @RequestBody ItalDto italDto) {
         return new ResponseEntity<>(italService.createItal(italDto), HttpStatus.CREATED);
     }
 

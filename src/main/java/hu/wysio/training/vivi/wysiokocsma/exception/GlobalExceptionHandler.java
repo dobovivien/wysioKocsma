@@ -1,5 +1,6 @@
 package hu.wysio.training.vivi.wysiokocsma.exception;
 
+import hu.wysio.training.vivi.wysiokocsma.model.ExceptionMessage;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -23,9 +23,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                HttpHeaders headers,
-                                                                HttpStatus status,
-                                                                WebRequest request) {
+                                                               HttpHeaders headers,
+                                                               HttpStatus status,
+                                                               WebRequest request) {
 
         Map<String, String> errors = ex.getBindingResult().getFieldErrors()
                 .stream()
@@ -34,27 +34,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(WysioKocsmaException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorMessage> resourceNotFoundException(Exception ex, WebRequest request) {
-        ErrorMessage errorMessage = new ErrorMessage(
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now(),
-                ex.getMessage(),
-                request.getDescription(false));
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> handleWysioKocsmaException(WysioKocsmaException ex) {
 
-        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+        ExceptionMessage exceptionMessage = ex.exceptionMessage;
+        HttpStatus httpStatus = exceptionMessage.getHttpStatus();
+
+        ErrorMessage errorMessage = new ErrorMessage(
+                httpStatus.toString(),
+                LocalDateTime.now(),
+                exceptionMessage.getMessage());
+
+        logger.error(ex.getMessage(), ex);
+
+        return new ResponseEntity<>(errorMessage, httpStatus);
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorMessage> globalExceptionHandler(Exception ex, WebRequest request) {
-        ErrorMessage message = new ErrorMessage(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                LocalDateTime.now(),
-                ex.getMessage(),
-                request.getDescription(false));
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> handleGlobalException(Exception ex) {
 
-        return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+        ErrorMessage message = new ErrorMessage(
+                ExceptionMessage.ISMERETLEN_HIBA.getHttpStatus().toString(),
+                LocalDateTime.now(),
+                ExceptionMessage.ISMERETLEN_HIBA.getMessage());
+
+        logger.error(message.getMessage(), ex);
+
+        return new ResponseEntity<>(message, ExceptionMessage.ISMERETLEN_HIBA.getHttpStatus());
     }
 }
