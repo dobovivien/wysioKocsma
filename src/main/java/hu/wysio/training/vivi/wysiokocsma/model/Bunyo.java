@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Setter
 @Getter
@@ -27,7 +27,7 @@ public class Bunyo extends AbstractEntity {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(joinColumns = @JoinColumn(name = "bunyo_id"), inverseJoinColumns = @JoinColumn(name = "vendeg_id"))
     @Min(value = 2)
-    private Set<Vendeg> vendegList;
+    private List<Vendeg> vendegList;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn

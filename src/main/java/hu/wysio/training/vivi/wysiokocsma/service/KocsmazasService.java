@@ -43,6 +43,14 @@ public class KocsmazasService {
     public long startKocsmazas(Long vendegId) throws WysioKocsmaException {
         Vendeg vendeg = vendegService.getById(vendegId);
 
+        Optional<Kocsmazas> kocsmazasnakNincsVege = vendeg.getKocsmazasList().stream()
+                .filter(kocsmazas -> kocsmazas.getMeddig() == null)
+                .findFirst();
+
+        if (kocsmazasnakNincsVege.isPresent()) {
+            throw new KocsmazasException(ExceptionMessage.NEM_KEZDHETO_KOCSMAZAS);
+        }
+
         Kocsmazas kocsmazas = new Kocsmazas();
         kocsmazas.setMettol(LocalDateTime.now());
         kocsmazas.setVendeg(vendeg);

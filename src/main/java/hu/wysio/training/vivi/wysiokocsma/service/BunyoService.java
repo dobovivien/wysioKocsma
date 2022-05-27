@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -38,11 +37,11 @@ public class BunyoService {
         Bunyo bunyo = new Bunyo();
         bunyo.setMettol(LocalDateTime.now());
 
-        Set<Vendeg> vendegSet = kocsmazasService.getAllBefejezetlenKocsmazas().stream()
+        List<Vendeg> vendegList = kocsmazasService.getAllBefejezetlenKocsmazas().stream()
                 .map(Kocsmazas::getVendeg)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
-        bunyo.setVendegList(vendegSet);
+        bunyo.setVendegList(vendegList);
 
         return bunyoRepository.save(bunyo).getId();
     }
